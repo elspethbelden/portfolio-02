@@ -153,37 +153,6 @@ function renderStaggeredLetters(text, loaded, baseDelay, { stagger = 35, trackin
 
 // ─────────────── COMPONENTS ───────────────
 
-function TopBar() {
-  return (
-    <header style={{
-      position: "fixed",
-      top: 0, left: 0, right: 0,
-      zIndex: 200,
-      padding: "24px 32px",
-      display: "flex",
-      justifyContent: "flex-start",
-      alignItems: "center",
-      mixBlendMode: "difference",
-      color: "#F4F1EC",
-      pointerEvents: "none",
-    }}>
-      <a
-        href="#contact"
-        className="mono"
-        style={{
-          pointerEvents: "auto",
-          color: "#F4F1EC",
-          transition: "opacity 200ms",
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.opacity = 0.6}
-        onMouseLeave={(e) => e.currentTarget.style.opacity = 1}
-      >
-        Let's talk
-      </a>
-    </header>
-  );
-}
-
 function Hero() {
   const [layout, setLayout] = useState(window.__tweaks.heroLayout);
   useEffect(() => {
@@ -200,11 +169,11 @@ function Hero() {
 function HeroStacked() {
   const isMobile = useIsMobile();
   const HERO_IMAGES = [
-    isMobile ? "assets/hero/mobile/Hero-2.png" : "assets/hero/Hero-2.png",
-    isMobile ? "assets/hero/mobile/Costa.png" : "assets/hero/Costa.png",
+    isMobile ? "assets/hero/mobile/Bupa-Hero.jpg" : "assets/hero/Hero-2.png",
+    isMobile ? "assets/hero/mobile/Costa.jpg" : "assets/hero/Costa.png",
     isMobile ? "assets/hero/mobile/HSBC-Hero.jpg" : "assets/hero/HSBC-Hero.jpg",
     isMobile ? "assets/hero/mobile/NatWest-Hero.jpg" : "assets/hero/NatWest-Hero.jpg",
-    isMobile ? "assets/hero/mobile/NatWest-Hero-WGDLL.png" : "assets/hero/NatWest-Hero-WGDLL.png",
+    isMobile ? "assets/hero/mobile/NatWest-Hero-WGDLL.jpg" : "assets/hero/NatWest-Hero-WGDLL.png",
   ];
   const [loaded, setLoaded] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
@@ -291,34 +260,12 @@ function HeroStacked() {
       {/* Inner fade-in wrapper handled per child below via `loaded` opacity. */}
       </div>
 
-      {/* Top utility row — Experience Designer top-right.
-          TopBar's "Let's talk" sits at top-left at z 200. */}
-      <div style={{
-        position: "relative", zIndex: 3,
-        opacity: loaded ? 1 : 0,
-        transform: loaded ? "translateY(0)" : "translateY(12px)",
-        transition: "opacity 900ms ease-out 400ms, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 400ms",
-        display: "flex", justifyContent: "flex-end",
-        alignItems: "center",
-        padding: "26px 32px 0",
-      }}>
-        <div className="mono" style={{
-          color: "rgba(244,241,236,0.85)",
-          textAlign: "right",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}>
-          <div>Experience Designer</div>
-        </div>
-      </div>
-
       {/* Full-width name — each letter fades/rises in on its own staggered
           delay rather than the whole word arriving as one block. */}
       <div style={{
         position: "relative",
         zIndex: 2,
-        padding: "16px 24px 0",
+        padding: isMobile ? "16px 20px 0" : "16px 24px 0",
       }}>
         <h1 style={{
           fontFamily: "var(--font-display)",
@@ -341,39 +288,111 @@ function HeroStacked() {
       {/* Spacer pushes tagline to bottom */}
       <div style={{ flex: 1 }} />
 
-      {/* Bottom: tagline + scroll cue */}
-      <div style={{
-        position: "relative", zIndex: 3,
-        display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "3fr 1fr",
-        gap: isMobile ? 16 : 40,
-        alignItems: "end",
-        padding: isMobile ? "0 20px 28px" : "0 32px 40px",
-        opacity: loaded ? 1 : 0,
-        transform: loaded ? "translateY(0)" : "translateY(12px)",
-        transition: "opacity 900ms ease-out 1100ms, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 1100ms",
-      }}>
-        <p style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(20px, 2.2vw, 30px)",
-          lineHeight: 1.3,
-          color: "#F4F1EC",
-          fontWeight: 400,
-          maxWidth: "36ch",
+      {/* Bottom: tagline + scroll cue. On mobile the tagline spans full
+          width on its own row, with "Let's talk" and "Scroll" aligned
+          together on the row beneath it; desktop keeps them stacked in
+          a left column next to the scroll cue on the right. */}
+      {isMobile ? (
+        <div style={{
+          position: "relative", zIndex: 3,
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
+          padding: "0 20px 28px",
+          opacity: loaded ? 1 : 0,
+          transform: loaded ? "translateY(0)" : "translateY(12px)",
+          transition: "opacity 900ms ease-out 1100ms, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 1100ms",
         }}>
-          I lead product vision and design system work for brands at scale. From AI interfaces and app strategies to tokenised component libraries, I bring structure to complex problems and keep the craft sharp.
-        </p>
-
-        <div style={{ textAlign: "right" }}>
-          <a href="#work" className="mono" style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            color: "#F4F1EC", borderBottom: "1px solid rgba(244,241,236,0.5)",
-            paddingBottom: 4
+          <p style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(20px, 2.2vw, 30px)",
+            lineHeight: 1.3,
+            color: "#F4F1EC",
+            fontWeight: 400,
+            maxWidth: "36ch",
           }}>
-            Scroll <span style={{ fontSize: 14 }}>↓</span>
-          </a>
+            Design lead. Systems thinker.{" "}
+            <span style={{ fontStyle: "italic", opacity: 0.8 }}>Making complexity look effortless.</span>
+          </p>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <a
+              href="#contact"
+              className="mono"
+              style={{
+                color: "#F4F1EC",
+                borderBottom: "1px solid rgba(244,241,236,0.5)",
+                paddingBottom: 4,
+                transition: "opacity 200ms",
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = 0.6}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = 1}
+            >
+              Let's talk
+            </a>
+            <a href="#work" className="mono" style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              color: "#F4F1EC", borderBottom: "1px solid rgba(244,241,236,0.5)",
+              paddingBottom: 4
+            }}>
+              Scroll <span style={{ fontSize: 14 }}>↓</span>
+            </a>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div style={{
+          position: "relative", zIndex: 3,
+          display: "grid",
+          gridTemplateColumns: "3fr 1fr",
+          gap: 40,
+          alignItems: "end",
+          padding: "0 32px 40px",
+          opacity: loaded ? 1 : 0,
+          transform: loaded ? "translateY(0)" : "translateY(12px)",
+          transition: "opacity 900ms ease-out 1100ms, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 1100ms",
+        }}>
+          <div>
+            <p style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(20px, 2.2vw, 30px)",
+              lineHeight: 1.3,
+              color: "#F4F1EC",
+              fontWeight: 400,
+              maxWidth: "36ch",
+            }}>
+              Design lead. Systems thinker.{" "}
+              <span style={{ fontStyle: "italic", opacity: 0.8 }}>Making complexity look effortless.</span>
+            </p>
+
+            <a
+              href="#contact"
+              className="mono"
+              style={{
+                display: "inline-block",
+                marginTop: 16,
+                color: "#F4F1EC",
+                borderBottom: "1px solid rgba(244,241,236,0.5)",
+                paddingBottom: 4,
+                transition: "opacity 200ms",
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = 0.6}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = 1}
+            >
+              Let's talk
+            </a>
+          </div>
+
+          <div style={{ textAlign: "right" }}>
+            <a href="#work" className="mono" style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              color: "#F4F1EC", borderBottom: "1px solid rgba(244,241,236,0.5)",
+              paddingBottom: 4
+            }}>
+              Scroll <span style={{ fontSize: 14 }}>↓</span>
+            </a>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -579,9 +598,9 @@ function PullQuote() {
           color: "var(--ink)",
           margin: 0,
         }}>
-          I design with{" "}
-          <span className="italic-accent" style={{ color: "var(--accent)" }}>refined aesthetics</span>
-          {" "}and functional clarity — shaping systems that hold up under scale, pressure, and pixel-perfect scrutiny.
+          I lead{" "}
+          <span className="italic-accent" style={{ color: "var(--accent)" }}>product vision</span>
+          {" "}and design system work for brands at scale. From AI interfaces and app strategies to tokenised component libraries, I bring structure to complex problems.
         </blockquote>
         <div />
       </div>
@@ -1097,10 +1116,9 @@ function Contact() {
                   display: "inline-block",
                   borderBottom: "1px solid var(--ink)",
                   paddingBottom: 2,
-                  wordBreak: "break-all",
                 }}
               >
-                elspethbelden@gmail.com
+                Send me a message
               </a>
             </div>
             <div>
@@ -1188,7 +1206,6 @@ function Contact() {
 function App() {
   return (
     <>
-      <TopBar />
       <Hero />
       <PullQuote />
       <SelectedWork />

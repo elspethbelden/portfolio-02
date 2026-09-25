@@ -11,7 +11,7 @@ function useIsMobile(bp = 768) {
   return m;
 }
 
-function ImagePlaceholder({ id, label = "image", aspect = "4/3", full = false, src }) {
+function ImagePlaceholder({ id, label = "image", aspect = "4/3", full = false, src, objectPosition = "center" }) {
   const slotId = id || ("na-" + label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""));
   const wrapRef = React.useRef(null);
   const [natAspect, setNatAspect] = React.useState(null);
@@ -50,7 +50,7 @@ function ImagePlaceholder({ id, label = "image", aspect = "4/3", full = false, s
         fit={full ? "cover" : (natAspect ? "fill" : "contain")}
         shape={full ? "rect" : undefined}
         src={src || undefined}
-        style={{ width: "100%", height: "100%", display: "block", background: "var(--bg-alt)" }}
+        style={{ width: "100%", height: "100%", display: "block", background: "var(--bg-alt)", objectPosition }}
       ></image-slot>
     </div>
   );
@@ -96,7 +96,7 @@ function HeroTop() {
         </div>
       </div>
       <div style={{ width: "100%", height: "100%", transform: `translateY(${y}px)`, opacity, willChange: "transform, opacity" }}>
-        <ImagePlaceholder id="na-cover" label="Cover 1 — desktop and mobile UI mockups" full src={isMobile ? "uploads/NordAnglia/mobile/Nord Hero-2.jpg" : "uploads/NordAnglia/Nord Hero-2.jpg"} />
+        <ImagePlaceholder id="na-cover" label="Cover 1 — desktop and mobile UI mockups" full src={isMobile ? "uploads/NordAnglia/mobile/Nord Hero-2.jpg" : "uploads/NordAnglia/Nord Hero-2.jpg"} objectPosition={isMobile ? "top" : "center"} />
       </div>
     </section>
   );

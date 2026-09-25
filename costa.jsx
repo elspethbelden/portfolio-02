@@ -13,7 +13,7 @@ function useIsMobile(bp = 768) {
 
 // Drop-in replacement: <ImagePlaceholder> now renders an <image-slot>
 // (user can drag-drop an image directly onto it; persists by id).
-function ImagePlaceholder({ id, label = "image", aspect = "4/3", full = false, tint = "warm", src }) {
+function ImagePlaceholder({ id, label = "image", aspect = "4/3", full = false, tint = "warm", src, objectPosition = "center" }) {
   const slotId = id || ("slot-" + label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""));
   const wrapRef = React.useRef(null);
   const [natAspect, setNatAspect] = React.useState(null);
@@ -52,7 +52,7 @@ function ImagePlaceholder({ id, label = "image", aspect = "4/3", full = false, t
         fit={full ? "cover" : (natAspect ? "fill" : "contain")}
         shape={full ? "rect" : undefined}
         src={src || undefined}
-        style={{ width: "100%", height: "100%", display: "block", background: "var(--bg-alt)" }}
+        style={{ width: "100%", height: "100%", display: "block", background: "var(--bg-alt)", objectPosition }}
       ></image-slot>
     </div>
   );
@@ -82,9 +82,21 @@ function HeroTop() {
         </div>
       </div>
 
-      <div style={{ width: "100%", height: "100%", transform: `translateY(${y}px)`, opacity, willChange: "transform, opacity" }}>
-        <ImagePlaceholder label="hero — Costa Express machine in-situ" full tint="coffee" src={isMobile ? "uploads/Costa/mobile/Costa-Hero.jpg" : "uploads/Costa/Costa-Hero.jpg"} />
-      </div>
+      {isMobile ? (
+        <div style={{
+          width: "100%", height: "100%",
+          backgroundImage: "url('uploads/Costa/mobile/Costa-Hero.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "top center",
+          transform: `translateY(${y}px)`,
+          opacity,
+          willChange: "transform, opacity",
+        }} />
+      ) : (
+        <div style={{ width: "100%", height: "100%", transform: `translateY(${y}px)`, opacity, willChange: "transform, opacity" }}>
+          <ImagePlaceholder label="hero — Costa Express machine in-situ" full tint="coffee" src="uploads/Costa/Costa-Hero.jpg" />
+        </div>
+      )}
     </section>
   );
 }
@@ -302,7 +314,7 @@ function PhotographySection() {
           alignItems: "start"
         }}>
           <figure style={{ padding: isMobile ? 0 : "0 8% 0 18%" }}>
-            <ImagePlaceholder label="syrup selection screen" aspect="16/6" tint="crema" />
+            <ImagePlaceholder label="syrup selection screen" aspect="16/6" tint="crema" src="uploads/Costa/Costa-syrup-screen-02.webp" />
             <figcaption className="mono" style={{
               color: "rgba(244,241,236,0.5)", marginTop: 14,
               display: "flex", justifyContent: "space-between"
@@ -312,7 +324,7 @@ function PhotographySection() {
             </figcaption>
           </figure>
           <figure style={{ padding: isMobile ? 0 : "0 18% 0 8%" }}>
-            <ImagePlaceholder label="sugar selection screen" aspect="16/6" tint="crema" />
+            <ImagePlaceholder label="sugar selection screen" aspect="16/6" tint="crema" src="uploads/Costa/Costa-sugar-screen.webp" />
             <figcaption className="mono" style={{
               color: "rgba(244,241,236,0.5)", marginTop: 14,
               display: "flex", justifyContent: "space-between"
@@ -391,7 +403,7 @@ function AppIntegrationSection() {
           Fast-turnaround, high-concept design exploring how the mobile app and the machine could become a more joined-up user experience — and how the coffee-ordering moment could fit seamlessly into the morning commute rather than interrupting it.
         </div>
         <figure>
-          <ImagePlaceholder label="car dashboard, in-situ" aspect="16/9" tint="dark" />
+          <ImagePlaceholder label="car dashboard, in-situ" aspect="16/9" tint="dark" src="uploads/Costa/Car-dashboard-situ.webp" />
           <figcaption className="mono" style={{
             color: "var(--ink-faint)", marginTop: 14,
             display: "flex", justifyContent: "space-between"
@@ -410,7 +422,7 @@ function AppIntegrationSection() {
         alignItems: "stretch"
       }}>
         <figure>
-          <ImagePlaceholder label="early scamps / concept sketches" aspect="4/3" tint="crema" />
+          <ImagePlaceholder label="early scamps / concept sketches" aspect="4/3" tint="crema" src="uploads/Costa/scamps.webp" />
           <figcaption className="mono" style={{
             color: "var(--ink-faint)", marginTop: 14,
             display: "flex", justifyContent: "space-between"
@@ -425,7 +437,7 @@ function AppIntegrationSection() {
               id="slot-morning-commuter-cups-lifestyle"
               placeholder="morning commuter cups, lifestyle"
               fit="cover"
-              src="uploads/Costa/Compact-screens-together-01.png"
+              src="uploads/Costa/Morning-communter-cups-for-site.webp"
               style={{ width: "100%", height: "100%", display: "block", background: "var(--bg-alt)" }}
             ></image-slot>
           </div>
@@ -440,7 +452,7 @@ function AppIntegrationSection() {
       </div>
 
       <figure style={{ padding: isMobile ? 0 : "0 15%" }}>
-        <ImagePlaceholder label="payment screen — in-situ" aspect="16/9" tint="coffee" />
+        <ImagePlaceholder label="payment screen — in-situ" aspect="16/9" tint="coffee" src="uploads/Costa/Payment-screen-situ-trimmed.webp" />
         <figcaption className="mono" style={{
           color: "var(--ink-faint)", marginTop: 14,
           display: "flex", justifyContent: "space-between"

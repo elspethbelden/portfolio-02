@@ -72,7 +72,7 @@ function HeroTop() {
         width: "100%", height: "100%",
         backgroundImage: isMobile ? "url('uploads/NatWest/mobile/Screen-comp2.jpg')" : "url('uploads/NatWest/Screen-comp2.jpg')",
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition: isMobile ? "top" : "center",
         transform: `translateY(${y}px)`,
         opacity,
         willChange: "transform, opacity",

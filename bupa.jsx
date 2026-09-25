@@ -21,7 +21,7 @@ function VideoSlot({ src, type = "video/mp4", aspect }) {
   );
 }
 
-function ImagePlaceholder({ id, label = "image", aspect = "4/3", full = false, src }) {
+function ImagePlaceholder({ id, label = "image", aspect = "4/3", full = false, src, objectPosition = "center" }) {
   const slotId = id || ("bupa-" + label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""));
   const wrapRef = React.useRef(null);
   const [natAspect, setNatAspect] = React.useState(null);
@@ -60,7 +60,7 @@ function ImagePlaceholder({ id, label = "image", aspect = "4/3", full = false, s
         fit={full ? "cover" : (natAspect ? "fill" : "contain")}
         shape={full ? "rect" : undefined}
         src={src || undefined}
-        style={{ width: "100%", height: "100%", display: "block", background: "var(--bg-alt)" }}
+        style={{ width: "100%", height: "100%", display: "block", background: "var(--bg-alt)", objectPosition }}
       ></image-slot>
     </div>
   );
@@ -88,7 +88,7 @@ function HeroTop() {
         </div>
       </div>
       <div style={{ width: "100%", height: "100%", transform: `translateY(${y}px)`, opacity, willChange: "transform, opacity" }}>
-        <ImagePlaceholder id="bupa-cover" label="Bupa Global Connect — hero product mockup" full src={isMobile ? "uploads/Bupa/mobile/Bupa-Hero.png" : "uploads/Bupa/Bupa-Hero.png"} />
+        <ImagePlaceholder id="bupa-cover" label="Bupa Global Connect — hero product mockup" full src={isMobile ? "uploads/Bupa/mobile/Bupa-Hero.png" : "uploads/Bupa/Bupa-Hero.png"} objectPosition={isMobile ? "top" : "center"} />
       </div>
     </section>
   );
@@ -205,11 +205,9 @@ function ChallengeSection() {
         <figure style={{ padding: isMobile ? 0 : "0 30%" }}>
           <ImagePlaceholder id="bupa-before-state" label="Before-state — fragmented apps, channels, and manual touchpoints" aspect="3/4" src="uploads/bupa/Screenshot 2026-05-30 at 19.38.17.png" />
           <figcaption className="mono" style={{
-            color: "var(--ink-faint)", marginTop: 14,
-            display: "flex", justifyContent: "space-between"
+            color: "var(--ink-faint)", marginTop: 14
           }}>
             <span><span className="bracket">FIG. 02</span> Before-state — fragmented apps, channels, and touchpoints.</span>
-            <span className="bracket">CONTEXT</span>
           </figcaption>
         </figure>
       </div>
@@ -298,11 +296,9 @@ function ApproachSection() {
       <figure style={{ marginBottom: isMobile ? 40 : 60, padding: isMobile ? 0 : "0 15%" }}>
         <ImagePlaceholder id="bupa-journey-map" label="Customer journey map — pain points and enhancements across 7 stages" aspect="16/7" src="uploads/bupa/Screenshot 2026-05-30 at 19.33.54.png" />
         <figcaption className="mono" style={{
-          color: "var(--ink-faint)", marginTop: 14,
-          display: "flex", justifyContent: "space-between"
+          color: "var(--ink-faint)", marginTop: 14
         }}>
           <span><span className="bracket">FIG. 01</span> Customer journey map — pain points and enhancements validated with customers.</span>
-          <span className="bracket">RESEARCH</span>
         </figcaption>
       </figure>
 
@@ -432,11 +428,9 @@ function SolutionSection() {
       <figure style={{ marginBottom: isMobile ? 40 : 64 }}>
         <ImagePlaceholder id="bupa-proposed-ia" label="Proposed IA — information architecture" aspect="16/9" src="uploads/bupa/PROPOSED IA.png" />
         <figcaption className="mono" style={{
-          color: "var(--ink-faint)", marginTop: 14,
-          display: "flex", justifyContent: "space-between"
+          color: "var(--ink-faint)", marginTop: 14
         }}>
           <span><span className="bracket">FIG. 03</span> Proposed information architecture.</span>
-          <span className="bracket">IA</span>
         </figcaption>
       </figure>
 
@@ -491,11 +485,9 @@ function SolutionSection() {
       <figure style={{ marginTop: isMobile ? 24 : 40 }}>
         <VideoSlot src="uploads/bupa/Journey overview.mp4" />
         <figcaption className="mono" style={{
-          color: "var(--ink-faint)", marginTop: 14,
-          display: "flex", justifyContent: "space-between"
+          color: "var(--ink-faint)", marginTop: 14
         }}>
           <span><span className="bracket">FIG. 06</span> High Level Journey.</span>
-          <span className="bracket">JOURNEY</span>
         </figcaption>
       </figure>
 
