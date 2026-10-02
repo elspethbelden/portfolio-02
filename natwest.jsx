@@ -121,7 +121,7 @@ function Opener() {
           letterSpacing: "-0.035em",
           maxWidth: "18ch", fontWeight: "500"
         }}>
-          Building a bank's design system from <span className="italic-accent" style={{ color: "var(--accent)", fontFamily: "\"Instrument Serif\"" }}>scratch</span>.
+          Building a bank's design system from <span style={{ fontStyle: "italic" }}>scratch</span>.
         </h1>
       </div>
 
@@ -138,13 +138,13 @@ function Opener() {
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(22px, 2.4vw, 32px)",
+          fontSize: "clamp(16px, 1.8vw, 20px)",
           lineHeight: 1.4,
           fontWeight: 300,
           color: "var(--ink)"
         }}>
           We rebuilt the foundations from the ground up, collapsing four siloed UI kits into one tokenised{" "}
-          <span className="italic-accent" style={{ color: "var(--accent)" }}>source of truth</span>
+          source of truth
           {" "}for hundreds of designers. Governance, documentation and a federated contribution model came along for the ride.
         </p>
         <div className="mono" style={{
@@ -199,11 +199,11 @@ function ContextSection() {
             marginBottom: 40
           }}>
             Four siloed UI kits,{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>no shared language</span>.
+            no shared language.
           </h2>
 
           <div style={{
-            fontFamily: "var(--font-display)",
+            fontFamily: "var(--font-body)",
             fontSize: 20, lineHeight: 1.6,
             color: "var(--ink-soft)"
           }}>
@@ -278,8 +278,7 @@ function StatsBand() {
             marginBottom: 8
           }}>
               {s.num}
-              <span className="italic-accent" style={{
-              color: "var(--accent)",
+              <span style={{
               fontSize: "0.45em",
               marginLeft: 8,
               fontWeight: 400
@@ -333,7 +332,7 @@ function PrinciplesSection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          Three principles that shaped <span className="italic-accent" style={{ color: "var(--accent)" }}>the build</span>.
+          Three principles that shaped the build.
         </h2>
       </div>
 
@@ -362,7 +361,7 @@ function PrinciplesSection() {
             marginBottom: 16
           }}>{p.title}</h3>
             <p style={{
-            fontFamily: "var(--font-display)",
+            fontFamily: "var(--font-body)",
             fontSize: 17,
             lineHeight: 1.6,
             color: "var(--ink-soft)"
@@ -398,7 +397,7 @@ function GalleryAsymmetric() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          From audit to <span className="italic-accent" style={{ color: "var(--accent)" }}>foundation</span>.
+          From audit to foundation.
         </h2>
       </div>
 
@@ -425,7 +424,7 @@ function GalleryAsymmetric() {
         marginBottom: isMobile ? 40 : 80
       }}>
         <div style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: 18,
           lineHeight: 1.55,
           color: "var(--ink-soft)"
@@ -457,7 +456,7 @@ function GalleryAsymmetric() {
         alignItems: "start"
       }}>
         <div style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: 18,
           lineHeight: 1.55,
           color: "var(--ink-soft)"
@@ -490,7 +489,7 @@ function GalleryAsymmetric() {
         marginTop: isMobile ? 40 : 80
       }}>
         <div style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: 18,
           lineHeight: 1.55,
           color: "var(--ink-soft)"
@@ -523,7 +522,7 @@ function GalleryAsymmetric() {
         marginTop: isMobile ? 40 : 80
       }}>
         <div style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: 18,
           lineHeight: 1.55,
           color: "var(--ink-soft)"
@@ -574,18 +573,15 @@ function PullQuoteDark() {
 
         <div>
           <div style={{
-            fontFamily: "var(--font-italic)",
+            fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 5vw, 72px)",
             lineHeight: 1.15,
             fontWeight: 400,
-            fontStyle: "italic",
             color: "#F4F1EC",
             maxWidth: "22ch",
             marginBottom: 40
           }}>
-            <span style={{ color: "var(--accent)" }}>“</span>
-            The system finally feels like ours — designers contribute back to it, onboard from it, and trust it. It bought us the time to actually <span style={{ color: "var(--accent)" }}>think</span>.
-            <span style={{ color: "var(--accent)" }}>”</span>
+            “The system finally feels like ours — designers contribute back to it, onboard from it, and trust it. It bought us the time to actually think.”
           </div>
           <div className="mono" style={{ color: "rgba(244,241,236,0.6)" }}>
             <span className="bracket">NATWEST HCD LEADERSHIP · 2024</span>
@@ -622,7 +618,7 @@ function ProcessSection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          Eighteen weeks, <span className="italic-accent" style={{ color: "var(--accent)" }}>four phases</span>.
+          Eighteen weeks, four phases.
         </h2>
       </div>
 
@@ -652,7 +648,7 @@ function ProcessSection() {
               {p.weeks}
             </div>
             <div style={{
-            fontFamily: "var(--font-display)",
+            fontFamily: "var(--font-body)",
             fontSize: 18,
             lineHeight: 1.55,
             color: "var(--ink-soft)",
@@ -695,7 +691,7 @@ function GovernanceSection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          Shepherding the system, <span className="italic-accent" style={{ color: "var(--accent)" }}>not policing it</span>.
+          Shepherding the system, not policing it.
         </h2>
       </div>
 
@@ -708,7 +704,7 @@ function GovernanceSection() {
         marginBottom: isMobile ? 40 : 80
       }}>
         <div style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: 18,
           lineHeight: 1.55,
           color: "var(--ink-soft)"
@@ -746,7 +742,7 @@ function GovernanceSection() {
         marginBottom: isMobile ? 40 : 80
       }}>
         <div style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: 18,
           lineHeight: 1.55,
           color: "var(--ink-soft)"
@@ -779,7 +775,7 @@ function GovernanceSection() {
         marginBottom: isMobile ? 40 : 80
       }}>
         <div style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: 18,
           lineHeight: 1.55,
           color: "var(--ink-soft)"
@@ -816,7 +812,7 @@ function GovernanceSection() {
         alignItems: "start"
       }}>
         <div style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: 18,
           lineHeight: 1.55,
           color: "var(--ink-soft)"
@@ -865,10 +861,10 @@ function OutcomeSection() {
             letterSpacing: "-0.03em",
             marginBottom: 40
           }}>
-            One year on, <span className="italic-accent" style={{ color: "var(--accent)" }}>400% faster</span>.
+            One year on, 400% faster.
           </h2>
           <div style={{
-            fontFamily: "var(--font-display)",
+            fontFamily: "var(--font-body)",
             fontSize: 20, lineHeight: 1.6,
             color: "var(--ink-soft)"
           }}>
@@ -934,7 +930,7 @@ function NextProject() {
               marginBottom: 24,
               color: "#F4F1EC"
             }}>
-              Global cover.{" "}<span className="italic-accent" style={{ color: "#82B9FF" }}>Local experience.</span>
+              Global cover.{" "}Local experience.
             </h3>
             <div className="mono" style={{
               display: "inline-flex", alignItems: "center", gap: 12,

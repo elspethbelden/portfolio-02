@@ -121,7 +121,7 @@ function Opener() {
         <div>
           <div className="mono" style={{ color: "var(--ink)", lineHeight: 1.8 }}>
             Brand Refresh<br />
-            UI Design<br />
+            GUI Design<br />
             Concept
           </div>
         </div>
@@ -138,7 +138,7 @@ function Opener() {
           letterSpacing: "-0.035em",
           maxWidth: "20ch", fontWeight: 500
         }}>
-          A facelift for the nation's most-loved <span className="italic-accent" style={{ color: "#B51244" }}>self-serve coffee</span>.
+          A facelift for the nation's most-loved self-serve coffee.
         </h1>
       </div>
 
@@ -154,13 +154,13 @@ function Opener() {
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(22px, 2.4vw, 32px)",
+          fontSize: "clamp(16px, 1.8vw, 20px)",
           lineHeight: 1.4,
           fontWeight: 300,
           color: "var(--ink)"
         }}>
           Facelift for the popular Costa Express self-serve machines, designed to flex across{" "}
-          <span className="italic-accent" style={{ color: "rgb(238, 221, 208)" }}>two screen formats</span>
+          two screen formats
           {" "}— the new flagship hardware and the compact unit in petrol stations across the country.
         </p>
       </div>
@@ -190,7 +190,7 @@ function ContextSection() {
             marginBottom: 40
           }}>
             Functional, but{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>dated</span>.
+            dated.
           </h2>
 
           <div style={{
@@ -239,7 +239,7 @@ function PhotographySection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          Rich new imagery, built to <span className="italic-accent" style={{ color: "var(--accent)" }}>flex</span>.
+          Rich new imagery, built to flex.
         </h2>
       </div>
 
@@ -381,7 +381,7 @@ function AppIntegrationSection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          Machine + app, <span className="italic-accent" style={{ color: "var(--accent)" }}>one journey</span>.
+          Machine + app, one journey.
         </h2>
       </div>
 
@@ -502,7 +502,7 @@ function NextProject() {
               letterSpacing: "-0.035em",
               marginBottom: 24
             }}>
-              One system. 76 schools. <span className="italic-accent" style={{ color: "#A7D5E8" }}>Counting.</span>
+              One system. 76 schools. Counting.
             </h3>
             <div className="mono" style={{
               display: "inline-flex", alignItems: "center", gap: 12,

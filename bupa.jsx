@@ -126,7 +126,7 @@ function Opener() {
           maxWidth: "20ch", fontWeight: 500
         }}>
           Global cover.{" "}
-          <span className="italic-accent" style={{ color: "rgb(130, 185, 255)" }}>Local experience.</span>
+          <span style={{ fontStyle: "italic" }}>Local experience.</span>
         </h1>
       </div>
 
@@ -139,11 +139,11 @@ function Opener() {
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(22px, 2.4vw, 32px)",
+          fontSize: "clamp(16px, 1.8vw, 20px)",
           lineHeight: 1.4, fontWeight: 300, color: "var(--ink)"
         }}>
           Bupa's international health offering spanned markets, systems, and apps — but not in a way customers could navigate. I led the experience design for{" "}
-          <span className="italic-accent" style={{ color: "rgb(130, 185, 255)" }}>Bupa Global Connect</span>
+          Bupa Global Connect
           : a unified journey embedded into existing local apps, giving customers seamless access to global cover without leaving the world they already knew.
         </p>
         <div className="mono" style={{ textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end" }}>
@@ -170,7 +170,7 @@ function ChallengeSection() {
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             Fragmented systems,{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>frustrated customers</span>.
+            frustrated customers.
           </h2>
         </div>
       </div>
@@ -231,7 +231,7 @@ function OpportunitySection() {
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             Reframing the{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>question</span>.
+            question.
           </h2>
           <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.7, color: "var(--ink-soft)" }}>
             <p style={{ marginBottom: "1.2em" }}>
@@ -274,7 +274,7 @@ function ApproachSection() {
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             Local-first,{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>globally consistent</span>.
+            globally consistent.
           </h2>
         </div>
       </div>
@@ -372,7 +372,7 @@ function SolutionSection() {
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             A connected layer in the{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>app they already use</span>.
+            app they already use.
           </h2>
           <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.7, color: "var(--ink-soft)" }}>
             <p style={{ marginBottom: "1.2em" }}>
@@ -523,7 +523,7 @@ function ImpactSection() {
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             The output unlocked{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>£20m+</span>
+            £20m+
             {" "}of follow-on work.
           </h2>
         </div>
@@ -594,7 +594,7 @@ function NextProject() {
               letterSpacing: "-0.035em", marginBottom: 24
             }}>
               A facelift for the nation's most-loved{" "}
-              <span className="italic-accent" style={{ color: "#B51244" }}>self-serve coffee</span>.
+              self-serve coffee.
             </h3>
             <div className="mono" style={{
               display: "inline-flex", alignItems: "center", gap: 12,
@@ -710,7 +710,7 @@ function PasswordGate({ children }) {
           lineHeight: 1.2,
         }}>
           This case study is<br />
-          <span style={{ fontFamily: "var(--font-italic)", fontStyle: "italic", color: "#82B9FF" }}>password protected</span>.
+          password protected.
         </h1>
 
         <form

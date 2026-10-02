@@ -117,7 +117,7 @@ function Opener() {
           letterSpacing: "-0.035em",
           maxWidth: "18ch", fontWeight: 500
         }}>
-          An AI companion for the <span className="italic-accent" style={{ color: "var(--accent)" }}>trading floor</span>.
+          An AI companion for the trading floor.
         </h1>
       </div>
 
@@ -133,13 +133,13 @@ function Opener() {
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(22px, 2.4vw, 32px)",
+          fontSize: "clamp(16px, 1.8vw, 20px)",
           lineHeight: 1.4,
           fontWeight: 300,
           color: "var(--ink)"
         }}>
           A north star vision for Goldman Sachs's in-house proprietary AI tool, built on the{" "}
-          <span className="italic-accent" style={{ color: "var(--accent)" }}>design system</span>
+          design system
           {" "}we helped establish. Designing for some of the most demanding, data-driven users in the world.
         </p>
         <div className="mono" style={{ textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end" }}>
@@ -168,7 +168,7 @@ function ContextSection() {
             marginBottom: 40
           }}>
             Proprietary AI, built for{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>professionals</span>.
+            professionals.
           </h2>
           <div style={{ fontFamily: "var(--font-display)", fontSize: 20, lineHeight: 1.6, color: "var(--ink-soft)" }}>
             <p style={{ marginBottom: "1.2em" }}>
@@ -225,7 +225,7 @@ function PrinciplesSection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          Designing for <span className="italic-accent" style={{ color: "var(--accent)" }}>demanding users</span>.
+          Designing for demanding users.
         </h2>
       </div>
 
@@ -266,7 +266,7 @@ function ExplorationSection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          From concept to <span className="italic-accent" style={{ color: "var(--accent)" }}>north star</span>.
+          From concept to north star.
         </h2>
       </div>
 
@@ -330,7 +330,7 @@ function OutcomeSection() {
             letterSpacing: "-0.03em",
             marginBottom: 40
           }}>
-            A north star that <span className="italic-accent" style={{ color: "var(--accent)" }}>stuck</span>.
+            A north star that stuck.
           </h2>
           <div style={{ fontFamily: "var(--font-display)", fontSize: 20, lineHeight: 1.6, color: "var(--ink-soft)" }}>
             <p style={{ marginBottom: "1.2em" }}>
@@ -376,7 +376,7 @@ function NextProject() {
               letterSpacing: "-0.035em",
               marginBottom: 24
             }}>
-              Building a bank's design system from <span className="italic-accent" style={{ color: "var(--accent)" }}>scratch</span>.
+              Building a bank's design system from scratch.
             </h3>
             <div className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 12, borderBottom: "1px solid var(--ink)", paddingBottom: 4 }}>
               Read case study <span>→</span>

@@ -27,7 +27,7 @@ const CASE_STUDIES = [
     client: "NatWest",
     title: "Building a bank's design system from scratch",
     tagline: "A 400% efficiency improvement by rebuilding the system, the governance, and the team around it.",
-    tags: ["Design System", "Governance", "Figma"],
+    tags: ["Design Systems", "Tokenisation", "Governance"],
     role: "Experience Lead",
     duration: "12 months",
     href: "natwest.html",
@@ -43,9 +43,9 @@ const CASE_STUDIES = [
     num: "03",
     year: "2023",
     client: "Bupa",
-    title: "A North Star for global health insurance",
+    title: "A North Star vision for Bupa's app",
     tagline: "Unifying the customer experience across markets. The output unlocked £20m+ of follow-on work.",
-    tags: ["Product Vision", "User Research", "Prototyping"],
+    tags: ["Experience Strategy", "Service Design", "UX Design", "Research"],
     role: "Experience Lead",
     duration: "4 months",
     href: "bupa.html",
@@ -60,9 +60,9 @@ const CASE_STUDIES = [
     num: "04",
     year: "2019",
     client: "Costa Express",
-    title: "A facelift for the nation's most-loved self-serve coffee",
+    title: "A facelift for Costa's self-serve coffee machines",
     tagline: "UI redesign across two screen formats, aligned to the new Costa brand. One visual language, two very different canvases.",
-    tags: ["Brand Refresh", "UI Design", "Concept"],
+    tags: ["Brand Refresh", "GUI Design", "Concept"],
     role: "Senior Designer",
     duration: "2 formats",
     href: "costa.html",
@@ -76,9 +76,9 @@ const CASE_STUDIES = [
     num: "05",
     year: "2022",
     client: "Nord Anglia",
-    title: "A flexible digital identity for a global network of premium schools",
+    title: "One digital identity for a global network of schools",
     tagline: "Delivering a component library for 76 international schools, designed in parallel with an evolving brand.",
-    tags: ["UX / UI", "Component Library", "Brand Translation"],
+    tags: ["UX / UI Design", "Component Library", "User Testing", "Brand Translation"],
     role: "Experience Designer",
     duration: "60+ modules",
     href: "nord-anglia.html",
@@ -149,6 +149,48 @@ function renderStaggeredLetters(text, loaded, baseDelay, { stagger = 35, trackin
     }
   });
   return nodes;
+}
+
+// One row of the footer's scrolling client-name marquee. `animationName`
+// picks the direction (see the client-scroll / client-scroll-reverse
+// keyframes in Contact) so two rows can run opposite ways. Giving the two
+// mobile rows different `duration`s (rather than just opposite direction
+// at the same speed) keeps their phase constantly drifting apart, so the
+// ✺ symbols don't keep lining up between rows the way they do at a
+// shared speed. A negative `delay` starts the row as if it had already
+// been playing for that long — i.e. mid-cycle, not flush at the very
+// start of the loop — useful for the first row so its first name isn't
+// sitting right at the left edge on load.
+function renderClientMarqueeRow(list, animationName, duration = 60, delay = 0) {
+  return (
+    <div style={{
+      display: "flex",
+      animation: `${animationName} ${duration}s linear infinite`,
+      animationDelay: `${delay}s`,
+      whiteSpace: "nowrap",
+    }}>
+      {[...list, ...list].map((c, i) => (
+        <span key={i} style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "clamp(32px, 4vw, 56px)",
+          fontWeight: 400,
+          letterSpacing: "-0.03em",
+          padding: "0 24px",
+          color: "var(--ink)",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 40,
+        }}>
+          {c}
+          <span style={{
+            color: "var(--ink)",
+            fontSize: "0.5em",
+            verticalAlign: "middle",
+          }}>✺</span>
+        </span>
+      ))}
+    </div>
+  );
 }
 
 // ─────────────── COMPONENTS ───────────────
@@ -268,8 +310,12 @@ function HeroStacked() {
         padding: isMobile ? "16px 20px 0" : "16px 24px 0",
       }}>
         <h1 style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(64px, 16vw, 300px)",
+          fontFamily: "var(--font-name)",
+          // Kept on one line on mobile too — sized to fill the available
+          // width edge to edge (mirrors the footer name's size, computed
+          // from the real measured width of "Elspeth" + image + "Belden"
+          // in Perfektta against the 20px side padding both share).
+          fontSize: isMobile ? "calc((100vw - 40px) / 6.008)" : "clamp(58px, 14.5vw, 270px)",
           lineHeight: 0.88,
           fontWeight: 400,
           letterSpacing: "-0.035em",
@@ -309,10 +355,10 @@ function HeroStacked() {
             lineHeight: 1.3,
             color: "#F4F1EC",
             fontWeight: 400,
-            maxWidth: "36ch",
+            maxWidth: "32ch",
           }}>
             Design lead. Systems thinker.{" "}
-            <span style={{ fontStyle: "italic", opacity: 0.8 }}>Making complexity look effortless.</span>
+            <span style={{ opacity: 0.8 }}>Making complexity look effortless.</span>
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -358,10 +404,10 @@ function HeroStacked() {
               lineHeight: 1.3,
               color: "#F4F1EC",
               fontWeight: 400,
-              maxWidth: "36ch",
+              maxWidth: "32ch",
             }}>
               Design lead. Systems thinker.{" "}
-              <span style={{ fontStyle: "italic", opacity: 0.8 }}>Making complexity look effortless.</span>
+              <span style={{ opacity: 0.8 }}>Making complexity look effortless.</span>
             </p>
 
             <a
@@ -431,7 +477,7 @@ function HeroSplit() {
           letterSpacing: "-0.035em",
           margin: "40px 0",
         }}>
-          Products, <span className="italic-accent" style={{ color: "var(--accent)" }}>systems</span>,
+          Products, systems,
           <br />and stories.
         </h1>
 
@@ -443,7 +489,7 @@ function HeroSplit() {
           color: "var(--ink-soft)",
         }}>
           I'm Elspeth — an experience lead at{" "}
-          <span className="italic-accent" style={{ color: "var(--accent)" }}>Publicis Sapient</span>
+          Publicis Sapient
           , designing work for Goldman Sachs, NatWest and Bupa.
         </p>
       </div>
@@ -499,7 +545,7 @@ function HeroMarquee() {
           color: "var(--ink-soft)",
         }}>
           Designing for Goldman Sachs, NatWest & Bupa at{" "}
-          <span className="italic-accent" style={{ color: "var(--accent)" }}>Publicis Sapient</span>.
+          Publicis Sapient.
         </p>
       </div>
     </section>
@@ -576,7 +622,7 @@ function ImagePlaceholder({ label = "image", aspect = "4/3", full = false, tint 
 function PullQuote() {
   const isMobile = useIsMobile();
   return (
-    <section style={{
+    <section id="approach" style={{
       padding: isMobile ? "60px 20px" : "120px 32px",
       borderTop: "1px solid var(--line-faint)",
       borderBottom: "1px solid var(--line-faint)",
@@ -591,16 +637,18 @@ function PullQuote() {
         </div>
         <blockquote style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(32px, 4.2vw, 60px)",
+          fontSize: "clamp(32px, 3.9vw, 56px)",
           lineHeight: 1.15,
-          fontWeight: 300,
+          fontWeight: 400,
           letterSpacing: "-0.02em",
           color: "var(--ink)",
           margin: 0,
         }}>
-          I lead{" "}
-          <span className="italic-accent" style={{ color: "var(--accent)" }}>product vision</span>
-          {" "}and design system work for brands at scale. From AI interfaces and app strategies to tokenised component libraries, I bring structure to complex problems.
+          I've spent over a decade designing digital products for{" "}
+          <span style={{ fontStyle: "italic", color: "var(--accent)" }}>finance, healthcare</span>
+          {" "}and{" "}
+          <span style={{ fontStyle: "italic", color: "var(--accent)" }}>retail</span>
+          . Lately, most of that has been AI products. I set the vision, design the product, and build the component libraries teams ship from.
         </blockquote>
         <div />
       </div>
@@ -652,6 +700,37 @@ function SelectedWork() {
     };
   }, [isMobile]);
 
+  // Mirrors the last card's own closing fade (see CaseStudyPanel) so the
+  // sticky "N / total" indicator — which lives here, not on the card
+  // itself — fades out in step with it as the footer arrives, instead of
+  // floating on top of the fading/shrinking card underneath it.
+  const [footerCloseProgress, setFooterCloseProgress] = useState(0);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    let raf = null;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = null;
+        const footer = document.getElementById('contact');
+        if (!footer) return;
+        const vh = window.innerHeight || 1;
+        const rect = footer.getBoundingClientRect();
+        const p = Math.max(0, Math.min(1, (vh - rect.top) / vh));
+        setFooterCloseProgress(p);
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [isMobile]);
+
   const activeCard = CASE_STUDIES[activeIndex];
 
   return (
@@ -665,16 +744,17 @@ function SelectedWork() {
         alignItems: "start",
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">SELECTED WORK</span>
+          <span className="bracket">CASE STUDIES</span>
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(48px, 7vw, 112px)",
           lineHeight: 0.95,
-          fontWeight: 300,
+          fontWeight: 400,
           letterSpacing: "-0.035em",
+          color: "var(--ink)",
         }}>
-          Recent <span className="italic-accent" style={{ color: "var(--accent)" }}>work</span>.
+          Recent <span style={{ fontStyle: "italic", color: "var(--accent)" }}>work</span>
         </h2>
         <div />
       </div>
@@ -715,6 +795,7 @@ function SelectedWork() {
           and each <article> is position:sticky top:0 so it pins as the next rises over. */}
       <div ref={stackRef} style={{
         position: "relative",
+        marginTop: -1,
         // Each card pins for ~80vh of scroll before the next one slides over.
         // Total scroll length = (count - 1) * pinDistance + 1 viewport for the last card.
         // We achieve this naturally by giving each article a height of 100vh
@@ -729,6 +810,7 @@ function SelectedWork() {
               position: "absolute",
               top: 20, right: 20,
               color: activeCard.bgImage ? "rgba(244,241,236,0.85)" : "#4A4A48",
+              opacity: activeIndex === CASE_STUDIES.length - 1 ? 1 - footerCloseProgress : 1,
             }}>
               <span className="bracket">{activeCard.num} / {String(CASE_STUDIES.length).padStart(2, "0")}</span>
             </div>
@@ -748,8 +830,13 @@ function CaseStudyPanel({ cs, index, total }) {
   const tint = TINT_COLORS[cs.imageTint] || TINT_COLORS.warm;
   const articleRef = useRef(null);
   const [revealed, setRevealed] = useState(false);
+  const isBento = index === 0 && !!cs.bgImage;
+  const [bentoProgress, setBentoProgress] = useState(0);
 
   useEffect(() => {
+    // The bento panel triggers its letter-reveal itself, once the reveal
+    // animation reaches full width — not on generic scroll-visibility.
+    if (isBento) return;
     const el = articleRef.current;
     if (!el) return;
     // Fires partway through the card's slide-in (not right as it first
@@ -768,7 +855,159 @@ function CaseStudyPanel({ cs, index, total }) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [isBento]);
+
+  // Bento-to-full-screen reveal — first case study only. p runs 0 (panel
+  // half into view — its top edge is half the viewport down from the
+  // top) to 1 (its top edge has reached the very top of the screen, i.e.
+  // the moment sticky pinning engages), so the reveal gets more of the
+  // scroll-in to play out in rather than being compressed into just the
+  // final third — it was starting late enough to feel like nothing was
+  // happening for most of the card's entrance. Driven by
+  // getBoundingClientRect(), which reflects the panel's actual rendered
+  // position regardless of sticky state, so there's no ambiguity once
+  // it's pinned the way an offsetTop-based measurement would have.
+  useEffect(() => {
+    if (!isBento) return;
+    let raf = null;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = null;
+        const el = articleRef.current;
+        if (!el) return;
+        const vh = window.innerHeight || 1;
+        const startTop = vh / 2;
+        const p = Math.max(0, Math.min(1, (startTop - el.getBoundingClientRect().top) / startTop));
+        setBentoProgress(p);
+        // Fires a little into the reveal rather than right as it starts
+        // or only once it's finished — still well before the panel
+        // settles, so the text visibly cascades in during the motion.
+        if (p > 0.2) setRevealed(true);
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [isBento]);
+
+  // Closing bookend on the last case study — as the footer rises into
+  // view behind it, this panel shrinks back down to the same 85%-width
+  // framed-card look the first case study started at. Driven by the
+  // footer's own position (0 = footer not yet visible, 1 = footer fully
+  // on screen) rather than this panel's position, since by the time the
+  // footer is on screen this panel itself may already be mid-cover.
+  const isLast = index === total - 1;
+  const [closeProgress, setCloseProgress] = useState(0);
+
+  useEffect(() => {
+    if (!isLast) return;
+    let raf = null;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = null;
+        const footer = document.getElementById('contact');
+        if (!footer) return;
+        const vh = window.innerHeight || 1;
+        // On mobile, wait until the footer is already a quarter of a
+        // viewport-height into view before starting to close, rather
+        // than the instant it starts peeking in — it was starting to
+        // shrink too early. Desktop keeps the original immediate start.
+        const startThreshold = isMobile ? vh * 0.75 : vh;
+        const rect = footer.getBoundingClientRect();
+        const p = Math.max(0, Math.min(1, (startThreshold - rect.top) / startThreshold));
+        setCloseProgress(p);
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [isLast, isMobile]);
+
+  // Opening bookend in reverse — as the first case study is scrolled
+  // back up and out of view, its text fades out the same way the last
+  // card's fades out as the footer arrives, just mirrored. Driven by
+  // this card's OWN top edge: once un-pinned by scrolling back up past
+  // it, a sticky element's rect.top grows from 0 as it's pushed back
+  // down the screen, which is the real moment it's being left behind.
+  // Before the card has ever actually been reached, though, rect.top
+  // sits at some large positive "not scrolled to yet" value that would
+  // clamp to the exact same 1 as a genuine exit — hasEnteredRef guards
+  // against reading that early, large-but-unrelated value as an exit.
+  const [openBackProgress, setOpenBackProgress] = useState(0);
+  const hasEnteredRef = useRef(false);
+
+  useEffect(() => {
+    if (!isBento) return;
+    let raf = null;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = null;
+        const el = articleRef.current;
+        if (!el) return;
+        const vh = window.innerHeight || 1;
+        const top = el.getBoundingClientRect().top;
+        if (top <= 0) hasEnteredRef.current = true;
+        // Compressed into a third of a viewport-height of upward scroll
+        // (the same distance the forward entry reveal uses) rather than
+        // a full one, so the fade is noticeable much sooner after the
+        // card starts un-pinning instead of needing a long scroll-up.
+        const exitRange = vh / 3;
+        const p = hasEnteredRef.current ? Math.max(0, Math.min(1, top / exitRange)) : 0;
+        setOpenBackProgress(p);
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [isBento]);
+
+  // On mobile, the smallest (starting) state is a fixed 20px margin each
+  // side, converted to a percentage of the real viewport width — not a
+  // floor on the open end, which always goes all the way to literal
+  // 100% (full-bleed, no margin) on both mobile and desktop.
+  const vw = typeof window !== "undefined" ? window.innerWidth : 375;
+  const startSide = isMobile ? 100 - (20 / vw) * 100 : 92.5;
+  const endSide = 100;
+
+  // Everything besides the client name's own letter-stagger (the index
+  // label, title and tags) fades in as a block on the bento panel's
+  // initial entrance, keyed to the same `revealed` trigger — rather than
+  // just appearing instantly while the name is still cascading in.
+  const bentoEntranceFade = isBento
+    ? { opacity: revealed ? 1 : 0, transition: "opacity 700ms ease-out" }
+    : {};
+
+  // Starts at its smallest margin and opens linearly to full-bleed as
+  // bentoProgress runs 0→1. The last panel's bars are the footer's own
+  // red, not the page background, so the shrink reads as revealing the
+  // footer behind it rather than the page.
+  let barBottom = 90, barSide = startSide, barColor = "var(--bg)";
+  if (isBento) {
+    barBottom = 90 + bentoProgress * 10;
+    barSide = startSide + bentoProgress * (endSide - startSide);
+  } else if (isLast) {
+    barBottom = 100 - closeProgress * 10;
+    barSide = endSide - closeProgress * (endSide - startSide);
+    barColor = "var(--accent)";
+  }
 
   return (
     <article
@@ -784,7 +1023,10 @@ function CaseStudyPanel({ cs, index, total }) {
         justifyContent: "center",
         background: cs.bgImage ? (tint.dark || "#120808") : tint.bg,
         zIndex: index + 1,
-        boxShadow: index > 0 ? "0 -20px 60px -10px rgba(0,0,0,0.4)" : "none",
+        // No shadow on the last panel — that "rising card" shadow is for
+        // one case study sliding over the previous one; the footer rises
+        // over this one instead, and shouldn't show a shadow of its own.
+        boxShadow: (index > 0 && index !== total - 1) ? "0 -20px 60px -10px rgba(0,0,0,0.4)" : "none",
         ...(cs.bgImage && {
           "--ink":      "#F4F1EC",
           "--ink-soft": "rgba(244,241,236,0.75)",
@@ -838,6 +1080,41 @@ function CaseStudyPanel({ cs, index, total }) {
         pointerEvents: "none",
       }} />
 
+      {/* Bento bars — solid, page-coloured strips over the photo,
+          clipped down with clip-path so only part of each shows.
+          Shrinking that visible part is what "opens" the first case
+          study; growing it back is what "closes" the last one as the
+          footer arrives, bookending the stack. No bottom strip — the
+          panel's bottom edge stays below the fold for the whole move. */}
+      {(isBento || isLast) && (
+        <>
+          <div style={{
+            position: "absolute", inset: 0,
+            background: barColor,
+            clipPath: `inset(0 0 ${barBottom}% 0)`,
+            willChange: "clip-path",
+            zIndex: 2,
+            pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute", inset: 0,
+            background: barColor,
+            clipPath: `inset(0 ${barSide}% 0 0)`,
+            willChange: "clip-path",
+            zIndex: 2,
+            pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute", inset: 0,
+            background: barColor,
+            clipPath: `inset(0 0 0 ${barSide}%)`,
+            willChange: "clip-path",
+            zIndex: 2,
+            pointerEvents: "none",
+          }} />
+        </>
+      )}
+
       {/* Three-column composition: client | thumbnail | meta */}
       <div style={{
         position: "relative",
@@ -852,7 +1129,11 @@ function CaseStudyPanel({ cs, index, total }) {
         padding: isMobile ? "56px 20px 40px" : "0 48px",
       }}>
         {/* Left / Top: client name — vertically centred in the space
-            above the thumbnail on mobile. */}
+            above the thumbnail on mobile. Fades out on its own (not the
+            thumbnail, which stays at full opacity): last card as soon as
+            the closing bars start moving, first card as it's scrolled
+            back up and out of view — the same closing/opening-reversed
+            fade, just scoped to text instead of the whole composition. */}
         <div style={{
           flex: isMobile ? 1 : undefined,
           display: isMobile ? "flex" : undefined,
@@ -861,9 +1142,11 @@ function CaseStudyPanel({ cs, index, total }) {
           alignItems: isMobile ? "center" : undefined,
           width: isMobile ? "100%" : undefined,
           textAlign: isMobile ? "center" : "left",
+          ...(isLast && { opacity: 1 - closeProgress }),
+          ...(isBento && { opacity: 1 - openBackProgress }),
         }}>
           {!isMobile && (
-            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 16 }}>
+            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 16, ...bentoEntranceFade }}>
               <span className="bracket">{cs.num} / {String(total).padStart(2, "0")}</span>
             </div>
           )}
@@ -892,7 +1175,7 @@ function CaseStudyPanel({ cs, index, total }) {
             cursor: (cs.href && !cs.locked) ? "pointer" : "default",
             overflow: "hidden",
             borderRadius: 12,
-            boxShadow: "0 24px 60px -20px rgba(0,0,0,0.3)",
+            boxShadow: isLast ? "none" : "0 24px 60px -20px rgba(0,0,0,0.3)",
             alignSelf: isMobile ? "center" : undefined,
             flexShrink: isMobile ? 0 : undefined,
             margin: isMobile ? "0 auto" : undefined,
@@ -953,7 +1236,8 @@ function CaseStudyPanel({ cs, index, total }) {
         </a>
 
         {/* Right / Bottom: title + tags — vertically centred in the
-            space below the thumbnail on mobile. */}
+            space below the thumbnail on mobile. Same text-only fade as
+            the client name on the left. */}
         <div style={{
           flex: isMobile ? 1 : undefined,
           display: isMobile ? "flex" : undefined,
@@ -962,10 +1246,12 @@ function CaseStudyPanel({ cs, index, total }) {
           alignItems: isMobile ? "center" : undefined,
           width: isMobile ? "100%" : undefined,
           textAlign: isMobile ? "center" : "right",
+          ...(isLast && { opacity: 1 - closeProgress }),
+          ...(isBento && { opacity: 1 - openBackProgress }),
         }}>
           <h4 style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(20px, 2.2vw, 30px)",
+            fontSize: "clamp(24px, 2.5vw, 34px)",
             lineHeight: 1.3,
             fontWeight: 400,
             color: "var(--ink)",
@@ -973,6 +1259,7 @@ function CaseStudyPanel({ cs, index, total }) {
             maxWidth: isMobile ? "28ch" : "32ch",
             marginLeft: isMobile ? "auto" : "auto",
             marginRight: isMobile ? "auto" : undefined,
+            ...bentoEntranceFade,
           }}>
             {cs.title}
           </h4>
@@ -982,83 +1269,33 @@ function CaseStudyPanel({ cs, index, total }) {
               display: "flex",
               flexDirection: "column",
               gap: 6,
+              ...bentoEntranceFade,
             }}>
               {cs.tags.map(t => (
-                <div key={t}>— {t}</div>
+                <div key={t}>{t}</div>
               ))}
             </div>
           )}
         </div>
       </div>
 
-      {/* Bottom meta */}
-      <div style={{
-        position: "absolute",
-        bottom: 32, left: 32, right: 32,
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "end",
-        zIndex: 3,
-      }}>
-        <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          {index < total - 1 ? "Scroll ↓" : "End ·"}
+      {/* Bottom meta — no "Scroll" cue on the last card, nothing to
+          scroll to within the stack anymore. */}
+      {index < total - 1 && (
+        <div style={{
+          position: "absolute",
+          bottom: 32, left: 32, right: 32,
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "end",
+          zIndex: 3,
+        }}>
+          <div className="mono" style={{ color: "var(--ink-soft)" }}>
+            Scroll ↓
+          </div>
         </div>
-      </div>
+      )}
     </article>
-  );
-}
-
-// ─────────────── CLIENT MARQUEE ───────────────
-
-function ClientStrip() {
-  return (
-    <section style={{
-      padding: "80px 0",
-      borderTop: "1px solid var(--line-faint)",
-      borderBottom: "1px solid var(--line-faint)",
-      overflow: "hidden",
-    }}>
-      <div style={{ padding: "0 32px", marginBottom: 40 }}>
-        <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          I'VE ALSO WORKED WITH
-        </div>
-      </div>
-
-      <div style={{
-        display: "flex",
-        animation: "client-scroll 60s linear infinite",
-        whiteSpace: "nowrap",
-      }}>
-        {[...PAST_CLIENTS, ...PAST_CLIENTS].map((c, i) => (
-          <span key={i} style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(40px, 5vw, 72px)",
-            fontWeight: 300,
-            letterSpacing: "-0.02em",
-            padding: "0 32px",
-            color: "var(--ink)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 48,
-          }}>
-            {c}
-            <span style={{
-              fontFamily: "var(--font-italic)",
-              fontStyle: "italic",
-              color: "var(--accent)",
-              fontSize: "0.5em",
-              verticalAlign: "middle",
-            }}>✺</span>
-          </span>
-        ))}
-      </div>
-      <style>{`
-        @keyframes client-scroll {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-      `}</style>
-    </section>
   );
 }
 
@@ -1068,135 +1305,132 @@ function Contact() {
   const isMobile = useIsMobile();
   return (
     <section id="contact" style={{
-      padding: isMobile ? "60px 20px 60px" : "80px 32px 80px",
-      minHeight: "90vh",
+      position: "relative",
+      // Above the case-study stack (max z-index 5) so its solid red
+      // covers the last card's blurred layers, which bleed a little past
+      // the card's own bottom edge despite its overflow:hidden — rather
+      // than touching those layers directly, which also soften every
+      // card's top/side edges.
+      zIndex: 20,
+      // Pulls the footer up 1px to overlap the card beneath it, covering
+      // the sub-pixel rounding seam that vh-based heights (92vh hero,
+      // 100vh cards, 90vh footer, all rounding independently) can leave
+      // between sections at certain viewport heights.
+      marginTop: "-1px",
+      height: "90vh",
+      padding: isMobile ? "56px 20px 40px" : "90px 32px 56px",
       display: "flex",
       flexDirection: "column",
+      justifyContent: "space-between",
+      overflow: "hidden",
+      background: "var(--accent)",
+      "--ink": "#F4F1EC",
+      "--ink-soft": "#F4F1EC",
+      "--ink-faint": "rgba(244,241,236,0.65)",
+      "--line-faint": "rgba(244,241,236,0.3)",
     }}>
-      <div style={{
-        flex: 1,
-        display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr",
-        gap: isMobile ? 24 : 80,
-        alignContent: "center",
-        marginBottom: isMobile ? 60 : 120,
-      }}>
-        <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">CONTACT</span>
+      {/* Scrolling client marquee — now part of the footer module's
+          own height rather than a separate section above it. */}
+      <div style={{ borderBottom: "1px solid var(--line-faint)", paddingBottom: isMobile ? 32 : 40 }}>
+        <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: isMobile ? 24 : 32 }}>
+          I'VE ALSO WORKED WITH
         </div>
+        {/* On mobile, two rows moving in opposite directions fill the
+            extra vertical space better than one thin line would; desktop
+            keeps the single row with the full client list. */}
+        {isMobile ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {renderClientMarqueeRow(PAST_CLIENTS.slice(0, 8), "client-scroll", 30, -10)}
+            {renderClientMarqueeRow(PAST_CLIENTS.slice(8), "client-scroll-reverse", 23)}
+          </div>
+        ) : (
+          renderClientMarqueeRow(PAST_CLIENTS, "client-scroll")
+        )}
+      </div>
 
-        <div>
-          <h2 style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(64px, 10vw, 180px)",
-            lineHeight: 0.92,
-            fontWeight: 300,
-            letterSpacing: "-0.04em",
-            marginBottom: 56,
-          }}>
-            Let's <span className="italic-accent" style={{ color: "var(--accent)" }}>talk</span>.
-          </h2>
-
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
-            gap: isMobile ? 32 : 64,
-            maxWidth: 1100,
-          }}>
-            <div>
-              <div className="mono" style={{ color: "var(--ink-faint)", marginBottom: 10 }}>
-                <span className="bracket">EMAIL</span>
-              </div>
-              <a
-                href="mailto:elspethbelden@gmail.com"
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "clamp(22px, 2.4vw, 30px)",
-                  fontWeight: 400,
-                  display: "inline-block",
-                  borderBottom: "1px solid var(--ink)",
-                  paddingBottom: 2,
-                }}
-              >
-                Send me a message
-              </a>
-            </div>
-            <div>
-              <div className="mono" style={{ color: "var(--ink-faint)", marginBottom: 10 }}>
-                <span className="bracket">ELSEWHERE</span>
-              </div>
-              <a
-                href="https://www.linkedin.com/in/elspethbelden/"
-                target="_blank" rel="noopener"
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "clamp(22px, 2.4vw, 30px)",
-                  fontWeight: 400,
-                  display: "inline-block",
-                  borderBottom: "1px solid var(--ink)",
-                  paddingBottom: 2,
-                }}
-              >
-                LinkedIn ↗
-              </a>
-            </div>
-            <div>
-              <div className="mono" style={{ color: "var(--ink-faint)", marginBottom: 10 }}>
-                <span className="bracket">CV</span>
-              </div>
-              <a
-                href="assets/Elspeth-Belden-CV.pdf"
-                download
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "clamp(22px, 2.4vw, 30px)",
-                  fontWeight: 400,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 10,
-                  borderBottom: "1px solid var(--ink)",
-                  paddingBottom: 2,
-                }}
-              >
-                Download
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-                  <path d="M8 2v9M4.5 7.5 8 11l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2.5 13.5h11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              </a>
-            </div>
+      {/* Contact info + name, grouped so the small-caps links sit
+          directly above the big name, both pinned to the bottom of
+          the section via the outer space-between. Link styling matches
+          the case-study footers: bracketed mono label, mono value with
+          an underline, no separate display-font treatment. */}
+      <div>
+        <div style={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "space-between",
+          alignItems: isMobile ? "flex-start" : "flex-end",
+          gap: isMobile ? 16 : 32,
+          marginBottom: isMobile ? 24 : 32,
+        }}>
+          <div className="mono" style={{ color: "var(--ink-soft)", alignSelf: isMobile ? undefined : "flex-start" }}>
+            Let's talk
+          </div>
+          <div className="mono" style={{ color: "var(--ink-soft)" }}>
+            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>EMAIL</div>
+            <a href="mailto:elspethbelden@gmail.com" style={{ borderBottom: "1px solid currentColor" }}>
+              elspethbelden@gmail.com
+            </a>
+          </div>
+          <div className="mono" style={{ color: "var(--ink-soft)" }}>
+            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>LINKEDIN</div>
+            <a href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener" style={{ borderBottom: "1px solid currentColor" }}>
+              /in/elspethbelden ↗
+            </a>
+          </div>
+          <div className="mono" style={{ color: "var(--ink-soft)" }}>
+            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>CV</div>
+            <a href="assets/Elspeth-Belden-CV.pdf" download style={{ borderBottom: "1px solid currentColor" }}>
+              Download ↓
+            </a>
           </div>
         </div>
+
+        {/* Big name — the same split "Elspeth" / "Belden" construction
+            and size as the hero. */}
+        <h2 style={{
+          fontFamily: "var(--font-name)",
+          // Kept on one line on mobile too, sized so "Elspeth" + the
+          // signature image + "Belden" fill the available width edge to
+          // edge — the ratio (100vw minus the 20px side padding, divided
+          // by the measured width-per-font-size of this exact string +
+          // image combo in Perfektta) solves for the font-size that does
+          // that at any mobile viewport.
+          fontSize: isMobile ? "calc((100vw - 40px) / 6.008)" : "clamp(58px, 14.5vw, 270px)",
+          lineHeight: 0.88,
+          fontWeight: 400,
+          letterSpacing: "-0.035em",
+          margin: 0,
+          color: "var(--ink)",
+          whiteSpace: "nowrap",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+        }}>
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", true, 0, { tracking: "-0.035em" })}</span>
+          <img
+            src="assets/hair-like-this-2.png"
+            alt=""
+            style={{
+              height: "0.75em",
+              width: "auto",
+              flexShrink: 0,
+            }}
+          />
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", true, 0, { tracking: "-0.035em" })}</span>
+        </h2>
       </div>
 
-      {/* Footer meta */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr 1fr",
-        gap: isMobile ? 24 : 32,
-        paddingTop: 40,
-        borderTop: "1px solid var(--line-faint)",
-      }}>
-        <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">© 2026</span></div>
-          Elspeth Belden
-        </div>
-        <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">LOCATION</span></div>
-          London, UK
-        </div>
-        <div className="mono" style={{ color: "var(--ink-soft)", gridColumn: isMobile ? "1 / -1" : undefined }}>
-          <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">STATUS</span></div>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-            <span style={{
-              width: 8, height: 8, borderRadius: "50%",
-              background: "var(--accent)",
-              display: "inline-block"
-            }}></span>
-            Open to conversations
-          </span>
-        </div>
-      </div>
+      <style>{`
+        @keyframes client-scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @keyframes client-scroll-reverse {
+          from { transform: translateX(-50%); }
+          to { transform: translateX(0); }
+        }
+      `}</style>
     </section>
   );
 }
@@ -1209,7 +1443,6 @@ function App() {
       <Hero />
       <PullQuote />
       <SelectedWork />
-      <ClientStrip />
       <Contact />
     </>
   );

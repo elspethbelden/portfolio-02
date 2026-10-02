@@ -27,10 +27,10 @@ const ACCENTS = {
 };
 
 const TYPE_PAIRS = {
-  editorial:  { display: "'Instrument Serif', Georgia, serif", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Instrument Serif', Georgia, serif" },
-  technical:  { display: "'JetBrains Mono', ui-monospace, monospace", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Instrument Serif', Georgia, serif" },
-  classic:    { display: "'Newsreader', Georgia, serif",      mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Newsreader', Georgia, serif",   italicDisplay: "'Instrument Serif', Georgia, serif" },
-  expanded:   { display: "'Archivo', system-ui, sans-serif",  mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Instrument Serif', Georgia, serif" }
+  editorial:  { display: "'Cardinal Fruit', Georgia, serif", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Cardinal Fruit', Georgia, serif" },
+  technical:  { display: "'JetBrains Mono', ui-monospace, monospace", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Cardinal Fruit', Georgia, serif" },
+  classic:    { display: "'Newsreader', Georgia, serif",      mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Newsreader', Georgia, serif",   italicDisplay: "'Cardinal Fruit', Georgia, serif" },
+  expanded:   { display: "'Archivo', system-ui, sans-serif",  mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Cardinal Fruit', Georgia, serif" }
 };
 
 window.__tweaks = { ...TWEAK_DEFAULTS };
@@ -75,8 +75,65 @@ window.setTweak = setTweak;
 </script>
 
 <style>
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-Regular-Trial.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-Italic-Trial.woff2") format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-Medium-Trial.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-MediumItalic-Trial.woff2") format("woff2");
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-SemiBold-Trial.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-SemiBoldItalic-Trial.woff2") format("woff2");
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-Bold-Trial.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-BoldItalic-Trial.woff2") format("woff2");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+
   :root {
-    --bg: #F4F1EC;
+    --bg: #E6E3DF;
     --bg-alt: #EBE7E0;
     --ink: #1A1A1A;
     --ink-soft: #4A4A48;
@@ -84,6 +141,7 @@ window.setTweak = setTweak;
     --line: #1A1A1A;
     --line-faint: rgba(26, 26, 26, 0.12);
     --accent: oklch(0.68 0.17 45);
+    --font-name: 'Cardinal Fruit', var(--font-display);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -120,13 +178,6 @@ window.setTweak = setTweak;
   /* Bracketed meta label */
   .bracket::before { content: "[ "; }
   .bracket::after  { content: " ]"; }
-
-  /* Italic accent */
-  .italic-accent {
-    font-family: var(--font-italic);
-    font-style: italic;
-    font-weight: 400;
-  }
 
   /* ── Tweaks panel ── */
   #tweaks-panel {

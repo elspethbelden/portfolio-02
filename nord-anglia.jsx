@@ -141,7 +141,7 @@ function Opener() {
           fontWeight: 500
         }}>
           One system.{" "}
-          <span className="italic-accent" style={{ color: "rgb(167, 213, 232)" }}>76 schools.</span>
+          <span style={{ fontStyle: "italic" }}>76 schools.</span>
           {" "}Counting.
         </h1>
       </div>
@@ -158,14 +158,14 @@ function Opener() {
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(22px, 2.4vw, 32px)",
+          fontSize: "clamp(16px, 1.8vw, 20px)",
           lineHeight: 1.4,
           fontWeight: 300,
           color: "var(--ink)"
         }}>
           Nord Anglia is a network of 76 (and counting) premium international schools across the globe.
           I partnered with a brand agency to refresh their online identity and deliver a{" "}
-          <span className="italic-accent" style={{ color: "rgb(167, 213, 232)" }}>flexible component system</span>
+          component system
           {" "}to serve both the corporate site and individual school sites.
         </p>
         <div className="mono" style={{ textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end" }}>
@@ -194,7 +194,7 @@ function DiscoverySection() {
             marginBottom: 40
           }}>
             Interpreting the{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>brand online</span>.
+            brand online.
           </h2>
           <div style={{
             fontFamily: "var(--font-body)",
@@ -246,7 +246,7 @@ function HomepageTestingSection() {
             marginBottom: 40
           }}>
             Testing two{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>competing</span>
+            competing
             {" "}approaches.
           </h2>
           <div style={{
@@ -346,7 +346,7 @@ function GoldenPathSection() {
             marginBottom: 40
           }}>
             Two days to implement{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>the changes</span>.
+            the changes.
           </h2>
           <div style={{
             fontFamily: "var(--font-body)",
@@ -394,7 +394,7 @@ function IterationSection() {
             marginBottom: 40
           }}>
             Three sprints. A{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>rapidly evolving</span>
+            rapidly evolving
             {" "}brand.
           </h2>
           <div style={{
@@ -469,7 +469,7 @@ function NavigationSection() {
             marginBottom: 40
           }}>
             Simple concept.{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>Evolving</span>
+            Evolving
             {" "}execution.
           </h2>
           <div style={{
@@ -517,7 +517,7 @@ function FindASchoolSection() {
             marginBottom: 40
           }}>
             Making a global network{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>navigable</span>.
+            navigable.
           </h2>
           <div style={{
             fontFamily: "var(--font-body)",
@@ -575,7 +575,7 @@ function LanguageSupportSection() {
             marginBottom: 40
           }}>
             Designing for a{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>global</span>
+            global
             {" "}audience.
           </h2>
           <div style={{
@@ -663,7 +663,7 @@ function DocumentationSection() {
             marginBottom: 40
           }}>
             Building the{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>reference</span>.
+            reference.
           </h2>
           <div style={{
             fontFamily: "var(--font-body)",
@@ -750,7 +750,7 @@ function ResultSection() {
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>60+ modules.</span>
+            60+ modules.
             {" "}76 schools.
           </h2>
           <div style={{
@@ -837,7 +837,7 @@ function NextProject() {
               marginBottom: 24
             }}>
               Building a bank's design system from{" "}
-              <span className="italic-accent" style={{ color: "#8C3FB3" }}>scratch</span>.
+              scratch.
             </h3>
             <div className="mono" style={{
               display: "inline-flex", alignItems: "center", gap: 12,

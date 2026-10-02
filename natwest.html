@@ -26,10 +26,10 @@ const ACCENTS = {
 };
 
 const TYPE_PAIRS = {
-  editorial:  { display: "'Instrument Serif', Georgia, serif", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Instrument Serif', Georgia, serif" },
-  technical:  { display: "'JetBrains Mono', ui-monospace, monospace", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Instrument Serif', Georgia, serif" },
-  classic:    { display: "'Newsreader', Georgia, serif",      mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Newsreader', Georgia, serif",   italicDisplay: "'Instrument Serif', Georgia, serif" },
-  expanded:   { display: "'Archivo', system-ui, sans-serif",  mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Instrument Serif', Georgia, serif" }
+  editorial:  { display: "'Cardinal Fruit', Georgia, serif", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Cardinal Fruit', Georgia, serif" },
+  technical:  { display: "'JetBrains Mono', ui-monospace, monospace", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Cardinal Fruit', Georgia, serif" },
+  classic:    { display: "'Newsreader', Georgia, serif",      mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Newsreader', Georgia, serif",   italicDisplay: "'Cardinal Fruit', Georgia, serif" },
+  expanded:   { display: "'Archivo', system-ui, sans-serif",  mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Cardinal Fruit', Georgia, serif" }
 };
 
 function applyTweaks(t) {
@@ -46,6 +46,63 @@ applyTweaks(TWEAK_DEFAULTS);
 </script>
 
 <style>
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-Regular-Trial.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-Italic-Trial.woff2") format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-Medium-Trial.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-MediumItalic-Trial.woff2") format("woff2");
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-SemiBold-Trial.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-SemiBoldItalic-Trial.woff2") format("woff2");
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-Bold-Trial.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cardinal Fruit';
+    src: url("assets/CARDINAL FRUIT Fonts-WOFF2/CardinalFruitWeb-BoldItalic-Trial.woff2") format("woff2");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+
   :root {
     --bg: #FFFFFF;
     --bg-alt: #EBE7E0;
@@ -80,11 +137,6 @@ applyTweaks(TWEAK_DEFAULTS);
   .bracket::before { content: "[ "; }
   .bracket::after  { content: " ]"; }
 
-  .italic-accent {
-    font-family: var(--font-italic);
-    font-style: italic;
-    font-weight: 400;
-  }
 </style>
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>

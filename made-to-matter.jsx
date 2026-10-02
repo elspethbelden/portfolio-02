@@ -117,7 +117,7 @@ function Opener() {
           letterSpacing: "-0.035em",
           maxWidth: "18ch", fontWeight: 500
         }}>
-          Made to <span className="italic-accent" style={{ color: "var(--accent)" }}>Matter</span>.
+          Made to Matter.
         </h1>
       </div>
 
@@ -133,13 +133,13 @@ function Opener() {
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(22px, 2.4vw, 32px)",
+          fontSize: "clamp(16px, 1.8vw, 20px)",
           lineHeight: 1.4,
           fontWeight: 300,
           color: "var(--ink)"
         }}>
           Defining what good looks like for{" "}
-          <span className="italic-accent" style={{ color: "var(--accent)" }}>NatWest's digital experience</span>
+          NatWest's digital experience
           {" "}— a strategic vision piece that set the direction for design quality across the bank.
         </p>
         <div className="mono" style={{ textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end" }}>
@@ -168,7 +168,7 @@ function ContextSection() {
             marginBottom: 40
           }}>
             Setting the bar for{" "}
-            <span className="italic-accent" style={{ color: "var(--accent)" }}>digital quality</span>.
+            digital quality.
           </h2>
           <div style={{ fontFamily: "var(--font-display)", fontSize: 20, lineHeight: 1.6, color: "var(--ink-soft)" }}>
             <p style={{ marginBottom: "1.2em" }}>
@@ -207,7 +207,7 @@ function VisionSection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          A benchmark for <span className="italic-accent" style={{ color: "var(--accent)" }}>what great feels like</span>.
+          A benchmark for what great feels like.
         </h2>
       </div>
 
@@ -261,7 +261,7 @@ function ProcessSection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          Research, distillation, <span className="italic-accent" style={{ color: "var(--accent)" }}>provocation</span>.
+          Research, distillation, provocation.
         </h2>
       </div>
 
@@ -317,7 +317,7 @@ function OutcomeSection() {
             letterSpacing: "-0.03em",
             marginBottom: 40
           }}>
-            A shared language for <span className="italic-accent" style={{ color: "var(--accent)" }}>quality</span>.
+            A shared language for quality.
           </h2>
           <div style={{ fontFamily: "var(--font-display)", fontSize: 20, lineHeight: 1.6, color: "var(--ink-soft)" }}>
             <p style={{ marginBottom: "1.2em" }}>
@@ -363,7 +363,7 @@ function NextProject() {
               letterSpacing: "-0.035em",
               marginBottom: 24
             }}>
-              Building a bank's design system from <span className="italic-accent" style={{ color: "var(--accent)" }}>scratch</span>.
+              Building a bank's design system from scratch.
             </h3>
             <div className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 12, borderBottom: "1px solid var(--ink)", paddingBottom: 4 }}>
               Read case study <span>→</span>
