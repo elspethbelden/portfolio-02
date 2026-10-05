@@ -128,9 +128,6 @@ function Opener() {
       </div>
 
       <div style={{ padding: isMobile ? "40px 0 24px" : "80px 0 40px" }}>
-        <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: isMobile ? 24 : 40 }}>
-          <span className="bracket">CASE STUDY · COSTA EXPRESS</span>
-        </div>
         <h1 style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(56px, 9vw, 160px)",
@@ -138,7 +135,7 @@ function Opener() {
           letterSpacing: "-0.035em",
           maxWidth: "20ch", fontWeight: 500
         }}>
-          A facelift for the nation's most-loved self-serve coffee.
+          A facelift for Costa Express self-serve coffee machines.
         </h1>
       </div>
 
@@ -150,7 +147,7 @@ function Opener() {
         paddingBottom: isMobile ? 24 : 40
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">INTRO</span>
+          INTRO
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
@@ -159,9 +156,7 @@ function Opener() {
           fontWeight: 300,
           color: "var(--ink)"
         }}>
-          Facelift for the popular Costa Express self-serve machines, designed to flex across{" "}
-          two screen formats
-          {" "}— the new flagship hardware and the compact unit in petrol stations across the country.
+          A redesign of the Costa Express interface for two screen formats: the new flagship machine and the compact unit found in service stations.
         </p>
       </div>
     </section>);
@@ -177,7 +172,7 @@ function ContextSection() {
         gap: isMobile ? 20 : 64
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">01 — CONTEXT</span>
+          01 — CONTEXT
         </div>
 
         <div style={{ maxWidth: "60ch" }}>
@@ -199,7 +194,7 @@ function ContextSection() {
             color: "var(--ink-soft)"
           }}>
             <p style={{ marginBottom: "1.2em" }}>
-              The Costa Express interface was functional but dated. With the new Costa brand launch, it was time to give these machines a much-needed update — one that reflected the parent brand's new visual language and felt at home next to the staffed stores on the high street.
+              The new Costa brand launch was the moment to update the machines, so they matched the parent brand's visual language and felt at home next to the staffed stores on the high street.
             </p>
           </div>
         </div>
@@ -230,7 +225,7 @@ function PhotographySection() {
         marginBottom: isMobile ? 40 : 80
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">02 — PHOTOGRAPHY &amp; SCREENS</span>
+          02 — PHOTOGRAPHY &amp; SCREENS
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
@@ -239,7 +234,7 @@ function PhotographySection() {
           fontWeight: 300,
           letterSpacing: "-0.03em"
         }}>
-          Rich new imagery, built to flex.
+          New imagery for two screen formats.
         </h2>
       </div>
 
@@ -255,10 +250,16 @@ function PhotographySection() {
           fontSize: 16, lineHeight: 1.7,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">P.01 — A FLEXIBLE LIBRARY</span>
-          </div>
-          Starting with rich new product photography, flexible enough to cater to both existing flavours and new seasonal additions — a library that could scale with the menu rather than getting reshot every quarter.
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>A flexible library</h3>
+          The work started with new product photography that covers existing flavours and seasonal additions, so the library grows with the menu and doesn't need reshooting every quarter.
         </div>
         <figure>
           <ImagePlaceholder label="coffee flavours — photography spread" aspect="16/9" tint="coffee" src="uploads/Costa/coffee-flavours.jpg" />
@@ -286,7 +287,7 @@ function PhotographySection() {
           fontSize: 16, lineHeight: 1.7,
           color: "var(--ink-soft)"
         }}>
-          The design aesthetic needed to flex between the newer, most advanced model of machine and the more compact model with a completely different screen orientation. One visual language, two very different canvases.
+          The design had to work on both the newest machine and the compact model, which has a different screen orientation.
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24, background: "var(--bg-alt)", padding: isMobile ? 20 : 32, borderRadius: 16 }}>
           <figure>
@@ -372,7 +373,7 @@ function AppIntegrationSection() {
         marginBottom: isMobile ? 40 : 80
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">03 — APP INTEGRATION</span>
+          03 — APP INTEGRATION
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
@@ -397,10 +398,16 @@ function AppIntegrationSection() {
           fontSize: 16, lineHeight: 1.7,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">C.01 — FROM HABIT TO INTERFACE</span>
-          </div>
-          Fast-turnaround, high-concept design exploring how the mobile app and the machine could become a more joined-up user experience — and how the coffee-ordering moment could fit seamlessly into the morning commute rather than interrupting it.
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>From habit to interface</h3>
+          A quick concept exploring how the app and the machine could work as one journey, so ordering a coffee fits into the morning commute.
         </div>
         <figure>
           <ImagePlaceholder label="car dashboard, in-situ" aspect="16/9" tint="dark" src="uploads/Costa/Car-dashboard-situ.webp" />
@@ -477,7 +484,7 @@ function NextProject() {
       ["--line-faint"]: "rgba(244,241,236,0.15)",
     }}>
       <div className="mono" style={{ color: "var(--ink-faint)", marginBottom: isMobile ? 24 : 40 }}>
-        <span className="bracket">NEXT</span>
+        NEXT
       </div>
 
       <a href="nord-anglia.html" style={{ display: "block" }}>
@@ -487,10 +494,7 @@ function NextProject() {
           gap: isMobile ? 24 : 64,
           alignItems: "center"
         }}>
-          <div style={{ height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined, overflow: "hidden", borderRadius: 12 }}>
-            <ImagePlaceholder label="Nord Anglia — school pages mockup" full src="assets/thumbnails/Nord Thumbnail.webp" />
-          </div>
-          <div>
+          <div style={{ order: isMobile ? 0 : 1 }}>
             <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 20 }}>
               Nord Anglia
             </div>
@@ -510,6 +514,9 @@ function NextProject() {
             }}>
               Read case study <span>→</span>
             </div>
+          </div>
+          <div style={{ order: isMobile ? 0 : 2, height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined, overflow: "hidden", borderRadius: 12 }}>
+            <ImagePlaceholder label="Nord Anglia — school pages mockup" full src="assets/thumbnails/Nord Thumbnail.webp" />
           </div>
         </div>
       </a>
@@ -533,17 +540,17 @@ function Footer() {
       ["--line-faint"]: "rgba(244,241,236,0.15)",
     }}>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">© 2026</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>© 2026</div>
         Elspeth Belden
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">EMAIL</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>EMAIL</div>
         <a href="mailto:elspethbelden@gmail.com" style={{ borderBottom: "1px solid currentColor" }}>
           elspethbelden@gmail.com
         </a>
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">LINKEDIN</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>LINKEDIN</div>
         <a href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener" style={{ borderBottom: "1px solid currentColor" }}>
           /in/elspethbelden ↗
         </a>
@@ -555,7 +562,7 @@ function Footer() {
           </a>
         ) : (
           <>
-            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">BACK</span></div>
+            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>BACK</div>
             <a href="index.html" style={{ borderBottom: "1px solid currentColor" }}>
               Home ↑
             </a>

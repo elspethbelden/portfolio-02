@@ -116,9 +116,6 @@ function Opener() {
       </div>
 
       <div style={{ padding: isMobile ? "40px 0 24px" : "80px 0 40px" }}>
-        <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: isMobile ? 24 : 40 }}>
-          <span className="bracket">CASE STUDY · BUPA GLOBAL CONNECT</span>
-        </div>
         <h1 style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(56px, 9vw, 160px)",
@@ -135,20 +132,15 @@ function Opener() {
         paddingTop: isMobile ? 24 : 40, paddingBottom: isMobile ? 24 : 40
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">INTRO</span>
+          INTRO
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(16px, 1.8vw, 20px)",
           lineHeight: 1.4, fontWeight: 300, color: "var(--ink)"
         }}>
-          Bupa's international health offering spanned markets, systems, and apps — but not in a way customers could navigate. I led the experience design for{" "}
-          Bupa Global Connect
-          : a unified journey embedded into existing local apps, giving customers seamless access to global cover without leaving the world they already knew.
+          Bupa's international health offering spanned several markets and apps, and customers couldn't find their way around it. I led the experience design for Bupa Global Connect, a single journey built into the existing local apps. Customers reach their global cover from the app they already use.
         </p>
-        <div className="mono" style={{ textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end" }}>
-          UK + HK
-        </div>
       </div>
     </section>
   );
@@ -160,7 +152,7 @@ function ChallengeSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 40 : 80 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">01 — THE CHALLENGE</span>
+          01 — THE CHALLENGE
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -180,7 +172,7 @@ function ChallengeSection() {
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 64 }}>
           <div>
             <div className="mono" style={{ color: "var(--accent)", marginBottom: 24 }}>
-              <span className="bracket">CUSTOMERS</span>
+              CUSTOMERS
             </div>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.65, color: "var(--ink-soft)" }}>
               <p style={{ marginBottom: "0.4em" }}>Couldn't understand what their policy covered.</p>
@@ -190,7 +182,7 @@ function ChallengeSection() {
           </div>
           <div>
             <div className="mono" style={{ color: "var(--accent)", marginBottom: 24 }}>
-              <span className="bracket">THE BUSINESS</span>
+              THE BUSINESS
             </div>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.65, color: "var(--ink-soft)" }}>
               <p style={{ marginBottom: "0.4em" }}>Needed to drive growth through global and modular products.</p>
@@ -221,7 +213,7 @@ function OpportunitySection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">02 — THE OPPORTUNITY</span>
+          02 — THE OPPORTUNITY
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -230,15 +222,15 @@ function OpportunitySection() {
             lineHeight: 1.1, fontWeight: 300,
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
-            Reframing the{" "}
-            question.
+            Use the apps{" "}
+            customers already trust.
           </h2>
           <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.7, color: "var(--ink-soft)" }}>
             <p style={{ marginBottom: "1.2em" }}>
-              Rather than building a new global product, we reframed the challenge: embed a consistent global experience into the local apps customers already used and trusted.
+              We proposed embedding a consistent global experience in the local apps customers already used and trusted.
             </p>
             <p style={{ marginBottom: "1.2em" }}>
-              This approach meant faster rollout, lower technical disruption, and continuity for customers. It also gave us a foundation to scale across markets without forcing a choice between global consistency and local relevance.
+              This approach meant a faster rollout with less technical disruption, and customers kept the app they knew. It also meant each new market could reuse the same global layer and keep its own app.
             </p>
           </div>
         </div>
@@ -264,7 +256,7 @@ function ApproachSection() {
     }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 40 : 80 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">03 — APPROACH</span>
+          03 — APPROACH
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -282,7 +274,7 @@ function ApproachSection() {
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 12 : 64, marginBottom: isMobile ? 24 : 40 }}>
         <div>
           <div className="mono" style={{ color: "var(--accent)", marginBottom: 8 }}>
-            <span className="bracket">STEP 01</span>
+            STEP 01
           </div>
           <div className="mono" style={{ color: "var(--ink-soft)" }}>Understand real needs</div>
         </div>
@@ -305,7 +297,7 @@ function ApproachSection() {
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 12 : 64, marginBottom: isMobile ? 24 : 40 }}>
         <div>
           <div className="mono" style={{ color: "var(--accent)", marginBottom: 8 }}>
-            <span className="bracket">STEP 02</span>
+            STEP 02
           </div>
           <div className="mono" style={{ color: "var(--ink-soft)" }}>Define experience principles</div>
         </div>
@@ -316,10 +308,10 @@ function ApproachSection() {
 
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)", gap: isMobile ? 16 : 24, marginBottom: isMobile ? 40 : 60 }}>
         {[
-          { n: "01", title: "Modular & Composable UI", body: "Build reusable UI components — cards, forms, navigation — that snap together across products, enabling consistent experiences while allowing each market to customise layouts." },
+          { n: "01", title: "Modular & Composable UI", body: "Build reusable UI components (cards, forms, navigation) that snap together across products. The experience stays consistent and each market can still customise its layouts." },
           { n: "02", title: "Seamless Cross-Region Identity", body: "A member's login and profile should work fluidly across geographies, with no friction from switching regions or re-authenticating." },
-          { n: "03", title: "Contextual & Localised Experience", body: "Adapt language, currency, provider directories, and content to each user's location automatically — the interface should feel native wherever they are." },
-          { n: "04", title: "Holistic User Profile", body: "Present a unified view of the member's journey — claims, coverage, interactions — so users never have to repeat themselves or hunt across disconnected screens." },
+          { n: "03", title: "Contextual & Localised Experience", body: "Adapt language, currency, provider directories and content to each user's location automatically. The interface should feel native wherever they are." },
+          { n: "04", title: "Holistic User Profile", body: "Show the member's claims, coverage and interactions in one view, so they never have to repeat themselves or hunt across disconnected screens." },
         ].map(({ n, title, body }) => (
           <div key={n} style={{
             padding: 32,
@@ -342,13 +334,13 @@ function ApproachSection() {
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 12 : 64 }}>
         <div>
           <div className="mono" style={{ color: "var(--accent)", marginBottom: 8 }}>
-            <span className="bracket">STEP 03</span>
+            STEP 03
           </div>
           <div className="mono" style={{ color: "var(--ink-soft)" }}>Prototype and validate</div>
         </div>
         <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.7, color: "var(--ink-soft)", maxWidth: "55ch" }}>
           <p>
-            We designed integrated app experiences and tested them with customers, iterating on policy comparison, claims visibility, and care discovery. Each round sharpened the design decisions that mattered most.
+            We tested interactive prototypes with five customers, three in the UK and two in Hong Kong. Each took part in a 60-minute one-to-one session run by our user researchers, using the version built for their market.
           </p>
         </div>
       </div>
@@ -362,7 +354,7 @@ function SolutionSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 40 : 80 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">04 — THE SOLUTION</span>
+          04 — THE SOLUTION
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -376,7 +368,7 @@ function SolutionSection() {
           </h2>
           <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.7, color: "var(--ink-soft)" }}>
             <p style={{ marginBottom: "1.2em" }}>
-              Bupa Global Connect was designed as an experience layer embedded into existing local apps — MyBupa UK, Blua HK — rather than a standalone product. Customers accessed global cover through a familiar interface, with context-aware experiences that adapted to where they were and what they needed.
+              We designed Bupa Global Connect as a layer inside the existing local apps, MyBupa UK and Blua HK. Customers reached their global cover through an app they already knew, which showed local providers, language and currency for wherever they were.
             </p>
             <div style={{ margin: "2em 0 0", fontFamily: "var(--font-body)" }}>
               {/* Top — Global app */}
@@ -434,12 +426,22 @@ function SolutionSection() {
         </figcaption>
       </figure>
 
+      <h2 style={{
+        fontFamily: "var(--font-display)",
+        fontSize: "clamp(36px, 4.2vw, 56px)",
+        lineHeight: 1.1,
+        fontWeight: 300,
+        letterSpacing: "-0.025em",
+        color: "var(--ink)",
+        marginBottom: isMobile ? 24 : 32
+      }}>Customer-driven insights</h2>
+
       {/* Key innovations */}
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: isMobile ? 16 : 24, marginBottom: isMobile ? 40 : 64 }}>
         {[
           { label: "CARE DISCOVERY", body: "Find doctors by location, language, and coverage. Guided pathways into trusted local networks, wherever the customer is in the world." },
-          { label: "CLAIMS", body: "Real-time claim status, clear coverage feedback, and digital submission via OCR and upload. No phone calls. No ambiguity." },
-          { label: "TRAVEL SUPPORT", body: "A location-aware travel hub with emergency info, local providers, and pre-travel nudges — surfaced when the customer needs it, not all the time." },
+          { label: "CLAIMS", body: "Real-time claim status, clear coverage feedback, and digital submission by OCR or upload, so customers don't have to phone to find out where a claim is." },
+          { label: "TRAVEL SUPPORT", body: "A location-aware travel hub with emergency info, local providers, and pre-travel nudges, shown only when the customer needs them." },
         ].map(item => (
           <div key={item.label} style={{
             padding: 32,
@@ -447,7 +449,7 @@ function SolutionSection() {
             borderTop: "2px solid var(--accent)"
           }}>
             <div className="mono" style={{ color: "var(--accent)", marginBottom: 20 }}>
-              <span className="bracket">{item.label}</span>
+              {item.label}
             </div>
             <p style={{ fontFamily: "var(--font-body)", fontSize: 16, lineHeight: 1.7, color: "var(--ink-soft)" }}>
               {item.body}
@@ -456,14 +458,36 @@ function SolutionSection() {
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 24, marginBottom: isMobile ? 24 : 40 }}>
-        <figure>
+      {/* Findings from prototype testing */}
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: isMobile ? 16 : 24, marginBottom: isMobile ? 40 : 64 }}>
+        {[
+          { label: "Allowances first", body: "Customers rated allowances and personalised recommendations highly. We prioritised allowances and added tailored recommendations to a new Health Dashboard." },
+          { label: "Plain labels for preauthorisation", body: "Some customers couldn't tell pre-approved clinics from those needing upfront payment. We rewrote the preauthorisation labels to remove the jargon." },
+          { label: "Visible waiting times", body: "Customers wanted to know how long things would take. We added a time estimate to claims progress and an expected wait for e-pharmacy." },
+        ].map(item => (
+          <div key={item.label} style={{
+            padding: 32,
+            background: "var(--bg-alt)",
+            borderTop: "2px solid var(--accent)"
+          }}>
+            <div className="mono" style={{ color: "var(--accent)", marginBottom: 20 }}>
+              {item.label}
+            </div>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 16, lineHeight: 1.7, color: "var(--ink-soft)" }}>
+              {item.body}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: isMobile ? 32 : 40, marginBottom: isMobile ? 24 : 40 }}>
+        <figure style={{ width: isMobile ? "100%" : "80%", margin: isMobile ? 0 : "0 auto" }}>
           <ImagePlaceholder id="bupa-travel-hub" label="Travel hub — screens" aspect="4/3" src="uploads/bupa/Travel hub.png" />
           <figcaption className="mono" style={{ color: "var(--ink-faint)", marginTop: 14 }}>
             <span className="bracket">FIG. 04</span> Travel hub.
           </figcaption>
         </figure>
-        <figure>
+        <figure style={{ width: isMobile ? "100%" : "80%", margin: isMobile ? 0 : "0 auto" }}>
           <ImagePlaceholder id="bupa-find-care" label="Find care and claims — screens" aspect="4/3" src="uploads/bupa/Find care and claims.png" />
           <figcaption className="mono" style={{ color: "var(--ink-faint)", marginTop: 14 }}>
             <span className="bracket">FIG. 05</span> Find care and claims.
@@ -471,10 +495,20 @@ function SolutionSection() {
         </figure>
       </div>
 
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 12 : 64, marginBottom: isMobile ? 24 : 32 }}>
+        {!isMobile && <div />}
+        <h2 style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "clamp(36px, 4.2vw, 56px)",
+          lineHeight: 1.1,
+          fontWeight: 300,
+          letterSpacing: "-0.025em",
+          color: "var(--ink)"
+        }}>Designed inside each market's app.</h2>
+      </div>
+
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 12 : 64, marginTop: isMobile ? 24 : 40 }}>
-        <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">EXAMPLE JOURNEY</span>
-        </div>
+        {!isMobile && <div />}
         <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.7, color: "var(--ink-soft)", maxWidth: "55ch" }}>
           <p style={{ marginBottom: "1.2em" }}>
             Dan upgrades to global cover in his existing app. When he travels, the app surfaces localised care information for his destination. He finds a doctor based on his coverage and preferred language, and tracks the claim from the same place he booked the appointment.
@@ -483,7 +517,22 @@ function SolutionSection() {
       </div>
 
       <figure style={{ marginTop: isMobile ? 24 : 40 }}>
-        <VideoSlot src="uploads/bupa/Journey overview.mp4" />
+        {isMobile ? (
+          <div style={{ display: "grid", gap: 2 }}>
+            <div style={{ overflow: "hidden", width: "100%" }}>
+              <div style={{ width: "200%" }}>
+                <VideoSlot src="uploads/bupa/Journey overview.mp4" />
+              </div>
+            </div>
+            <div style={{ overflow: "hidden", width: "100%" }}>
+              <div style={{ width: "200%", marginLeft: "-100%" }}>
+                <VideoSlot src="uploads/bupa/Journey overview.mp4" />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <VideoSlot src="uploads/bupa/Journey overview.mp4" />
+        )}
         <figcaption className="mono" style={{
           color: "var(--ink-faint)", marginTop: 14
         }}>
@@ -497,11 +546,40 @@ function SolutionSection() {
 
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 12 : 64, marginTop: isMobile ? 24 : 40 }}>
         {!isMobile && <div />}
-        <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.7, color: "var(--ink-soft)", maxWidth: "55ch" }}>
-          <p>
-            A significant volume of screens was produced in a short space of time. These were conceptual — built for user testing rather than handoff — but deliberately grounded in Bupa's latest design system. The intent was clear: if the direction was validated, the work could move into build rapidly with minimal rework. Every screen reused existing app structure, components, and navigation patterns as much as possible, keeping the designs both realistic enough to test meaningfully and close enough to production to be taken seriously.
-          </p>
+        <div style={{ maxWidth: "55ch" }}>
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(24px, 2.8vw, 32px)",
+            lineHeight: 1.2,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--ink)",
+            marginBottom: 16
+          }}>Built into each app as it already was</h3>
+          <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.7, color: "var(--ink-soft)" }}>
+            <p style={{ marginBottom: "1.2em" }}>
+              A key part of the brief was to fit the existing apps. MyBupa UK and Blua HK have different design languages and UX patterns, so we designed the same journey twice, once in each. We designed nothing from scratch. Every screen reuses the structure, components and navigation of the app it sits in.
+            </p>
+            <p>
+              We produced two full customer journeys, one per region, in three weeks. The screens were conceptual, built for user testing rather than handoff. Because they stayed close to production, the work could move into build with minimal rework if testing validated the direction.
+            </p>
+          </div>
         </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 24, marginTop: isMobile ? 24 : 40 }}>
+        <figure>
+          <ImagePlaceholder id="bupa-uk-journey" label="UK journey — screens" aspect="4/3" />
+          <figcaption className="mono" style={{ color: "var(--ink-faint)", marginTop: 14 }}>
+            <span className="bracket">FIG. 07</span> UK journey.
+          </figcaption>
+        </figure>
+        <figure>
+          <ImagePlaceholder id="bupa-hk-journey" label="HK journey — screens" aspect="4/3" />
+          <figcaption className="mono" style={{ color: "var(--ink-faint)", marginTop: 14 }}>
+            <span className="bracket">FIG. 08</span> HK journey.
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
@@ -513,7 +591,7 @@ function ImpactSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 40 : 80 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">05 — IMPACT</span>
+          05 — IMPACT
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -526,7 +604,22 @@ function ImpactSection() {
             £20m+
             {" "}of follow-on work.
           </h2>
+          <p style={{ fontFamily: "var(--font-body)", fontSize: 18, lineHeight: 1.6, color: "var(--ink-soft)" }}>
+            The design phase closed with a validated direction. Two tested journeys in three weeks were enough for Bupa to fund the next phase.
+          </p>
         </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 24 : 32 }}>
+        {!isMobile && <div />}
+        <h3 style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "clamp(24px, 2.8vw, 32px)",
+          lineHeight: 1.2,
+          fontWeight: 400,
+          letterSpacing: "-0.02em",
+          color: "var(--ink)"
+        }}>What the next phase sets out to prove</h3>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 32 : 64, marginBottom: isMobile ? 40 : 80 }}>
@@ -534,17 +627,17 @@ function ImpactSection() {
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 64 }}>
           <div>
             <div className="mono" style={{ color: "var(--accent)", marginBottom: 24 }}>
-              <span className="bracket">CUSTOMER EXPERIENCE</span>
+              FOR CUSTOMERS
             </div>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.65, color: "var(--ink-soft)" }}>
-              <p style={{ marginBottom: "0.8em" }}>Increased customer confidence in coverage.</p>
-              <p style={{ marginBottom: "0.8em" }}>Reduced reliance on manual customer support.</p>
-              <p>Improved usability across markets and languages.</p>
+              <p style={{ marginBottom: "0.8em" }}>Customers are more confident about what their policy covers.</p>
+              <p style={{ marginBottom: "0.8em" }}>Fewer customers need manual support.</p>
+              <p>The experience is easier to use across markets and languages.</p>
             </div>
           </div>
           <div>
             <div className="mono" style={{ color: "var(--accent)", marginBottom: 24 }}>
-              <span className="bracket">BUSINESS</span>
+              FOR BUSINESS
             </div>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.65, color: "var(--ink-soft)" }}>
               <p style={{ marginBottom: "0.8em" }}>Supports global product growth with a scalable, modular foundation.</p>
@@ -575,15 +668,12 @@ function NextProject() {
       ["--line-faint"]: "rgba(244,241,236,0.15)",
     }}>
       <div className="mono" style={{ color: "var(--ink-faint)", marginBottom: isMobile ? 24 : 40 }}>
-        <span className="bracket">NEXT</span>
+        NEXT
       </div>
 
       <a href="costa.html" style={{ display: "block" }}>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 24 : 64, alignItems: "center" }}>
-          <div style={{ height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined, overflow: "hidden", borderRadius: 12 }}>
-            <ImagePlaceholder id="bupa-next-thumb" label="Costa Express — machine in-situ" full src="assets/thumbnails/Costa-thumb.png" />
-          </div>
-          <div>
+          <div style={{ order: isMobile ? 0 : 1 }}>
             <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 20 }}>
               Costa Express
             </div>
@@ -602,6 +692,9 @@ function NextProject() {
             }}>
               Read case study <span>→</span>
             </div>
+          </div>
+          <div style={{ order: isMobile ? 0 : 2, height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined, overflow: "hidden", borderRadius: 12 }}>
+            <ImagePlaceholder id="bupa-next-thumb" label="Costa Express — machine in-situ" full src="assets/thumbnails/Costa-thumb.png" />
           </div>
         </div>
       </a>
@@ -624,17 +717,17 @@ function Footer() {
       ["--line-faint"]: "rgba(244,241,236,0.15)",
     }}>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">© 2026</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>© 2026</div>
         Elspeth Belden
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">EMAIL</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>EMAIL</div>
         <a href="mailto:elspethbelden@gmail.com" style={{ borderBottom: "1px solid currentColor" }}>
           elspethbelden@gmail.com
         </a>
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">LINKEDIN</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>LINKEDIN</div>
         <a href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener" style={{ borderBottom: "1px solid currentColor" }}>
           /in/elspethbelden ↗
         </a>
@@ -646,7 +739,7 @@ function Footer() {
           </a>
         ) : (
           <>
-            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">BACK</span></div>
+            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>BACK</div>
             <a href="index.html" style={{ borderBottom: "1px solid currentColor" }}>
               Home ↑
             </a>
@@ -697,7 +790,7 @@ function PasswordGate({ children }) {
 
       <div style={{ textAlign: "center", padding: "0 32px" }}>
         <div className="mono" style={{ color: "rgba(244,241,236,0.4)", marginBottom: 32, letterSpacing: "0.14em" }}>
-          <span className="bracket">BUPA GLOBAL CONNECT</span>
+          BUPA GLOBAL CONNECT
         </div>
 
         <h1 style={{

@@ -466,7 +466,7 @@ function HeroSplit() {
         display: "flex", flexDirection: "column", justifyContent: "space-between",
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">EB — EXPERIENCE DESIGNER · 2026</span>
+          EB — EXPERIENCE DESIGNER · 2026
         </div>
 
         <h1 style={{
@@ -535,7 +535,7 @@ function HeroMarquee() {
         display: "flex", justifyContent: "space-between", alignItems: "end"
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">PORTFOLIO · 2026</span>
+          PORTFOLIO · 2026
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
@@ -633,7 +633,7 @@ function PullQuote() {
         gap: 40,
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">APPROACH</span>
+          APPROACH
         </div>
         <blockquote style={{
           fontFamily: "var(--font-display)",
@@ -744,7 +744,7 @@ function SelectedWork() {
         alignItems: "start",
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">CASE STUDIES</span>
+          CASE STUDIES
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
@@ -812,7 +812,7 @@ function SelectedWork() {
               color: activeCard.bgImage ? "rgba(244,241,236,0.85)" : "#4A4A48",
               opacity: activeIndex === CASE_STUDIES.length - 1 ? 1 - footerCloseProgress : 1,
             }}>
-              <span className="bracket">{activeCard.num} / {String(CASE_STUDIES.length).padStart(2, "0")}</span>
+              {activeCard.num} / {String(CASE_STUDIES.length).padStart(2, "0")}
             </div>
           </div>
         )}
@@ -1147,7 +1147,7 @@ function CaseStudyPanel({ cs, index, total }) {
         }}>
           {!isMobile && (
             <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 16, ...bentoEntranceFade }}>
-              <span className="bracket">{cs.num} / {String(total).padStart(2, "0")}</span>
+              {cs.num} / {String(total).padStart(2, "0")}
             </div>
           )}
           <h3 style={{

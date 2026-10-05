@@ -110,9 +110,6 @@ function Opener() {
 
       {/* Huge title */}
       <div style={{ padding: isMobile ? "40px 0 24px" : "80px 0 40px" }}>
-        <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: isMobile ? 24 : 40 }}>
-          <span className="bracket">CASE STUDY · 02 / 03</span>
-        </div>
         <h1 style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(56px, 9vw, 160px)",
@@ -121,7 +118,7 @@ function Opener() {
           letterSpacing: "-0.035em",
           maxWidth: "18ch", fontWeight: "500"
         }}>
-          Building a bank's design system from <span style={{ fontStyle: "italic" }}>scratch</span>.
+          A design system built to <span style={{ fontStyle: "italic" }}>survive a rebrand</span>.
         </h1>
       </div>
 
@@ -134,7 +131,7 @@ function Opener() {
         paddingBottom: isMobile ? 24 : 40
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">INTRO</span>
+          INTRO
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
@@ -143,9 +140,7 @@ function Opener() {
           fontWeight: 300,
           color: "var(--ink)"
         }}>
-          We rebuilt the foundations from the ground up, collapsing four siloed UI kits into one tokenised{" "}
-          source of truth
-          {" "}for hundreds of designers. Governance, documentation and a federated contribution model came along for the ride.
+          We collapsed four siloed UI kits into one tokenised system for hundreds of designers, and built the governance, documentation and federated contribution model to run it.
         </p>
         <div className="mono" style={{
           textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end"
@@ -186,7 +181,7 @@ function ContextSection() {
         gap: isMobile ? 20 : 64
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">01 — CONTEXT</span>
+          01 — CONTEXT
         </div>
 
         <div style={{ maxWidth: "60ch" }}>
@@ -218,7 +213,7 @@ function ContextSection() {
               The bank wanted to move to Figma, and was simultaneously going through a major rebrand. The brief was twelve weeks for the audit and rebuild, six weeks for the brand refresh, with the same team carrying both.
             </p>
             <p>
-              My job was to use the moment for more than a tool change. We collapsed four UI kits into one shared system, tokenised the foundations, and put governance in place that would survive the next rebrand without any of this happening again.
+              My job was to use the moment for more than a tool change. We collapsed four UI kits into one shared system, tokenised the foundations, and put governance in place so the next rebrand wouldn't mean starting over.
             </p>
           </div>
         </div>
@@ -248,10 +243,10 @@ function ContextSection() {
 function StatsBand() {
   const isMobile = useIsMobile();
   const stats = [
-  { num: "4→11", unit: "", label: "systems consolidated" },
+  { num: "4→1", unit: "", label: "design systems consolidated" },
   { num: "1,162", unit: "comp.", label: "audited end-to-end" },
-  { num: "21", unit: "libs", label: "foundation libraries" },
-  { num: "400%", unit: "↑", label: "designer efficiency, yr 1" }];
+  { num: "21", unit: "libs", label: "libraries audited" },
+  { num: "400%", unit: "↑", label: "efficiency gain, time per screen, yr 1" }];
 
   return (
     <section style={{
@@ -299,18 +294,18 @@ function PrinciplesSection() {
   const principles = [
   {
     num: "P.01",
-    title: "One source of truth, not four",
-    body: "We collapsed four channel-specific UI kits into a single tokenised foundation. Components were rebuilt from the ground up: responsive, scalable, shared across platforms rather than duplicated. Naming was unified to match code."
+    title: "One source of truth",
+    body: "We collapsed four channel-specific UI kits into a single tokenised foundation. We rebuilt every component to be responsive and shared across platforms, and renamed them to match code."
   },
   {
     num: "P.02",
     title: "Tokens close to code",
-    body: "Working alongside engineering, we aligned colour, spacing and type tokens to the names already in production. Variables in Figma meant the rebrand could ship as a library swap. Hours of work, not months."
+    body: "Working alongside engineering, we aligned colour, spacing and type tokens to the names already in production. Variables in Figma meant the rebrand could ship as a library swap, in hours."
   },
   {
     num: "P.03",
-    title: "Federated, never policed",
-    body: "We moved away from the 'overlord' model and appointed advocates across each tenant team. Twice-weekly clinics, weekly releases, transparent change logs. The system became something designers contributed to, rather than something imposed on them."
+    title: "Federated governance",
+    body: "We dropped the 'overlord' model and appointed advocates in each tenant team. Designers contributed through twice-weekly clinics and weekly releases."
   }];
 
 
@@ -323,7 +318,7 @@ function PrinciplesSection() {
         marginBottom: isMobile ? 40 : 80
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">02 — PRINCIPLES</span>
+          02 — PRINCIPLES
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
@@ -347,17 +342,18 @@ function PrinciplesSection() {
           paddingTop: 24
         }}>
             <div className="mono" style={{
-            color: "var(--accent)",
+            color: "var(--ink)",
             marginBottom: 20
           }}>
               <span className="bracket">{p.num}</span>
             </div>
             <h3 style={{
             fontFamily: "var(--font-display)",
-            fontSize: 30,
+            fontSize: 28,
             lineHeight: 1.15,
             fontWeight: 400,
             letterSpacing: "-0.02em",
+            color: "var(--accent)",
             marginBottom: 16
           }}>{p.title}</h3>
             <p style={{
@@ -388,7 +384,7 @@ function GalleryAsymmetric() {
         marginBottom: isMobile ? 32 : 60
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">03 — EXPLORATION</span>
+          03 — EXPLORATION
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
@@ -429,10 +425,16 @@ function GalleryAsymmetric() {
           lineHeight: 1.55,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">P.01 — TOKENS NEAR CODE</span>
-          </div>
-          We worked closely with engineering to align colour, spacing and text naming to code. Internal alignment between design and dev was still maturing, so getting the system as close as possible was the first step toward future synchronisation and efficiencies.
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>Token names that match code</h3>
+          We worked closely with engineering to align colour, spacing and text naming to code. Design and dev weren't yet working in sync, so matching names was the first step.
         </div>
         <figure>
           <img src="semantic-tokens.jpg" alt="Primitive → semantic token → UI mapping"
@@ -461,9 +463,15 @@ function GalleryAsymmetric() {
           lineHeight: 1.55,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">P.02 — LIGHT ↔ DARK</span>
-          </div>
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>Light and dark from one set of variables</h3>
           Previously, the app team shipped both modes by hand. Slow, and prone to mismatched colour logic between design and code. With Figma colour variables hot off the press at the time, we set the system up to switch automatically.
         </div>
         <figure>
@@ -494,10 +502,16 @@ function GalleryAsymmetric() {
           lineHeight: 1.55,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">P.03 — DESIGNS THAT BEHAVE LIKE A WEBSITE</span>
-          </div>
-          Components are built the way engineering builds them, with full consideration of how they reflow responsively, and the customisation and authoring available inside the CMS.
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>Components that reflow like the build</h3>
+          Components are built the way engineering builds them. They reflow at the same breakpoints and offer the same options authors get in the CMS.
         </div>
         <figure>
           <video src="responsive.mp4" autoPlay loop muted playsInline
@@ -527,9 +541,15 @@ function GalleryAsymmetric() {
           lineHeight: 1.55,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">P.04 — A SINGLE SOURCE OF TRUTH</span>
-          </div>
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>Documentation inside Figma</h3>
           <p style={{ marginBottom: "1.2em" }}>
             Documentation already existed, but it was scattered across platforms and often stale. We needed a trustworthy, maintained source of truth, and since the core audience was designers, we built it inside Figma itself.
           </p>
@@ -545,7 +565,7 @@ function GalleryAsymmetric() {
             marginTop: 14,
             display: "flex", justifyContent: "space-between"
           }}>
-            <span><span className="bracket">FIG. 07</span> Documentation embedded in the library itself. Accessible, maintained, where designers already live.</span>
+            <span><span className="bracket">FIG. 07</span> Documentation embedded in the library itself. Maintained, and where designers already work.</span>
             <span className="bracket">FIGMA · DOCS</span>
           </figcaption>
         </figure>
@@ -568,7 +588,7 @@ function PullQuoteDark() {
         gap: isMobile ? 20 : 64
       }}>
         <div className="mono" style={{ color: "rgba(244,241,236,0.5)" }}>
-          <span className="bracket">TESTIMONY</span>
+          TESTIMONY
         </div>
 
         <div>
@@ -584,7 +604,7 @@ function PullQuoteDark() {
             “The system finally feels like ours — designers contribute back to it, onboard from it, and trust it. It bought us the time to actually think.”
           </div>
           <div className="mono" style={{ color: "rgba(244,241,236,0.6)" }}>
-            <span className="bracket">NATWEST HCD LEADERSHIP · 2024</span>
+            NATWEST HCD LEADERSHIP · 2024
           </div>
         </div>
       </div>
@@ -595,10 +615,10 @@ function PullQuoteDark() {
 function ProcessSection() {
   const isMobile = useIsMobile();
   const phases = [
-  { phase: "01", name: "Audit", weeks: "W.01—04", desc: "Mapped 1,162 components across 4 channels and 21 foundation libraries. Catalogued duplications, surfaced naming inconsistencies, identified the documentation worth carrying forward." },
+  { phase: "01", name: "Audit", weeks: "W.01—04", desc: "Mapped 1,162 components across 4 retail banking channels and 21 foundation libraries. Catalogued duplications, surfaced naming inconsistencies, identified the documentation worth carrying forward." },
   { phase: "02", name: "Foundation", weeks: "W.05—10", desc: "Built the new Figma library from the ground up. Tokens for colour, spacing and type aligned to engineering's naming. Light and dark mode automated via variables." },
   { phase: "03", name: "Migration", weeks: "W.11—12", desc: "Cut over from Sketch. Wrote onboarding for designers new to Figma, embedded usage docs into the library itself, started the weekly release cadence." },
-  { phase: "04", name: "Rebrand", weeks: "W.13—18", desc: "Brand refresh shipped as a library swap and variable update, not a redo. Federated governance went live: tenant advocates, twice-weekly clinics, transparent change logs." }];
+  { phase: "04", name: "Rebrand", weeks: "W.13—18", desc: "Brand refresh shipped as a library swap and variable update. Federated governance went live: tenant advocates, twice-weekly clinics, transparent change logs." }];
 
   return (
     <section style={{ padding: isMobile ? "80px 20px" : "160px 32px", borderTop: "1px solid var(--line-faint)" }}>
@@ -609,7 +629,7 @@ function ProcessSection() {
         marginBottom: isMobile ? 40 : 80
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">04 — PROCESS</span>
+          04 — PROCESS
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
@@ -634,7 +654,7 @@ function ProcessSection() {
           alignItems: isMobile ? "start" : "baseline"
         }}>
             <div className="mono" style={{ color: "var(--accent)" }}>
-              <span className="bracket">{p.phase}</span>
+              {p.phase}
             </div>
             <div style={{
             fontFamily: "var(--font-display)",
@@ -645,7 +665,7 @@ function ProcessSection() {
               {p.name}
             </div>
             <div className="mono" style={{ color: "var(--ink-soft)" }}>
-              {p.weeks}
+              <span className="bracket">{p.weeks}</span>
             </div>
             <div style={{
             fontFamily: "var(--font-body)",
@@ -682,7 +702,7 @@ function GovernanceSection() {
         marginBottom: isMobile ? 40 : 80
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">05 — GOVERNANCE</span>
+          05 — GOVERNANCE
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
@@ -709,14 +729,17 @@ function GovernanceSection() {
           lineHeight: 1.55,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">G.01 — FEDERATED, NOT GATED</span>
-          </div>
-          <p style={{ marginBottom: "1.2em" }}>
-            Once the system was established, we moved off the central-overlord model (a guaranteed bottleneck) and welcomed contributions from designers across every channel.
-          </p>
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>Federated, not gated</h3>
           <p>
-            Two-way flow, not one-way decree.
+            Once the system was established, we moved off the central-overlord model (a guaranteed bottleneck) and welcomed contributions from designers across every channel.
           </p>
         </div>
         <figure>
@@ -747,10 +770,16 @@ function GovernanceSection() {
           lineHeight: 1.55,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">G.02 — OWNERSHIP &amp; ADVOCACY</span>
-          </div>
-          We embedded advocates across the bank and the consultancy, channel by channel, building shared ownership where departmental teams had historically struggled to talk to each other.
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>Ownership and advocacy</h3>
+          We embedded advocates across the bank and the consultancy, channel by channel, so teams that rarely spoke to each other owned the system together.
         </div>
         <figure>
           <img src="gov-champions.png" alt="Design system champions across channels"
@@ -780,9 +809,15 @@ function GovernanceSection() {
           lineHeight: 1.55,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">G.03 — SHEPHERDS, NOT POLICE</span>
-          </div>
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>Shepherds, not police</h3>
           <p style={{ marginBottom: "1.2em" }}>
             Twice-weekly drop-in clinics where we taught, advised and guided. Components landed via shared acceptance criteria, and designers stayed owners of their contribution all the way through review.
           </p>
@@ -798,7 +833,7 @@ function GovernanceSection() {
             marginTop: 14,
             display: "flex", justifyContent: "space-between"
           }}>
-            <span><span className="bracket">FIG. 11</span> Drop-in clinics, no stupid questions, self-help. The cultural scaffolding around the system.</span>
+            <span><span className="bracket">FIG. 11</span> Drop-in clinics, no stupid questions, self-help.</span>
             <span className="bracket">CULTURE</span>
           </figcaption>
         </figure>
@@ -817,9 +852,15 @@ function GovernanceSection() {
           lineHeight: 1.55,
           color: "var(--ink-soft)"
         }}>
-          <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">G.04 — CADENCE &amp; TRANSPARENCY</span>
-          </div>
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 28,
+            lineHeight: 1.15,
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            color: "var(--accent)",
+            marginBottom: 16
+          }}>Cadence and transparency</h3>
           A strict weekly release cadence: fewer interruptions, no surprises. Every change documented three ways: in the Figma file, in the Updates panel, and in the DS Teams channel.
         </div>
         <figure>
@@ -849,7 +890,7 @@ function OutcomeSection() {
         gap: isMobile ? 20 : 64
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">06 — OUTCOME</span>
+          06 — OUTCOME
         </div>
 
         <div style={{ maxWidth: "55ch" }}>
@@ -869,13 +910,13 @@ function OutcomeSection() {
             color: "var(--ink-soft)"
           }}>
             <p style={{ marginBottom: "1.2em" }}>
-              A year after launch, designers using the new system reported a 400% efficiency gain on production work, with the system itself doubling as onboarding material, brand reference, and the connective tissue between previously-siloed channel teams.
+              A year after launch, time per screen showed a 400% efficiency gain on production work. The system also served as onboarding material and brand reference, and was the one thing every channel team shared.
             </p>
             <p style={{ marginBottom: "1.2em" }}>
-              The federated model held: contributions came from across the bank, governed by acceptance criteria rather than gatekeeping. Weekly releases, transparent change logs, no surprises.
+              The federated model held. Contributions came from across the bank and landed through shared acceptance criteria.
             </p>
             <p>
-              And the design system stopped being a chore. It became something the community actively maintained: a living product, not a museum piece.
+              And the design system stopped being a chore. The community maintained it.
             </p>
           </div>
         </div>
@@ -903,7 +944,7 @@ function NextProject() {
       ["--line-faint"]: "rgba(244,241,236,0.18)"
     }}>
       <div className="mono" style={{ color: "rgba(244,241,236,0.5)", marginBottom: isMobile ? 24 : 40 }}>
-        <span className="bracket">NEXT CASE</span>
+        NEXT CASE
       </div>
 
       <a href="bupa.html" style={{ display: "block", color: "#F4F1EC" }}>
@@ -913,11 +954,7 @@ function NextProject() {
           gap: isMobile ? 24 : 64,
           alignItems: "center"
         }}>
-          <div style={{ height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined, overflow: "hidden" }}>
-            <img src="assets/hero/Bupa-hero.jpg" alt="Bupa Global Connect"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-          </div>
-          <div>
+          <div style={{ order: isMobile ? 0 : 1 }}>
             <div className="mono" style={{ color: "rgba(244,241,236,0.75)", marginBottom: 20 }}>
               Bupa · 2022
             </div>
@@ -940,6 +977,10 @@ function NextProject() {
               Read case study <span>→</span>
             </div>
           </div>
+          <div style={{ order: isMobile ? 0 : 2, height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined, overflow: "hidden" }}>
+            <img src="assets/hero/Bupa-hero.jpg" alt="Bupa Global Connect"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          </div>
         </div>
       </a>
     </section>);
@@ -958,17 +999,17 @@ function Footer() {
       gap: isMobile ? 24 : 32
     }}>
       <div className="mono" style={{ color: "rgba(244,241,236,0.75)" }}>
-        <div style={{ marginBottom: 6, color: "rgba(244,241,236,0.5)" }}><span className="bracket">© 2026</span></div>
+        <div style={{ marginBottom: 6, color: "rgba(244,241,236,0.5)" }}>© 2026</div>
         Elspeth Belden
       </div>
       <div className="mono" style={{ color: "rgba(244,241,236,0.75)" }}>
-        <div style={{ marginBottom: 6, color: "rgba(244,241,236,0.5)" }}><span className="bracket">EMAIL</span></div>
+        <div style={{ marginBottom: 6, color: "rgba(244,241,236,0.5)" }}>EMAIL</div>
         <a href="mailto:elspethbelden@gmail.com" style={{ borderBottom: "1px solid currentColor", color: "rgba(244,241,236,0.75)" }}>
           elspethbelden@gmail.com
         </a>
       </div>
       <div className="mono" style={{ color: "rgba(244,241,236,0.75)" }}>
-        <div style={{ marginBottom: 6, color: "rgba(244,241,236,0.5)" }}><span className="bracket">LINKEDIN</span></div>
+        <div style={{ marginBottom: 6, color: "rgba(244,241,236,0.5)" }}>LINKEDIN</div>
         <a href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener" style={{ borderBottom: "1px solid currentColor", color: "rgba(244,241,236,0.75)" }}>
           /in/elspethbelden ↗
         </a>
@@ -980,7 +1021,7 @@ function Footer() {
           </a>
         ) : (
           <>
-            <div style={{ marginBottom: 6, color: "rgba(244,241,236,0.5)" }}><span className="bracket">BACK</span></div>
+            <div style={{ marginBottom: 6, color: "rgba(244,241,236,0.5)" }}>BACK</div>
             <a href="index.html" style={{ borderBottom: "1px solid currentColor", color: "rgba(244,241,236,0.75)" }}>
               Home ↑
             </a>

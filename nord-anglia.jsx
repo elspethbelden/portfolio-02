@@ -129,9 +129,6 @@ function Opener() {
       </div>
 
       <div style={{ padding: isMobile ? "40px 0 24px" : "80px 0 40px" }}>
-        <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: isMobile ? 24 : 40 }}>
-          <span className="bracket">CASE STUDY · NORD ANGLIA EDUCATION</span>
-        </div>
         <h1 style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(56px, 9vw, 160px)",
@@ -154,7 +151,7 @@ function Opener() {
         paddingBottom: isMobile ? 24 : 40
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">INTRO</span>
+          INTRO
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
@@ -163,10 +160,7 @@ function Opener() {
           fontWeight: 300,
           color: "var(--ink)"
         }}>
-          Nord Anglia is a network of 76 (and counting) premium international schools across the globe.
-          I partnered with a brand agency to refresh their online identity and deliver a{" "}
-          component system
-          {" "}to serve both the corporate site and individual school sites.
+          Nord Anglia runs 76 premium international schools, and the network is still growing. I worked with a brand agency to refresh its online identity and build one component system for the corporate site and every school site.
         </p>
         <div className="mono" style={{ textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end" }}>
           76 SCHOOLS
@@ -182,7 +176,7 @@ function DiscoverySection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">01 — DISCOVERY</span>
+          01 — DISCOVERY
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -203,7 +197,7 @@ function DiscoverySection() {
             color: "var(--ink-soft)"
           }}>
             <p style={{ marginBottom: "1.2em" }}>
-              During the initial design exploration, I worked as part of a collaborative UX/UI team to explore how to interpret the — still-evolving — brand online, while defining key user journeys and page content.
+              In the first design phase, I worked in a UX/UI team to interpret the still-evolving brand online and define the key user journeys and page content.
             </p>
             <p>
               A core goal was to use design to articulate what makes Nord Anglia's offering distinctive. The outcome was a desktop and mobile prototype ready for user testing.
@@ -234,7 +228,7 @@ function HomepageTestingSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 40 : 80 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">02 — USER TESTING</span>
+          02 — USER TESTING
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -256,7 +250,7 @@ function HomepageTestingSection() {
             color: "var(--ink-soft)"
           }}>
             <p>
-              As part of the golden path user testing, we wanted to compare two different design approaches to the homepage — one oriented towards a more visionary persona, one more traditionalist.
+              In golden path testing we compared two homepages, one designed for a visionary persona and one for a traditionalist.
             </p>
           </div>
         </div>
@@ -317,10 +311,10 @@ function HomepageTestingSection() {
           maxWidth: "55ch"
         }}>
           <p style={{ marginBottom: "1.2em" }}>
-            The overall design was well received. It gave a premium, modern impression of the school and was considered both recognisable and professional.
+            Participants liked the overall design. They found it premium, modern, recognisable and professional and leaned towards the more traditionalist concept.
           </p>
           <p>
-            However, the collage elements from the brand identity didn't translate well digitally. Users wanted to see authentic photography of the school environment, and found the illustrations confusing and inauthentic. The digital design needed to use these elements more sparingly, and the context and purpose of each page needed to be made clearer.
+            However, the brand's collage elements didn't work on screen. Users found the illustrations confusing and inauthentic, and wanted real photography of the schools. We needed to use collage more sparingly and make each page's purpose clearer.
           </p>
         </div>
       </div>
@@ -334,7 +328,7 @@ function GoldenPathSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 32 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">03 — GOLDEN PATH</span>
+          03 — GOLDEN PATH
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -355,7 +349,7 @@ function GoldenPathSection() {
             color: "var(--ink-soft)"
           }}>
             <p>
-              Following user testing, we had two days to implement the recommended updates to the golden path, plus additional feedback we hadn't had time to address prior to testing.
+              After testing, we had two days to update the golden path, including feedback we hadn't had time to address beforehand.
             </p>
           </div>
         </div>
@@ -382,7 +376,7 @@ function IterationSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 40 : 80 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">04 — ITERATION</span>
+          04 — ITERATION
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -393,9 +387,7 @@ function IterationSection() {
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
-            Three sprints. A{" "}
-            rapidly evolving
-            {" "}brand.
+            Three sprints alongside a brand still in motion.
           </h2>
           <div style={{
             fontFamily: "var(--font-body)",
@@ -404,13 +396,13 @@ function IterationSection() {
             color: "var(--ink-soft)"
           }}>
             <p style={{ marginBottom: "1.2em" }}>
-              With a tight timeline, we needed to rapidly define and build out the backlog for the development team and content editors to have enough to work with during the build phase. Looking beyond the golden path, we worked with the Product Owners to identify the key pages and templates to prioritise within the time available.
+              The timeline was tight, so we had to build the backlog fast enough to keep developers and content editors busy through the build. Looking beyond the golden path, we worked with the Product Owners to identify the key pages and templates to prioritise within the time available.
             </p>
             <p style={{ marginBottom: "1.2em" }}>
-              The brand and digital transformation ran as concurrent workstreams. We worked as closely as possible with the appointed brand agency to iterate on the visual language of our components as the brand evolved. By maintaining a strict, embedded component library, I was able to push brand updates through into page designs with minimal effort.
+              The brand and digital transformation ran as concurrent workstreams. We worked as closely as possible with the appointed brand agency to iterate on the visual language of our components as the brand evolved. I kept a strict, embedded component library, so each brand update flowed through to the page designs with little rework.
             </p>
             <p>
-              Design exploration moved quickly, to say the least. Some key components — such as the page hero — required multiple design trials to determine how the brand could be applied effectively in a digital context.
+              Design exploration moved quickly, to say the least. Some key components, such as the page hero, took several attempts before the brand worked on screen.
             </p>
           </div>
         </div>
@@ -419,7 +411,7 @@ function IterationSection() {
       {/* Hero iterations grid */}
       <div style={{ marginBottom: isMobile ? 40 : 80 }}>
         <div className="mono" style={{ color: "var(--ink-faint)", marginBottom: 16 }}>
-          <span className="bracket">PAGE HERO — DESIGN ITERATIONS</span>
+          PAGE HERO — DESIGN ITERATIONS
         </div>
         <figure style={{ padding: isMobile ? 0 : "0 15%" }}>
           <ImagePlaceholder id="na-hero-iter-1" label="Hero component — iteration 1" aspect="4/3" src="uploads/NordAnglia/Component+alignment.webp" />
@@ -443,7 +435,7 @@ function IterationSection() {
           maxWidth: "55ch"
         }}>
           <p>
-            Other components were complex and required multiple rounds of iteration to get right. These were largely developed directly in design with UX guidance feeding in throughout.
+            The more complex components took several rounds. Having now established the digital visual language, we mostly worked them out directly in higher fidelity design.
           </p>
         </div>
       </div>
@@ -457,7 +449,7 @@ function NavigationSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 32 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">05 — NAVIGATION</span>
+          05 — NAVIGATION
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -468,9 +460,7 @@ function NavigationSection() {
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
-            Simple concept.{" "}
-            Evolving
-            {" "}execution.
+            A simple nav that kept evolving.
           </h2>
           <div style={{
             fontFamily: "var(--font-body)",
@@ -479,7 +469,7 @@ function NavigationSection() {
             color: "var(--ink-soft)"
           }}>
             <p>
-              The navigation continued to evolve throughout the project. The simplicity of the conceptual nav tested very well with users. By adding additional subsections we were able to improve wayfinding without compromising the clarity of the golden path journey.
+              The navigation continued to evolve throughout the project. Users liked the simple conceptual nav in testing. We later added subsections to improve wayfinding while keeping the golden path clear.
             </p>
           </div>
         </div>
@@ -505,7 +495,7 @@ function FindASchoolSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 32 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">06 — FIND A SCHOOL</span>
+          06 — FIND A SCHOOL
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -526,13 +516,13 @@ function FindASchoolSection() {
             color: "var(--ink-soft)"
           }}>
             <p>
-              The ability for parents to find the most relevant school within the Nord Anglia network was a key feature of the corporate website. We ran a dedicated sprint to make this process more intuitive and user-friendly.
+              Helping parents find the right school was a key job of the corporate site, so we gave it a dedicated sprint.
             </p>
           </div>
         </div>
       </div>
 
-      <figure style={{ marginBottom: 24 }}>
+      <figure style={{ marginBottom: isMobile ? 40 : 64 }}>
         <ImagePlaceholder id="na-find-school" label="Find A School — school search experience" aspect="16/9" src="uploads/NordAnglia/Find+a+school+tool.webp" />
         <figcaption className="mono" style={{
           color: "var(--ink-faint)", marginTop: 14,
@@ -563,7 +553,7 @@ function LanguageSupportSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 32 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">07 — LANGUAGE SUPPORT</span>
+          07 — LANGUAGE SUPPORT
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -585,7 +575,7 @@ function LanguageSupportSection() {
             color: "var(--ink-soft)"
           }}>
             <p>
-              Nord Anglia has a global network of schools, so although we designed English-first, it was important to design flexibly with varying copy lengths in mind. Most schools would have their site available in multiple languages.
+              Most schools would publish their site in several languages. We designed in English first, but every component had to cope with varying copy lengths.
             </p>
           </div>
         </div>
@@ -615,7 +605,7 @@ function LanguageSupportSection() {
             China was a key audience for MVP launch. We conducted a second round of user testing with a Chinese-speaking audience to identify where regional design changes were appropriate.
           </p>
           <p>
-            One key insight led to the creation of a China-specific typographic treatment, distinct from the Latin script style sheet used for other launch regions. This significantly improved legibility and overall accessibility of the site for that audience.
+            Testing surfaced a key insight: the Chinese brand font read smaller than the Roman font used for other languages at the same size. We scaled everything up slightly and built a China-specific typographic treatment, separate from the Latin-script style sheet used for other launch regions. It made the site more legible and accessible for that audience.
           </p>
         </div>
       </div>
@@ -651,7 +641,7 @@ function DocumentationSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 32 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">08 — DOCUMENTATION</span>
+          08 — DOCUMENTATION
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -672,7 +662,7 @@ function DocumentationSection() {
             color: "var(--ink-soft)"
           }}>
             <p>
-              To support our China-based development team and facilitate the wider stakeholder sign-off process, I produced an extensively detailed component library and digital style guide.
+              To support our China-based development team and help stakeholders sign off, I produced a detailed component library and digital style guide.
             </p>
           </div>
         </div>
@@ -714,7 +704,7 @@ function DocumentationSection() {
           maxWidth: "55ch"
         }}>
           <p>
-            More complex motion design that couldn't be replicated within standard design tools was prototyped in React using Framer. This helped communicate behaviour to both developers and the client, while demonstrating motion that was code-friendly — as opposed to more traditional methods like After Effects.
+            We prototyped the more complex motion in React using Framer, because standard design tools couldn't replicate it. Developers and the client could see the behaviour, and unlike an After Effects mock-up, the motion was already code-friendly.
           </p>
         </div>
       </div>
@@ -739,7 +729,7 @@ function ResultSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 32 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">09 — THE RESULT</span>
+          09 — THE RESULT
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -750,8 +740,7 @@ function ResultSection() {
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
-            60+ modules.
-            {" "}76 schools.
+            60+ modules for 76 schools.
           </h2>
           <div style={{
             fontFamily: "var(--font-body)",
@@ -760,7 +749,7 @@ function ResultSection() {
             color: "var(--ink-soft)"
           }}>
             <p>
-              A flexible, scalable library of 60+ modules that can be adapted and personalised across Nord Anglia Education's network of 76 schools according to their individual needs.
+              The result is a library of 60+ modules that each of Nord Anglia's 76 schools can adapt to its own needs.
             </p>
           </div>
         </div>
@@ -797,7 +786,7 @@ function NextProject() {
   return (
     <section style={{
       padding: isMobile ? "60px 20px 70px" : "120px 32px 140px",
-      background: "#160D24",
+      background: "#003058",
       color: "#F4F1EC",
       ["--ink"]: "#F4F1EC",
       ["--ink-soft"]: "rgba(244,241,236,0.75)",
@@ -805,7 +794,7 @@ function NextProject() {
       ["--line-faint"]: "rgba(244,241,236,0.15)",
     }}>
       <div className="mono" style={{ color: "var(--ink-faint)", marginBottom: isMobile ? 24 : 40 }}>
-        <span className="bracket">NEXT</span>
+        NEXT
       </div>
 
       <a href="natwest.html" style={{ display: "block" }}>
@@ -815,16 +804,7 @@ function NextProject() {
           gap: isMobile ? 24 : 64,
           alignItems: "center"
         }}>
-          <div style={{ height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined, position: "relative", overflow: "hidden", borderRadius: 12 }}>
-            <image-slot
-              id="na-next-thumb"
-              placeholder="NatWest — Design System"
-              fit="contain"
-              src="assets/thumbnails/Pulse_logo loop.gif"
-              style={{ width: "100%", height: "100%", display: "block", background: "#3C1053" }}
-            ></image-slot>
-          </div>
-          <div>
+          <div style={{ order: isMobile ? 0 : 1 }}>
             <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 20 }}>
               NatWest
             </div>
@@ -846,6 +826,15 @@ function NextProject() {
               Read case study <span>→</span>
             </div>
           </div>
+          <div style={{ order: isMobile ? 0 : 2, height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined, position: "relative", overflow: "hidden", borderRadius: 12 }}>
+            <image-slot
+              id="na-next-thumb"
+              placeholder="NatWest — Design System"
+              fit="contain"
+              src="assets/thumbnails/Pulse_logo loop.gif"
+              style={{ width: "100%", height: "100%", display: "block", background: "#3C1053" }}
+            ></image-slot>
+          </div>
         </div>
       </a>
     </section>
@@ -861,7 +850,7 @@ function Footer() {
       display: "grid",
       gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr 1fr",
       gap: isMobile ? 24 : 32,
-      background: "#160D24",
+      background: "#040C20",
       color: "#F4F1EC",
       ["--ink"]: "#F4F1EC",
       ["--ink-soft"]: "rgba(244,241,236,0.75)",
@@ -869,17 +858,17 @@ function Footer() {
       ["--line-faint"]: "rgba(244,241,236,0.15)",
     }}>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">© 2026</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>© 2026</div>
         Elspeth Belden
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">EMAIL</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>EMAIL</div>
         <a href="mailto:elspethbelden@gmail.com" style={{ borderBottom: "1px solid currentColor" }}>
           elspethbelden@gmail.com
         </a>
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">LINKEDIN</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>LINKEDIN</div>
         <a href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener" style={{ borderBottom: "1px solid currentColor" }}>
           /in/elspethbelden ↗
         </a>
@@ -891,7 +880,7 @@ function Footer() {
           </a>
         ) : (
           <>
-            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">BACK</span></div>
+            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>BACK</div>
             <a href="index.html" style={{ borderBottom: "1px solid currentColor" }}>
               Home ↑
             </a>
@@ -906,7 +895,7 @@ function App() {
   return (
     <>
       <div style={{
-        background: "#0B1F30",
+        background: "#003058",
         color: "#F4F1EC",
         ["--ink"]: "#F4F1EC",
         ["--ink-soft"]: "rgba(244,241,236,0.75)",

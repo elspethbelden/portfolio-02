@@ -107,9 +107,6 @@ function Opener() {
       </div>
 
       <div style={{ padding: isMobile ? "40px 0 24px" : "80px 0 40px" }}>
-        <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: isMobile ? 24 : 40 }}>
-          <span className="bracket">CASE STUDY · NATWEST</span>
-        </div>
         <h1 style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(56px, 9vw, 160px)",
@@ -129,7 +126,7 @@ function Opener() {
         paddingBottom: isMobile ? 24 : 40
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">INTRO</span>
+          INTRO
         </div>
         <p style={{
           fontFamily: "var(--font-display)",
@@ -156,7 +153,7 @@ function ContextSection() {
     <section style={{ padding: isMobile ? "48px 20px" : "80px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">01 — CONTEXT</span>
+          01 — CONTEXT
         </div>
         <div style={{ maxWidth: "60ch" }}>
           <h2 style={{
@@ -198,7 +195,7 @@ function VisionSection() {
     <section style={{ padding: isMobile ? "80px 20px" : "160px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 40 : 80 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">02 — VISION</span>
+          02 — VISION
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
@@ -214,7 +211,7 @@ function VisionSection() {
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, alignItems: "start", marginBottom: isMobile ? 40 : 80 }}>
         <div style={{ fontFamily: "var(--font-display)", fontSize: 18, lineHeight: 1.55, color: "var(--ink-soft)" }}>
           <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">V.01 — INSPIRATION</span>
+            V.01 — INSPIRATION
           </div>
           Pulling together the best-in-class references from across finance, retail and beyond to establish what a premium, trusted digital experience could look like for NatWest customers.
         </div>
@@ -230,7 +227,7 @@ function VisionSection() {
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, alignItems: "start" }}>
         <div style={{ fontFamily: "var(--font-display)", fontSize: 18, lineHeight: 1.55, color: "var(--ink-soft)" }}>
           <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">V.02 — PRINCIPLES</span>
+            V.02 — PRINCIPLES
           </div>
           Translating the inspiration into a set of guiding principles that could inform design decisions at every level, from component detail to journey flow.
         </div>
@@ -252,7 +249,7 @@ function ProcessSection() {
     <section style={{ padding: isMobile ? "80px 20px" : "160px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, marginBottom: isMobile ? 40 : 80 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">03 — PROCESS</span>
+          03 — PROCESS
         </div>
         <h2 style={{
           fontFamily: "var(--font-display)",
@@ -268,7 +265,7 @@ function ProcessSection() {
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, alignItems: "start", marginBottom: isMobile ? 40 : 80 }}>
         <div style={{ fontFamily: "var(--font-display)", fontSize: 18, lineHeight: 1.55, color: "var(--ink-soft)" }}>
           <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">P.01 — AUDIT</span>
+            P.01 — AUDIT
           </div>
           Reviewing NatWest's existing digital touchpoints against the benchmark — identifying the gaps, the quick wins, and the structural changes needed to close the distance.
         </div>
@@ -284,7 +281,7 @@ function ProcessSection() {
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64, alignItems: "start" }}>
         <div style={{ fontFamily: "var(--font-display)", fontSize: 18, lineHeight: 1.55, color: "var(--ink-soft)" }}>
           <div className="mono" style={{ color: "var(--accent)", marginBottom: 16 }}>
-            <span className="bracket">P.02 — SHOWCASE</span>
+            P.02 — SHOWCASE
           </div>
           Presenting the vision to senior stakeholders in a format that was engaging and persuasive, not just a document. The breakfast deck format was designed to create conversation, not just inform.
         </div>
@@ -306,7 +303,7 @@ function OutcomeSection() {
     <section style={{ padding: isMobile ? "80px 20px" : "160px 32px", borderTop: "1px solid var(--line-faint)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64 }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          <span className="bracket">04 — OUTCOME</span>
+          04 — OUTCOME
         </div>
         <div style={{ maxWidth: "55ch" }}>
           <h2 style={{
@@ -346,14 +343,11 @@ function NextProject() {
   return (
     <section style={{ padding: isMobile ? "60px 20px 70px" : "120px 32px 140px", borderTop: "1px solid var(--line-faint)" }}>
       <div className="mono" style={{ color: "var(--ink-faint)", marginBottom: isMobile ? 24 : 40 }}>
-        <span className="bracket">NEXT CASE</span>
+        NEXT CASE
       </div>
       <a href="natwest.html" style={{ display: "block" }}>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 24 : 64, alignItems: "center" }}>
-          <div style={{ height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined }}>
-            <ImagePlaceholder id="next-natwest-ds" label="NatWest — Design System" full tint="cool" />
-          </div>
-          <div>
+          <div style={{ order: isMobile ? 0 : 1 }}>
             <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 20 }}>NatWest · 2023—2024</div>
             <h3 style={{
               fontFamily: "var(--font-display)",
@@ -368,6 +362,9 @@ function NextProject() {
             <div className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 12, borderBottom: "1px solid var(--ink)", paddingBottom: 4 }}>
               Read case study <span>→</span>
             </div>
+          </div>
+          <div style={{ order: isMobile ? 0 : 2, height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined }}>
+            <ImagePlaceholder id="next-natwest-ds" label="NatWest — Design System" full tint="cool" />
           </div>
         </div>
       </a>
@@ -386,15 +383,15 @@ function Footer() {
       gap: isMobile ? 24 : 32
     }}>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">© 2026</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>© 2026</div>
         Elspeth Belden
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">EMAIL</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>EMAIL</div>
         <a href="mailto:elspethbelden@gmail.com" style={{ borderBottom: "1px solid currentColor" }}>elspethbelden@gmail.com</a>
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
-        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">LINKEDIN</span></div>
+        <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>LINKEDIN</div>
         <a href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener" style={{ borderBottom: "1px solid currentColor" }}>/in/elspethbelden ↗</a>
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)", textAlign: isMobile ? "left" : "right" }}>
@@ -402,7 +399,7 @@ function Footer() {
           <a href="#" onClick={(e) => { e.preventDefault(); if (window.__lenis) window.__lenis.scrollTo(0); else window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ borderBottom: "1px solid currentColor" }}>Back to top ↑</a>
         ) : (
           <>
-            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}><span className="bracket">BACK</span></div>
+            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>BACK</div>
             <a href="index.html" style={{ borderBottom: "1px solid currentColor" }}>Home ↑</a>
           </>
         )}
