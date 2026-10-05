@@ -11,10 +11,17 @@ function useIsMobile(bp = 768) {
   return m;
 }
 
-function VideoSlot({ src, type = "video/mp4", aspect }) {
+function VideoSlot({ src, type = "video/mp4", aspect, scale = 1 }) {
   return (
     <div style={{ width: "100%", aspectRatio: aspect || "auto", overflow: "hidden", background: "#000" }}>
-      <video autoPlay loop muted playsInline style={{ width: "100%", height: aspect ? "100%" : "auto", objectFit: aspect ? "cover" : "initial", display: "block" }}>
+      <video autoPlay loop muted playsInline style={{
+        width: "100%",
+        height: aspect ? "100%" : "auto",
+        objectFit: aspect ? "cover" : "initial",
+        display: "block",
+        transform: scale !== 1 ? `scale(${scale})` : undefined,
+        transformOrigin: "top"
+      }}>
         <source src={src} type={type} />
       </video>
     </div>
@@ -544,7 +551,7 @@ function SolutionSection() {
         <ImagePlaceholder id="bupa-full-journey" label="Full journey — end-to-end annotated screens" src="uploads/bupa/Full journey.png" />
       </figure>
 
-      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 12 : 64, marginTop: isMobile ? 24 : 40 }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 12 : 64, marginTop: isMobile ? 48 : 96, marginBottom: isMobile ? 48 : 96 }}>
         {!isMobile && <div />}
         <div style={{ maxWidth: "55ch" }}>
           <h3 style={{
@@ -567,16 +574,16 @@ function SolutionSection() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 24, marginTop: isMobile ? 24 : 40 }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 0, marginTop: isMobile ? 24 : 40, width: isMobile ? "100%" : "60vw", marginLeft: isMobile ? 0 : "auto", marginRight: isMobile ? 0 : "auto" }}>
         <figure>
-          <ImagePlaceholder id="bupa-uk-journey" label="UK journey — screens" aspect="4/3" />
-          <figcaption className="mono" style={{ color: "var(--ink-faint)", marginTop: 14 }}>
+          <VideoSlot src="assets/Dan.mp4" aspect="3/4" />
+          <figcaption className="mono" style={{ color: "var(--ink-faint)", marginTop: 14, textAlign: "center" }}>
             <span className="bracket">FIG. 07</span> UK journey.
           </figcaption>
         </figure>
         <figure>
-          <ImagePlaceholder id="bupa-hk-journey" label="HK journey — screens" aspect="4/3" />
-          <figcaption className="mono" style={{ color: "var(--ink-faint)", marginTop: 14 }}>
+          <VideoSlot src="assets/Dominique.mp4" aspect="3/4" />
+          <figcaption className="mono" style={{ color: "var(--ink-faint)", marginTop: 14, textAlign: "center" }}>
             <span className="bracket">FIG. 08</span> HK journey.
           </figcaption>
         </figure>

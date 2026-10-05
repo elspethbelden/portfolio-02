@@ -786,7 +786,7 @@ function NextProject() {
   return (
     <section style={{
       padding: isMobile ? "60px 20px 70px" : "120px 32px 140px",
-      background: "#003058",
+      background: "#160D24",
       color: "#F4F1EC",
       ["--ink"]: "#F4F1EC",
       ["--ink-soft"]: "rgba(244,241,236,0.75)",
@@ -850,7 +850,7 @@ function Footer() {
       display: "grid",
       gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr 1fr",
       gap: isMobile ? 24 : 32,
-      background: "#040C20",
+      background: "#160D24",
       color: "#F4F1EC",
       ["--ink"]: "#F4F1EC",
       ["--ink-soft"]: "rgba(244,241,236,0.75)",
