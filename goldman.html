@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Goldman Sachs — AI Companion / Elspeth Belden</title>
 
+<link rel="icon" href="assets/Favicon/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/Favicon/favicon.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Archivo:wdth,wght@125,400;125,500;125,600;125,700;125,800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -25,10 +28,10 @@ const ACCENTS = {
 };
 
 const TYPE_PAIRS = {
-  editorial:  { display: "'Cardinal Fruit', Georgia, serif", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Cardinal Fruit', Georgia, serif" },
-  technical:  { display: "'JetBrains Mono', ui-monospace, monospace", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Cardinal Fruit', Georgia, serif" },
-  classic:    { display: "'Newsreader', Georgia, serif",      mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Newsreader', Georgia, serif",   italicDisplay: "'Cardinal Fruit', Georgia, serif" },
-  expanded:   { display: "'Archivo', system-ui, sans-serif",  mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Cardinal Fruit', Georgia, serif" }
+  editorial:  { display: "'Instrument Serif', Georgia, serif", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Instrument Serif', Georgia, serif" },
+  technical:  { display: "'JetBrains Mono', ui-monospace, monospace", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Instrument Serif', Georgia, serif" },
+  classic:    { display: "'Newsreader', Georgia, serif",      mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Newsreader', Georgia, serif",   italicDisplay: "'Instrument Serif', Georgia, serif" },
+  expanded:   { display: "'Archivo', system-ui, sans-serif",  mono: "'JetBrains Mono', ui-monospace, monospace", body: "'DM Sans', system-ui, sans-serif", italicDisplay: "'Instrument Serif', Georgia, serif" }
 };
 
 function applyTweaks(t) {
@@ -42,6 +45,19 @@ function applyTweaks(t) {
   root.style.setProperty('--font-italic', type.italicDisplay);
 }
 applyTweaks(TWEAK_DEFAULTS);
+
+// Temporary font A/B override — open with ?font=cardinal or ?font=instrument
+(function() {
+  const fontParam = new URLSearchParams(location.search).get('font');
+  const fonts = {
+    cardinal: "'Cardinal Fruit', Georgia, serif",
+    instrument: "'Instrument Serif', Georgia, serif"
+  };
+  if (fonts[fontParam]) {
+    document.documentElement.style.setProperty('--font-display', fonts[fontParam]);
+    document.documentElement.style.setProperty('--font-italic', fonts[fontParam]);
+  }
+})();
 </script>
 
 <style>

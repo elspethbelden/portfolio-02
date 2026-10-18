@@ -25,7 +25,7 @@ const CASE_STUDIES = [
     num: "02",
     year: "2024",
     client: "NatWest",
-    title: "Building a bank's design system from scratch",
+    title: "A design system built to survive a rebrand",
     tagline: "A 400% efficiency improvement by rebuilding the system, the governance, and the team around it.",
     tags: ["Design Systems", "Tokenisation", "Governance"],
     role: "Experience Lead",
@@ -211,10 +211,10 @@ function Hero() {
 function HeroStacked() {
   const isMobile = useIsMobile();
   const HERO_IMAGES = [
-    isMobile ? "assets/hero/mobile/Bupa-Hero.jpg" : "assets/hero/Hero-2.png",
+    isMobile ? "assets/hero/mobile/Bupa-Hero.jpg" : "assets/hero/Bupa.png",
     isMobile ? "assets/hero/mobile/Costa.jpg" : "assets/hero/Costa.png",
     isMobile ? "assets/hero/mobile/HSBC-Hero.jpg" : "assets/hero/HSBC-Hero.jpg",
-    isMobile ? "assets/hero/mobile/NatWest-Hero.jpg" : "assets/hero/NatWest-Hero.jpg",
+    isMobile ? "assets/hero/mobile/NatWest-Hero.jpg" : "assets/hero/NatWest-Hero.png",
     isMobile ? "assets/hero/mobile/NatWest-Hero-WGDLL.jpg" : "assets/hero/NatWest-Hero-WGDLL.png",
   ];
   const [loaded, setLoaded] = useState(false);
@@ -311,23 +311,23 @@ function HeroStacked() {
       }}>
         <h1 style={{
           fontFamily: "var(--font-name)",
-          // Kept on one line on mobile too — sized to fill the available
-          // width edge to edge (mirrors the footer name's size, computed
-          // from the real measured width of "Elspeth" + image + "Belden"
-          // in Perfektta against the 20px side padding both share).
-          fontSize: isMobile ? "calc((100vw - 40px) / 6.008)" : "clamp(58px, 14.5vw, 270px)",
+          // Kept on one line on mobile too — sized so "Elspeth Belden"
+          // (no image, unlike the footer treatment) fills edge to edge
+          // against the 20px side padding, measured directly.
+          fontSize: isMobile ? "calc((100vw - 40px) / 4.476)" : "clamp(58px, 14.5vw, 270px)",
           lineHeight: 0.88,
           fontWeight: 400,
-          letterSpacing: "-0.035em",
+          letterSpacing: "-0.025em",
           margin: 0,
           color: "#F4F1EC",
           whiteSpace: "nowrap",
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: isMobile ? "flex-start" : "space-between",
+          gap: isMobile ? "0.28em" : 0,
           width: "100%",
         }}>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", loaded, 600, { tracking: "-0.035em" })}</span>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", loaded, 845, { tracking: "-0.035em" })}</span>
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", loaded, 600, { tracking: "-0.025em" })}</span>
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", loaded, 845, { tracking: "-0.025em" })}</span>
         </h1>
       </div>
 
@@ -357,8 +357,7 @@ function HeroStacked() {
             fontWeight: 400,
             maxWidth: "32ch",
           }}>
-            Design lead. Systems thinker.{" "}
-            <span style={{ opacity: 0.8 }}>Making complexity look effortless.</span>
+            I help complex organisations{" "}<br />ship products that feel simple.
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -406,8 +405,7 @@ function HeroStacked() {
               fontWeight: 400,
               maxWidth: "32ch",
             }}>
-              Design lead. Systems thinker.{" "}
-              <span style={{ opacity: 0.8 }}>Making complexity look effortless.</span>
+              I help complex organisations{" "}<br />ship products that feel simple.
             </p>
 
             <a
@@ -1155,10 +1153,10 @@ function CaseStudyPanel({ cs, index, total }) {
             fontSize: isMobile ? "48px" : "clamp(48px, 7vw, 112px)",
             lineHeight: 0.95,
             fontWeight: 400,
-            letterSpacing: "-0.035em",
+            letterSpacing: "-0.025em",
             color: "var(--ink)",
           }}>
-            {renderStaggeredLetters(cs.client, revealed, 0, { tracking: "-0.035em" })}
+            {renderStaggeredLetters(cs.client, revealed, 0, { tracking: "-0.025em" })}
           </h3>
         </div>
 
@@ -1398,7 +1396,7 @@ function Contact() {
           fontSize: isMobile ? "calc((100vw - 40px) / 6.008)" : "clamp(58px, 14.5vw, 270px)",
           lineHeight: 0.88,
           fontWeight: 400,
-          letterSpacing: "-0.035em",
+          letterSpacing: "-0.025em",
           margin: 0,
           color: "var(--ink)",
           whiteSpace: "nowrap",
@@ -1407,7 +1405,7 @@ function Contact() {
           justifyContent: "space-between",
           width: "100%",
         }}>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", true, 0, { tracking: "-0.035em" })}</span>
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", true, 0, { tracking: "-0.025em" })}</span>
           <img
             src="assets/hair-like-this-2.png"
             alt=""
@@ -1417,7 +1415,7 @@ function Contact() {
               flexShrink: 0,
             }}
           />
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", true, 0, { tracking: "-0.035em" })}</span>
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", true, 0, { tracking: "-0.025em" })}</span>
         </h2>
       </div>
 

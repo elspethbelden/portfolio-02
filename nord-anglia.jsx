@@ -816,8 +816,7 @@ function NextProject() {
               letterSpacing: "-0.035em",
               marginBottom: 24
             }}>
-              Building a bank's design system from{" "}
-              scratch.
+              A design system built to survive a rebrand.
             </h3>
             <div className="mono" style={{
               display: "inline-flex", alignItems: "center", gap: 12,
