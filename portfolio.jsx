@@ -316,7 +316,7 @@ function HeroStacked() {
           // against the 20px side padding, measured directly.
           fontSize: isMobile ? "calc((100vw - 40px) / 4.476)" : "clamp(58px, 14.5vw, 270px)",
           lineHeight: 0.88,
-          fontWeight: 400,
+          fontWeight: 200,
           letterSpacing: "-0.025em",
           margin: 0,
           color: "#F4F1EC",
@@ -333,6 +333,19 @@ function HeroStacked() {
 
       {/* Spacer pushes tagline to bottom */}
       <div style={{ flex: 1 }} />
+
+      {/* Extra darkening behind the mobile tagline/links, on top of the
+          hero-wide gradient above, since that one alone wasn't enough
+          contrast for this text specifically. */}
+      {isMobile && (
+        <div style={{
+          position: "absolute", left: 0, right: 0, bottom: 0,
+          height: "38%",
+          background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%)",
+          zIndex: 2,
+          pointerEvents: "none",
+        }} />
+      )}
 
       {/* Bottom: tagline + scroll cue. On mobile the tagline spans full
           width on its own row, with "Let's talk" and "Scroll" aligned
@@ -471,7 +484,7 @@ function HeroSplit() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(64px, 9vw, 160px)",
           lineHeight: 0.92,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.035em",
           margin: "40px 0",
         }}>
@@ -511,7 +524,7 @@ function HeroMarquee() {
         <div key={row} style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(80px, 14vw, 220px)",
-          fontWeight: 300,
+          fontWeight: 200,
           lineHeight: 0.9,
           letterSpacing: "-0.04em",
           whiteSpace: "nowrap",
@@ -748,7 +761,7 @@ function SelectedWork() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(48px, 7vw, 112px)",
           lineHeight: 0.95,
-          fontWeight: 400,
+          fontWeight: 200,
           letterSpacing: "-0.035em",
           color: "var(--ink)",
         }}>
@@ -1395,7 +1408,7 @@ function Contact() {
           // that at any mobile viewport.
           fontSize: isMobile ? "calc((100vw - 40px) / 6.008)" : "clamp(58px, 14.5vw, 270px)",
           lineHeight: 0.88,
-          fontWeight: 400,
+          fontWeight: 200,
           letterSpacing: "-0.025em",
           margin: 0,
           color: "var(--ink)",

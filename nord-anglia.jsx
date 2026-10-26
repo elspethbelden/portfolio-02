@@ -135,7 +135,7 @@ function Opener() {
           lineHeight: 0.95,
           letterSpacing: "-0.035em",
           maxWidth: "20ch",
-          fontWeight: 500
+          fontWeight: 200
         }}>
           One system.{" "}
           <span style={{ fontStyle: "italic" }}>76 schools.</span>
@@ -145,25 +145,33 @@ function Opener() {
 
       <div style={{
         display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr 1fr",
-        gap: isMobile ? 20 : 40,
+        gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr",
+        gap: isMobile ? 20 : 64,
         paddingTop: isMobile ? 24 : 40,
         paddingBottom: isMobile ? 24 : 40
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
           INTRO
         </div>
-        <p style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(16px, 1.8vw, 20px)",
-          lineHeight: 1.4,
-          fontWeight: 300,
-          color: "var(--ink)"
+        <div style={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "space-between",
+          alignItems: isMobile ? "flex-start" : "flex-end",
+          gap: isMobile ? 16 : 24
         }}>
-          Nord Anglia runs 76 premium international schools, and the network is still growing. I worked with a brand agency to refresh its online identity and build one component system for the corporate site and every school site.
-        </p>
-        <div className="mono" style={{ textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end" }}>
-          76 SCHOOLS
+          <p style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "clamp(16px, 1.8vw, 20px)",
+            lineHeight: 1.4,
+            fontWeight: 300,
+            color: "var(--ink)"
+          }}>
+            Nord Anglia runs 76 premium international schools, and the network is still growing. I worked with a brand agency to refresh its online identity and build one component system for the corporate site and every school site.
+          </p>
+          <div className="mono" style={{ color: "var(--ink-soft)", whiteSpace: "nowrap" }}>
+            76 SCHOOLS
+          </div>
         </div>
       </div>
     </section>
@@ -183,7 +191,7 @@ function DiscoverySection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -235,7 +243,7 @@ function HomepageTestingSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -335,7 +343,7 @@ function GoldenPathSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -383,7 +391,7 @@ function IterationSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -456,7 +464,7 @@ function NavigationSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -502,7 +510,7 @@ function FindASchoolSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -560,7 +568,7 @@ function LanguageSupportSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -648,7 +656,7 @@ function DocumentationSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -736,7 +744,7 @@ function ResultSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -812,7 +820,7 @@ function NextProject() {
               fontFamily: "var(--font-display)",
               fontSize: "clamp(40px, 5.5vw, 88px)",
               lineHeight: 0.95,
-              fontWeight: 300,
+              fontWeight: 400,
               letterSpacing: "-0.035em",
               marginBottom: 24
             }}>

@@ -112,7 +112,7 @@ function Opener() {
           fontSize: "clamp(56px, 9vw, 160px)",
           lineHeight: 0.95,
           letterSpacing: "-0.035em",
-          maxWidth: "18ch", fontWeight: 500
+          maxWidth: "18ch", fontWeight: 200
         }}>
           An AI companion for the trading floor.
         </h1>
@@ -120,27 +120,35 @@ function Opener() {
 
       <div style={{
         display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr 1fr",
-        gap: isMobile ? 20 : 40,
+        gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr",
+        gap: isMobile ? 20 : 64,
         paddingTop: isMobile ? 24 : 40,
         paddingBottom: isMobile ? 24 : 40
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
           INTRO
         </div>
-        <p style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(16px, 1.8vw, 20px)",
-          lineHeight: 1.4,
-          fontWeight: 300,
-          color: "var(--ink)"
+        <div style={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "space-between",
+          alignItems: isMobile ? "flex-start" : "flex-end",
+          gap: isMobile ? 16 : 24
         }}>
-          A north star vision for Goldman Sachs's in-house proprietary AI tool, built on the{" "}
-          design system
-          {" "}we helped establish. Designing for some of the most demanding, data-driven users in the world.
-        </p>
-        <div className="mono" style={{ textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end" }}>
-          6 MO.
+          <p style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "clamp(16px, 1.8vw, 20px)",
+            lineHeight: 1.4,
+            fontWeight: 300,
+            color: "var(--ink)"
+          }}>
+            A north star vision for Goldman Sachs's in-house proprietary AI tool, built on the{" "}
+            design system
+            {" "}we helped establish. Designing for some of the most demanding, data-driven users in the world.
+          </p>
+          <div className="mono" style={{ color: "var(--ink-soft)", whiteSpace: "nowrap" }}>
+            6 MO.
+          </div>
         </div>
       </div>
     </section>
@@ -160,7 +168,7 @@ function ContextSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -219,7 +227,7 @@ function PrinciplesSection() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(40px, 5vw, 76px)",
           lineHeight: 1,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.03em"
         }}>
           Designing for demanding users.
@@ -260,7 +268,7 @@ function ExplorationSection() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(40px, 5vw, 76px)",
           lineHeight: 1,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.03em"
         }}>
           From concept to north star.
@@ -323,7 +331,7 @@ function OutcomeSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(40px, 5vw, 76px)",
             lineHeight: 1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.03em",
             marginBottom: 40
           }}>
@@ -366,7 +374,7 @@ function NextProject() {
               fontFamily: "var(--font-display)",
               fontSize: "clamp(40px, 5.5vw, 88px)",
               lineHeight: 0.95,
-              fontWeight: 300,
+              fontWeight: 400,
               letterSpacing: "-0.035em",
               marginBottom: 24
             }}>

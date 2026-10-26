@@ -133,7 +133,7 @@ function Opener() {
           fontSize: "clamp(56px, 9vw, 160px)",
           lineHeight: 0.95,
           letterSpacing: "-0.035em",
-          maxWidth: "20ch", fontWeight: 500
+          maxWidth: "20ch", fontWeight: 200
         }}>
           A facelift for Costa Express self-serve coffee machines.
         </h1>
@@ -141,8 +141,8 @@ function Opener() {
 
       <div style={{
         display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr 1fr",
-        gap: isMobile ? 20 : 40,
+        gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr",
+        gap: isMobile ? 20 : 64,
         paddingTop: isMobile ? 24 : 40,
         paddingBottom: isMobile ? 24 : 40
       }}>
@@ -150,7 +150,7 @@ function Opener() {
           INTRO
         </div>
         <p style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: "clamp(16px, 1.8vw, 20px)",
           lineHeight: 1.4,
           fontWeight: 300,
@@ -180,7 +180,7 @@ function ContextSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -231,7 +231,7 @@ function PhotographySection() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(40px, 5vw, 76px)",
           lineHeight: 1,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.03em"
         }}>
           New imagery for two screen formats.
@@ -379,7 +379,7 @@ function AppIntegrationSection() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(40px, 5vw, 76px)",
           lineHeight: 1,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.03em"
         }}>
           Machine + app, one journey.
@@ -502,7 +502,7 @@ function NextProject() {
               fontFamily: "var(--font-display)",
               fontSize: "clamp(40px, 5.5vw, 88px)",
               lineHeight: 0.95,
-              fontWeight: 300,
+              fontWeight: 400,
               letterSpacing: "-0.035em",
               marginBottom: 24
             }}>

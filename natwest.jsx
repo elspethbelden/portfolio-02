@@ -116,7 +116,7 @@ function Opener() {
           lineHeight: 0.95,
 
           letterSpacing: "-0.035em",
-          maxWidth: "18ch", fontWeight: "500"
+          maxWidth: "18ch", fontWeight: 200
         }}>
           A design system built to <span style={{ fontStyle: "italic" }}>survive a rebrand</span>.
         </h1>
@@ -125,27 +125,33 @@ function Opener() {
       {/* Dek */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr 1fr",
-        gap: isMobile ? 20 : 40,
+        gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr",
+        gap: isMobile ? 20 : 64,
         paddingTop: isMobile ? 24 : 40,
         paddingBottom: isMobile ? 24 : 40
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
           INTRO
         </div>
-        <p style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(16px, 1.8vw, 20px)",
-          lineHeight: 1.4,
-          fontWeight: 300,
-          color: "var(--ink)"
+        <div style={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "space-between",
+          alignItems: isMobile ? "flex-start" : "flex-end",
+          gap: isMobile ? 16 : 24
         }}>
-          We collapsed four siloed UI kits into one tokenised system for hundreds of designers, and built the governance, documentation and federated contribution model to run it.
-        </p>
-        <div className="mono" style={{
-          textAlign: isMobile ? "left" : "right", color: "var(--ink-soft)", alignSelf: isMobile ? "auto" : "end"
-        }}>
-          12 + 6 WK.
+          <p style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "clamp(16px, 1.8vw, 20px)",
+            lineHeight: 1.4,
+            fontWeight: 300,
+            color: "var(--ink)"
+          }}>
+            We collapsed four siloed UI kits into one tokenised system for hundreds of designers, and built the governance, documentation and federated contribution model to run it.
+          </p>
+          <div className="mono" style={{ color: "var(--ink-soft)", whiteSpace: "nowrap" }}>
+            12 + 6 WK.
+          </div>
         </div>
       </div>
     </section>);
@@ -189,7 +195,7 @@ function ContextSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
             lineHeight: 1.1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.025em",
             marginBottom: 40
           }}>
@@ -266,7 +272,7 @@ function StatsBand() {
             <div style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(48px, 6vw, 88px)",
-            fontWeight: 300,
+            fontWeight: 200,
             lineHeight: 1,
             letterSpacing: "-0.03em",
             color: "var(--ink)",
@@ -324,7 +330,7 @@ function PrinciplesSection() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(40px, 5vw, 76px)",
           lineHeight: 1,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.03em"
         }}>
           Three principles that shaped the build.
@@ -390,7 +396,7 @@ function GalleryAsymmetric() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(40px, 5vw, 76px)",
           lineHeight: 1,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.03em"
         }}>
           From audit to foundation.
@@ -635,7 +641,7 @@ function ProcessSection() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(40px, 5vw, 76px)",
           lineHeight: 1,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.03em"
         }}>
           Eighteen weeks, four phases.
@@ -708,7 +714,7 @@ function GovernanceSection() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(40px, 5vw, 76px)",
           lineHeight: 1,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.03em"
         }}>
           Shepherding the system, not policing it.
@@ -898,7 +904,7 @@ function OutcomeSection() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(40px, 5vw, 76px)",
             lineHeight: 1,
-            fontWeight: 300,
+            fontWeight: 200,
             letterSpacing: "-0.03em",
             marginBottom: 40
           }}>
@@ -962,7 +968,7 @@ function NextProject() {
               fontFamily: "var(--font-display)",
               fontSize: "clamp(40px, 5.5vw, 88px)",
               lineHeight: 0.95,
-              fontWeight: 300,
+              fontWeight: 400,
               letterSpacing: "-0.035em",
               marginBottom: 24,
               color: "#F4F1EC"

@@ -127,7 +127,7 @@ function Opener() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(56px, 9vw, 160px)",
           lineHeight: 0.95, letterSpacing: "-0.035em",
-          maxWidth: "20ch", fontWeight: 500
+          maxWidth: "20ch", fontWeight: 200
         }}>
           Global cover.{" "}
           <span style={{ fontStyle: "italic" }}>Local experience.</span>
@@ -135,14 +135,14 @@ function Opener() {
       </div>
 
       <div style={{
-        display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr 1fr", gap: isMobile ? 20 : 40,
+        display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 20 : 64,
         paddingTop: isMobile ? 24 : 40, paddingBottom: isMobile ? 24 : 40
       }}>
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
           INTRO
         </div>
         <p style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-body)",
           fontSize: "clamp(16px, 1.8vw, 20px)",
           lineHeight: 1.4, fontWeight: 300, color: "var(--ink)"
         }}>
@@ -165,7 +165,7 @@ function ChallengeSection() {
           <h2 style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
-            lineHeight: 1.1, fontWeight: 300,
+            lineHeight: 1.1, fontWeight: 200,
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             Fragmented systems,{" "}
@@ -226,7 +226,7 @@ function OpportunitySection() {
           <h2 style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
-            lineHeight: 1.1, fontWeight: 300,
+            lineHeight: 1.1, fontWeight: 200,
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             Use the apps{" "}
@@ -269,7 +269,7 @@ function ApproachSection() {
           <h2 style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
-            lineHeight: 1.1, fontWeight: 300,
+            lineHeight: 1.1, fontWeight: 200,
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             Local-first,{" "}
@@ -367,7 +367,7 @@ function SolutionSection() {
           <h2 style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
-            lineHeight: 1.1, fontWeight: 300,
+            lineHeight: 1.1, fontWeight: 200,
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             A connected layer in the{" "}
@@ -437,7 +437,7 @@ function SolutionSection() {
         fontFamily: "var(--font-display)",
         fontSize: "clamp(36px, 4.2vw, 56px)",
         lineHeight: 1.1,
-        fontWeight: 300,
+        fontWeight: 200,
         letterSpacing: "-0.025em",
         color: "var(--ink)",
         marginBottom: isMobile ? 24 : 32
@@ -508,7 +508,7 @@ function SolutionSection() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(36px, 4.2vw, 56px)",
           lineHeight: 1.1,
-          fontWeight: 300,
+          fontWeight: 200,
           letterSpacing: "-0.025em",
           color: "var(--ink)"
         }}>Designed inside each market's app.</h2>
@@ -604,7 +604,7 @@ function ImpactSection() {
           <h2 style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(36px, 4.2vw, 56px)",
-            lineHeight: 1.1, fontWeight: 300,
+            lineHeight: 1.1, fontWeight: 200,
             letterSpacing: "-0.025em", marginBottom: 40
           }}>
             The output unlocked{" "}
@@ -687,7 +687,7 @@ function NextProject() {
             <h3 style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(40px, 5.5vw, 88px)",
-              lineHeight: 0.95, fontWeight: 300,
+              lineHeight: 0.95, fontWeight: 400,
               letterSpacing: "-0.035em", marginBottom: 24
             }}>
               A facelift for the nation's most-loved{" "}
@@ -803,7 +803,7 @@ function PasswordGate({ children }) {
         <h1 style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(32px, 5vw, 56px)",
-          fontWeight: 400,
+          fontWeight: 200,
           color: "#F4F1EC",
           marginBottom: 48,
           letterSpacing: "-0.02em",
