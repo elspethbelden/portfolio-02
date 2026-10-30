@@ -1,6 +1,64 @@
 // Portfolio landing page — Elspeth Belden
 const { useState, useEffect, useRef } = React;
 
+function RollingLink({ href, children, style, onClick, as = "a", className, hover: hoverProp, target, rel, download }) {
+  const [internalHover, setInternalHover] = useState(false);
+  const hover = hoverProp !== undefined ? hoverProp : internalHover;
+  const reduced = typeof window !== "undefined" && window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const text = String(children);
+  const Tag = as;
+  const tagProps = as === "a"
+    ? { href, onClick, target, rel, download, "aria-label": text }
+    : { "aria-label": text };
+  const hoverHandlers = hoverProp === undefined
+    ? { onMouseEnter: () => setInternalHover(true), onMouseLeave: () => setInternalHover(false) }
+    : {};
+
+  return (
+    <Tag
+      {...tagProps}
+      className={className}
+      {...hoverHandlers}
+      style={{ position: "relative", display: "inline-flex", cursor: "pointer", ...style }}
+    >
+      <span aria-hidden="true" style={{ display: "inline-flex" }}>
+        {text.split("").map((ch, i) => (
+          <span key={i} style={{
+            position: "relative", display: "inline-block",
+            height: "1em", lineHeight: "1em", overflow: reduced ? "visible" : "hidden"
+          }}>
+            {reduced ? (
+              <span style={{ display: "block", opacity: hover ? 0.6 : 1, transition: "opacity 0.2s ease" }}>
+                {ch === " " ? " " : ch}
+              </span>
+            ) : (
+              <span style={{
+                display: "block",
+                transform: hover ? "translateY(1em)" : "translateY(0)",
+                transition: "transform 0.55s cubic-bezier(0.43, 0.195, 0.02, 1)",
+                transitionDelay: `${i * 0.025}s`
+              }}>
+                <span style={{ display: "block", height: "1em" }}>{ch === " " ? " " : ch}</span>
+                <span style={{ display: "block", height: "1em", opacity: 0.6, position: "absolute", top: "-1em", left: 0 }}>
+                  {ch === " " ? " " : ch}
+                </span>
+              </span>
+            )}
+          </span>
+        ))}
+      </span>
+      <span aria-hidden="true" style={{
+        position: "absolute", left: 0, right: 0, bottom: -4,
+        height: 1, background: "currentColor",
+        transformOrigin: "right",
+        transform: hover ? "scaleX(0)" : "scaleX(1)",
+        transition: "transform 0.22s ease"
+      }} />
+    </Tag>
+  );
+}
+
 // ─────────────── DATA ───────────────
 const CASE_STUDIES = [
   {
@@ -173,7 +231,7 @@ function renderClientMarqueeRow(list, animationName, duration = 60, delay = 0) {
         <span key={i} style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(32px, 4vw, 56px)",
-          fontWeight: 400,
+          fontWeight: 200,
           letterSpacing: "-0.03em",
           padding: "0 24px",
           color: "var(--ink)",
@@ -307,7 +365,7 @@ function HeroStacked() {
       <div style={{
         position: "relative",
         zIndex: 2,
-        padding: isMobile ? "16px 20px 0" : "16px 24px 0",
+        padding: isMobile ? "48px 20px 0" : "56px 24px 0",
       }}>
         <h1 style={{
           fontFamily: "var(--font-name)",
@@ -317,7 +375,7 @@ function HeroStacked() {
           fontSize: isMobile ? "calc((100vw - 40px) / 4.476)" : "clamp(58px, 14.5vw, 270px)",
           lineHeight: 0.88,
           fontWeight: 200,
-          letterSpacing: "-0.025em",
+          letterSpacing: "-0.022em",
           margin: 0,
           color: "#F4F1EC",
           whiteSpace: "nowrap",
@@ -326,8 +384,8 @@ function HeroStacked() {
           gap: isMobile ? "0.28em" : 0,
           width: "100%",
         }}>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", loaded, 600, { tracking: "-0.025em" })}</span>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", loaded, 845, { tracking: "-0.025em" })}</span>
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", loaded, 600, { tracking: "-0.022em" })}</span>
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", loaded, 845, { tracking: "-0.022em" })}</span>
         </h1>
       </div>
 
@@ -367,27 +425,16 @@ function HeroStacked() {
             fontSize: "clamp(20px, 2.2vw, 30px)",
             lineHeight: 1.3,
             color: "#F4F1EC",
-            fontWeight: 400,
+            fontWeight: 200,
             maxWidth: "32ch",
           }}>
             I help complex organisations{" "}<br />ship products that feel simple.
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <a
-              href="#contact"
-              className="mono"
-              style={{
-                color: "#F4F1EC",
-                borderBottom: "1px solid rgba(244,241,236,0.5)",
-                paddingBottom: 4,
-                transition: "opacity 200ms",
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = 0.6}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = 1}
-            >
+            <RollingLink href="#contact" className="mono" style={{ color: "#F4F1EC", paddingBottom: 4 }}>
               Let's talk
-            </a>
+            </RollingLink>
             <a href="#work" className="mono" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               color: "#F4F1EC", borderBottom: "1px solid rgba(244,241,236,0.5)",
@@ -415,28 +462,15 @@ function HeroStacked() {
               fontSize: "clamp(20px, 2.2vw, 30px)",
               lineHeight: 1.3,
               color: "#F4F1EC",
-              fontWeight: 400,
+              fontWeight: 200,
               maxWidth: "32ch",
             }}>
               I help complex organisations{" "}<br />ship products that feel simple.
             </p>
 
-            <a
-              href="#contact"
-              className="mono"
-              style={{
-                display: "inline-block",
-                marginTop: 16,
-                color: "#F4F1EC",
-                borderBottom: "1px solid rgba(244,241,236,0.5)",
-                paddingBottom: 4,
-                transition: "opacity 200ms",
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = 0.6}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = 1}
-            >
+            <RollingLink href="#contact" className="mono" style={{ display: "inline-flex", marginTop: 16, color: "#F4F1EC", paddingBottom: 4 }}>
               Let's talk
-            </a>
+            </RollingLink>
           </div>
 
           <div style={{ textAlign: "right" }}>
@@ -493,7 +527,7 @@ function HeroSplit() {
         </h1>
 
         <p style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-display)", fontWeight: 200,
           fontSize: 22,
           lineHeight: 1.4,
           maxWidth: "38ch",
@@ -529,9 +563,7 @@ function HeroMarquee() {
           letterSpacing: "-0.04em",
           whiteSpace: "nowrap",
           padding: "8px 0",
-          color: row === 1 ? "var(--accent)" : "var(--ink)",
-          fontStyle: row === 1 ? "italic" : "normal",
-          fontFamily: row === 1 ? "var(--font-italic)" : "var(--font-display)"
+          color: row === 1 ? "var(--accent)" : "var(--ink)"
         }}>
           <MarqueeRow
             text={row === 1 ? "Belden — Experience Designer —" : "Elspeth Belden — Experience Designer —"}
@@ -549,7 +581,7 @@ function HeroMarquee() {
           PORTFOLIO · 2026
         </div>
         <p style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-display)", fontWeight: 200,
           fontSize: 20,
           maxWidth: "38ch",
           textAlign: "right",
@@ -650,15 +682,15 @@ function PullQuote() {
           fontFamily: "var(--font-display)",
           fontSize: "clamp(32px, 3.9vw, 56px)",
           lineHeight: 1.15,
-          fontWeight: 400,
+          fontWeight: 200,
           letterSpacing: "-0.02em",
           color: "var(--ink)",
           margin: 0,
         }}>
           I've spent over a decade designing digital products for{" "}
-          <span style={{ fontStyle: "italic", color: "var(--accent)" }}>finance, healthcare</span>
+          <span style={{ color: "var(--accent)" }}>finance, healthcare</span>
           {" "}and{" "}
-          <span style={{ fontStyle: "italic", color: "var(--accent)" }}>retail</span>
+          <span style={{ color: "var(--accent)" }}>retail</span>
           . Lately, most of that has been AI products. I set the vision, design the product, and build the component libraries teams ship from.
         </blockquote>
         <div />
@@ -765,7 +797,7 @@ function SelectedWork() {
           letterSpacing: "-0.035em",
           color: "var(--ink)",
         }}>
-          Recent <span style={{ fontStyle: "italic", color: "var(--accent)" }}>work</span>
+          Recent <span style={{ color: "var(--accent)" }}>work</span>
         </h2>
         <div />
       </div>
@@ -1157,7 +1189,7 @@ function CaseStudyPanel({ cs, index, total }) {
           ...(isBento && { opacity: 1 - openBackProgress }),
         }}>
           {!isMobile && (
-            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 16, ...bentoEntranceFade }}>
+            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 32, ...bentoEntranceFade }}>
               {cs.num} / {String(total).padStart(2, "0")}
             </div>
           )}
@@ -1165,11 +1197,11 @@ function CaseStudyPanel({ cs, index, total }) {
             fontFamily: "var(--font-display)",
             fontSize: isMobile ? "48px" : "clamp(48px, 7vw, 112px)",
             lineHeight: 0.95,
-            fontWeight: 400,
-            letterSpacing: "-0.025em",
+            fontWeight: 200,
+            letterSpacing: "-0.022em",
             color: "var(--ink)",
           }}>
-            {renderStaggeredLetters(cs.client, revealed, 0, { tracking: "-0.025em" })}
+            {renderStaggeredLetters(cs.client, revealed, 0, { tracking: "-0.022em" })}
           </h3>
         </div>
 
@@ -1189,7 +1221,7 @@ function CaseStudyPanel({ cs, index, total }) {
             boxShadow: isLast ? "none" : "0 24px 60px -20px rgba(0,0,0,0.3)",
             alignSelf: isMobile ? "center" : undefined,
             flexShrink: isMobile ? 0 : undefined,
-            margin: isMobile ? "0 auto" : undefined,
+            margin: isMobile ? "0 auto" : "0 48px",
           }}
         >
           <image-slot
@@ -1264,7 +1296,7 @@ function CaseStudyPanel({ cs, index, total }) {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(24px, 2.5vw, 34px)",
             lineHeight: 1.3,
-            fontWeight: 400,
+            fontWeight: 200,
             color: "var(--ink)",
             marginBottom: isMobile ? 12 : 24,
             maxWidth: isMobile ? "28ch" : "32ch",
@@ -1329,7 +1361,7 @@ function Contact() {
       // between sections at certain viewport heights.
       marginTop: "-1px",
       height: "90vh",
-      padding: isMobile ? "56px 20px 40px" : "90px 32px 56px",
+      padding: isMobile ? "56px 20px 32px" : "90px 32px 44px",
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
@@ -1371,28 +1403,22 @@ function Contact() {
           justifyContent: "space-between",
           alignItems: isMobile ? "flex-start" : "flex-end",
           gap: isMobile ? 16 : 32,
-          marginBottom: isMobile ? 24 : 32,
+          marginBottom: isMobile ? 48 : 72,
         }}>
           <div className="mono" style={{ color: "var(--ink-soft)", alignSelf: isMobile ? undefined : "flex-start" }}>
             Let's talk
           </div>
           <div className="mono" style={{ color: "var(--ink-soft)" }}>
             <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>EMAIL</div>
-            <a href="mailto:elspethbelden@gmail.com" style={{ borderBottom: "1px solid currentColor" }}>
-              elspethbelden@gmail.com
-            </a>
+            <RollingLink href="mailto:elspethbelden@gmail.com">elspethbelden@gmail.com</RollingLink>
           </div>
           <div className="mono" style={{ color: "var(--ink-soft)" }}>
             <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>LINKEDIN</div>
-            <a href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener" style={{ borderBottom: "1px solid currentColor" }}>
-              /in/elspethbelden ↗
-            </a>
+            <RollingLink href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener">/in/elspethbelden ↗</RollingLink>
           </div>
           <div className="mono" style={{ color: "var(--ink-soft)" }}>
             <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>CV</div>
-            <a href="assets/Elspeth-Belden-CV.pdf" download style={{ borderBottom: "1px solid currentColor" }}>
-              Download ↓
-            </a>
+            <RollingLink href="assets/Elspeth-Belden-CV.pdf" download>Download ↓</RollingLink>
           </div>
         </div>
 
@@ -1409,7 +1435,7 @@ function Contact() {
           fontSize: isMobile ? "calc((100vw - 40px) / 6.008)" : "clamp(58px, 14.5vw, 270px)",
           lineHeight: 0.88,
           fontWeight: 200,
-          letterSpacing: "-0.025em",
+          letterSpacing: "-0.022em",
           margin: 0,
           color: "var(--ink)",
           whiteSpace: "nowrap",
@@ -1418,7 +1444,7 @@ function Contact() {
           justifyContent: "space-between",
           width: "100%",
         }}>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", true, 0, { tracking: "-0.025em" })}</span>
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", true, 0, { tracking: "-0.022em" })}</span>
           <img
             src="assets/hair-like-this-2.png"
             alt=""
@@ -1428,7 +1454,7 @@ function Contact() {
               flexShrink: 0,
             }}
           />
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", true, 0, { tracking: "-0.025em" })}</span>
+          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", true, 0, { tracking: "-0.022em" })}</span>
         </h2>
       </div>
 

@@ -1,6 +1,90 @@
 // Case study — Nord Anglia Education
 const { useState, useEffect } = React;
 
+function RollingLink({ href, children, style, onClick, as = "a", className, hover: hoverProp, target, rel, download }) {
+  const [internalHover, setInternalHover] = useState(false);
+  const hover = hoverProp !== undefined ? hoverProp : internalHover;
+  const reduced = typeof window !== "undefined" && window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const text = String(children);
+  const Tag = as;
+  const tagProps = as === "a"
+    ? { href, onClick, target, rel, download, "aria-label": text }
+    : { "aria-label": text };
+  const hoverHandlers = hoverProp === undefined
+    ? { onMouseEnter: () => setInternalHover(true), onMouseLeave: () => setInternalHover(false) }
+    : {};
+
+  return (
+    <Tag
+      {...tagProps}
+      className={className}
+      {...hoverHandlers}
+      style={{ position: "relative", display: "inline-flex", cursor: "pointer", ...style }}
+    >
+      <span aria-hidden="true" style={{ display: "inline-flex" }}>
+        {text.split("").map((ch, i) => (
+          <span key={i} style={{
+            position: "relative", display: "inline-block",
+            height: "1em", lineHeight: "1em", overflow: reduced ? "visible" : "hidden"
+          }}>
+            {reduced ? (
+              <span style={{ display: "block", opacity: hover ? 0.6 : 1, transition: "opacity 0.2s ease" }}>
+                {ch === " " ? " " : ch}
+              </span>
+            ) : (
+              <span style={{
+                display: "block",
+                transform: hover ? "translateY(1em)" : "translateY(0)",
+                transition: "transform 0.55s cubic-bezier(0.43, 0.195, 0.02, 1)",
+                transitionDelay: `${i * 0.025}s`
+              }}>
+                <span style={{ display: "block", height: "1em" }}>{ch === " " ? " " : ch}</span>
+                <span style={{ display: "block", height: "1em", opacity: 0.6, position: "absolute", top: "-1em", left: 0 }}>
+                  {ch === " " ? " " : ch}
+                </span>
+              </span>
+            )}
+          </span>
+        ))}
+      </span>
+      <span aria-hidden="true" style={{
+        position: "absolute", left: 0, right: 0, bottom: -4,
+        height: 1, background: "currentColor",
+        transformOrigin: "right",
+        transform: hover ? "scaleX(0)" : "scaleX(1)",
+        transition: "transform 0.22s ease"
+      }} />
+    </Tag>
+  );
+}
+
+function BrandMark() {
+  const [hover, setHover] = useState(false);
+  return (
+    <span
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{ position: "relative", display: "inline-block", width: 21, height: 21 }}
+    >
+      <svg width="21" height="21" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style={{
+        position: "absolute", top: 0, left: 0,
+        transform: hover ? "scale(0) rotate(-14deg)" : "scale(1) rotate(0deg)",
+        transition: "transform 0.25s ease"
+      }}>
+        <path d="M0 5 H32 V9 H4 V14 H32 V18 H4 V23 H32 V27 H0 Z" />
+      </svg>
+      <svg width="21" height="21" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true" style={{
+        position: "absolute", top: 0, left: 0,
+        transform: hover ? "scale(1) rotate(0deg)" : "scale(0) rotate(14deg)",
+        transition: "transform 0.25s ease"
+      }}>
+        <path d="M16 4 L3 17 L3 29 L29 29 L29 17 Z" />
+      </svg>
+    </span>
+  );
+}
+
 function useIsMobile(bp = 768) {
   const [m, setM] = React.useState(window.innerWidth < bp);
   React.useEffect(() => {
@@ -81,7 +165,7 @@ function HeroTop() {
   const opacity = mapRange(progress, [0, 0.5, 1], [1, 1, 0]);
 
   return (
-    <section ref={heroRef} style={{ position: "relative", height: "calc(100dvh - 185px)", width: "100%", overflow: "hidden" }}>
+    <section ref={heroRef} style={{ position: "relative", height: "calc(100dvh - 223px)", width: "100%", overflow: "hidden" }}>
       {/* Breadcrumbs overlay — left untouched, only the background media below moves/fades. */}
       <div style={{
         position: "absolute",
@@ -90,7 +174,9 @@ function HeroTop() {
         color: "#FFFFFF"
       }}>
         <div className="mono">
-          <a href="index.html" style={{ color: "#FFFFFF" }}>Home</a>
+          <a href="index.html" aria-label="Home" style={{ color: "#FFFFFF", display: "inline-flex", verticalAlign: "-6px" }}>
+            <BrandMark />
+          </a>
           <span style={{ margin: "0 10px", color: "#FFFFFF" }}>/</span>
           <span style={{ color: "#FFFFFF" }}>Nord Anglia Education</span>
         </div>
@@ -108,40 +194,66 @@ function Opener() {
     <section style={{ padding: isMobile ? "32px 20px 32px" : "40px 32px 40px" }}>
       <div style={{
         display: "grid",
-        gridTemplateColumns: isMobile ? "1fr 1fr" : "2fr 1fr",
-        gap: isMobile ? 20 : 32,
-        paddingBottom: isMobile ? 32 : 60,
-        borderBottom: "1px solid var(--line-faint)"
+        gridTemplateColumns: isMobile ? "1fr" : "3fr 1fr",
+        gap: isMobile ? 20 : 64
       }}>
-        <div>
-          <div style={{ fontFamily: "var(--font-display)", fontSize: 26, fontWeight: 400 }}>
-            Nord Anglia Education
-          </div>
+        <div style={{
+          fontFamily: "var(--font-display)",
+          fontSize: 32, fontWeight: 200, lineHeight: 1.26
+        }}>
+          Nord Anglia Education
         </div>
-        <div>
-          <div className="mono" style={{ color: "var(--ink)", lineHeight: 1.8 }}>
-            UX / UI Design<br />
-            Component Library<br />
-            User Testing<br />
-            Brand Translation
+        {!isMobile && (
+          <div>
+            {["UX / UI Design", "Component Library", "User Testing", "Brand Translation"].map(tag => (
+              <div key={tag} style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                padding: "6px 0",
+                borderTop: "1px solid var(--line-faint)",
+                fontFamily: "var(--font-body)",
+                fontWeight: 400,
+                fontSize: 16,
+                letterSpacing: "-0.025em",
+                color: "var(--ink)"
+              }}>{tag}</div>
+            ))}
           </div>
-        </div>
+        )}
       </div>
 
       <div style={{ padding: isMobile ? "40px 0 24px" : "80px 0 40px" }}>
         <h1 style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(56px, 9vw, 160px)",
+          fontSize: "clamp(56px, 9.7vw, 140px)",
           lineHeight: 0.95,
           letterSpacing: "-0.035em",
           maxWidth: "20ch",
           fontWeight: 200
         }}>
           One system.{" "}
-          <span style={{ fontStyle: "italic" }}>76 schools.</span>
+          <span style={{ color: "var(--accent)" }}>76 schools.</span>
           {" "}Counting.
         </h1>
       </div>
+
+      {isMobile && (
+        <div style={{ marginBottom: 24 }}>
+          {["UX / UI Design", "Component Library", "User Testing", "Brand Translation"].map(tag => (
+            <div key={tag} style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              padding: "6px 0",
+              borderTop: "1px solid var(--line-faint)",
+              fontFamily: "var(--font-body)",
+              fontWeight: 400,
+              fontSize: 16,
+              letterSpacing: "-0.025em",
+              color: "var(--ink)"
+            }}>{tag}</div>
+          ))}
+        </div>
+      )}
 
       <div style={{
         display: "grid",
@@ -153,26 +265,16 @@ function Opener() {
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
           INTRO
         </div>
-        <div style={{
-          display: "flex",
-          flexDirection: isMobile ? "column" : "row",
-          justifyContent: "space-between",
-          alignItems: isMobile ? "flex-start" : "flex-end",
-          gap: isMobile ? 16 : 24
+        <p style={{
+          fontFamily: "var(--font-body)",
+          fontSize: isMobile ? 18 : 20,
+          lineHeight: isMobile ? "26px" : "28px",
+          fontWeight: 300,
+          color: "var(--ink)",
+          paddingRight: isMobile ? 0 : 80
         }}>
-          <p style={{
-            fontFamily: "var(--font-body)",
-            fontSize: "clamp(16px, 1.8vw, 20px)",
-            lineHeight: 1.4,
-            fontWeight: 300,
-            color: "var(--ink)"
-          }}>
-            Nord Anglia runs 76 premium international schools, and the network is still growing. I worked with a brand agency to refresh its online identity and build one component system for the corporate site and every school site.
-          </p>
-          <div className="mono" style={{ color: "var(--ink-soft)", whiteSpace: "nowrap" }}>
-            76 SCHOOLS
-          </div>
-        </div>
+          Nord Anglia runs 76 premium international schools, and the network is still growing. I worked with a brand agency to refresh its online identity and build one component system for the corporate site and every school site.
+        </p>
       </div>
     </section>
   );
@@ -791,6 +893,7 @@ function ResultSection() {
 
 function NextProject() {
   const isMobile = useIsMobile();
+  const [cardHover, setCardHover] = useState(false);
   return (
     <section style={{
       padding: isMobile ? "60px 20px 70px" : "120px 32px 140px",
@@ -801,11 +904,7 @@ function NextProject() {
       ["--ink-faint"]: "rgba(244,241,236,0.45)",
       ["--line-faint"]: "rgba(244,241,236,0.15)",
     }}>
-      <div className="mono" style={{ color: "var(--ink-faint)", marginBottom: isMobile ? 24 : 40 }}>
-        NEXT
-      </div>
-
-      <a href="natwest.html" style={{ display: "block" }}>
+      <a href="natwest.html" style={{ display: "block" }} onMouseEnter={() => setCardHover(true)} onMouseLeave={() => setCardHover(false)}>
         <div style={{
           display: "grid",
           gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
@@ -820,18 +919,13 @@ function NextProject() {
               fontFamily: "var(--font-display)",
               fontSize: "clamp(40px, 5.5vw, 88px)",
               lineHeight: 0.95,
-              fontWeight: 400,
+              fontWeight: 200,
               letterSpacing: "-0.035em",
               marginBottom: 24
             }}>
               A design system built to survive a rebrand.
             </h3>
-            <div className="mono" style={{
-              display: "inline-flex", alignItems: "center", gap: 12,
-              borderBottom: "1px solid var(--ink)", paddingBottom: 4
-            }}>
-              Read case study <span>→</span>
-            </div>
+            <RollingLink as="span" hover={cardHover} className="mono" style={{ paddingBottom: 4 }}>Read case study</RollingLink>
           </div>
           <div style={{ order: isMobile ? 0 : 2, height: isMobile ? "auto" : 420, aspectRatio: isMobile ? "4/3" : undefined, position: "relative", overflow: "hidden", borderRadius: 12 }}>
             <image-slot
@@ -870,27 +964,19 @@ function Footer() {
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
         <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>EMAIL</div>
-        <a href="mailto:elspethbelden@gmail.com" style={{ borderBottom: "1px solid currentColor" }}>
-          elspethbelden@gmail.com
-        </a>
+        <RollingLink href="mailto:elspethbelden@gmail.com">elspethbelden@gmail.com</RollingLink>
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)" }}>
         <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>LINKEDIN</div>
-        <a href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener" style={{ borderBottom: "1px solid currentColor" }}>
-          /in/elspethbelden ↗
-        </a>
+        <RollingLink href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener">/in/elspethbelden ↗</RollingLink>
       </div>
       <div className="mono" style={{ color: "var(--ink-soft)", textAlign: isMobile ? "left" : "right" }}>
         {isMobile ? (
-          <a href="#" onClick={(e) => { e.preventDefault(); if (window.__lenis) window.__lenis.scrollTo(0); else window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ borderBottom: "1px solid currentColor" }}>
-            Back to top ↑
-          </a>
+          <RollingLink href="#" onClick={(e) => { e.preventDefault(); if (window.__lenis) window.__lenis.scrollTo(0); else window.scrollTo({ top: 0, behavior: "smooth" }); }}>Back to top ↑</RollingLink>
         ) : (
           <>
             <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>BACK</div>
-            <a href="index.html" style={{ borderBottom: "1px solid currentColor" }}>
-              Home ↑
-            </a>
+            <RollingLink href="index.html">Home ↑</RollingLink>
           </>
         )}
       </div>

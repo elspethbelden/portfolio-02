@@ -10,7 +10,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Archivo:wdth,wght@125,400;125,500;125,600;125,700;125,800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&family=Geist+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Archivo:wdth,wght@125,400;125,500;125,600;125,700;125,800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <script>
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
@@ -29,10 +29,10 @@ const ACCENTS = {
 };
 
 const TYPE_PAIRS = {
-  editorial:  { display: "'PP Editorial New', Georgia, serif", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Geist', system-ui, sans-serif", italicDisplay: "'PP Editorial New', Georgia, serif" },
-  technical:  { display: "'JetBrains Mono', ui-monospace, monospace", mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Geist', system-ui, sans-serif", italicDisplay: "'PP Editorial New', Georgia, serif" },
-  classic:    { display: "'Newsreader', Georgia, serif",      mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Newsreader', Georgia, serif",   italicDisplay: "'PP Editorial New', Georgia, serif" },
-  expanded:   { display: "'Archivo', system-ui, sans-serif",  mono: "'JetBrains Mono', ui-monospace, monospace", body: "'Geist', system-ui, sans-serif", italicDisplay: "'PP Editorial New', Georgia, serif" }
+  editorial:  { display: "'PP Editorial New', Georgia, serif", mono: "'Geist Mono', ui-monospace, monospace", body: "'Geist', system-ui, sans-serif", italicDisplay: "'PP Editorial New', Georgia, serif" },
+  technical:  { display: "'Geist Mono', ui-monospace, monospace", mono: "'Geist Mono', ui-monospace, monospace", body: "'Geist', system-ui, sans-serif", italicDisplay: "'PP Editorial New', Georgia, serif" },
+  classic:    { display: "'Newsreader', Georgia, serif",      mono: "'Geist Mono', ui-monospace, monospace", body: "'Newsreader', Georgia, serif",   italicDisplay: "'PP Editorial New', Georgia, serif" },
+  expanded:   { display: "'Archivo', system-ui, sans-serif",  mono: "'Geist Mono', ui-monospace, monospace", body: "'Geist', system-ui, sans-serif", italicDisplay: "'PP Editorial New', Georgia, serif" }
 };
 
 function applyTweaks(t) {
@@ -126,27 +126,6 @@ applyTweaks(TWEAK_DEFAULTS);
     font-style: normal;
     font-display: swap;
   }
-  @font-face {
-    font-family: 'PP Editorial New';
-    src: url("assets/PPEditorialNew-Free for personal use/PPEditorialNew-UltralightItalic.otf") format("opentype");
-    font-weight: 200;
-    font-style: italic;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'PP Editorial New';
-    src: url("assets/PPEditorialNew-Free for personal use/PPEditorialNew-Regular.otf") format("opentype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'PP Editorial New';
-    src: url("assets/PPEditorialNew-Free for personal use/PPEditorialNew-Italic.otf") format("opentype");
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-  }
 
   :root {
     --bg: #EEF2FA;
@@ -174,7 +153,7 @@ applyTweaks(TWEAK_DEFAULTS);
 
   .mono {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     font-weight: 400;
