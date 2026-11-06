@@ -350,49 +350,7 @@ function HeroStacked() {
         zIndex: 1,
       }} />
 
-      {/* Foreground text wrapper — fades in on load. */}
-      <div style={{
-        position: "relative",
-        zIndex: 3,
-        display: "contents",
-        // Note: display:contents lets children keep their original layout.
-      }}>
-      {/* Inner fade-in wrapper handled per child below via `loaded` opacity. */}
-      </div>
-
-      {/* Full-width name — each letter fades/rises in on its own staggered
-          delay rather than the whole word arriving as one block. */}
-      <div style={{
-        position: "relative",
-        zIndex: 2,
-        padding: isMobile ? "48px 20px 0" : "56px 24px 0",
-      }}>
-        <h1 style={{
-          fontFamily: "var(--font-name)",
-          // Kept on one line on mobile too — sized so "Elspeth Belden"
-          // (no image, unlike the footer treatment) fills edge to edge
-          // against the 20px side padding, measured directly.
-          fontSize: isMobile ? "calc((100vw - 40px) / 4.476)" : "clamp(58px, 14.5vw, 270px)",
-          lineHeight: 0.88,
-          fontWeight: 200,
-          letterSpacing: "-0.022em",
-          margin: 0,
-          color: "#F4F1EC",
-          whiteSpace: "nowrap",
-          display: "flex",
-          justifyContent: isMobile ? "flex-start" : "space-between",
-          gap: isMobile ? "0.28em" : 0,
-          width: "100%",
-        }}>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", loaded, 600, { tracking: "-0.022em" })}</span>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", loaded, 845, { tracking: "-0.022em" })}</span>
-        </h1>
-      </div>
-
-      {/* Spacer pushes tagline to bottom */}
-      <div style={{ flex: 1 }} />
-
-      {/* Extra darkening behind the mobile tagline/links, on top of the
+      {/* Extra darkening behind the mobile foreground content, on top of the
           hero-wide gradient above, since that one alone wasn't enough
           contrast for this text specifically. */}
       {isMobile && (
@@ -405,85 +363,145 @@ function HeroStacked() {
         }} />
       )}
 
-      {/* Bottom: tagline + scroll cue. On mobile the tagline spans full
-          width on its own row, with "Let's talk" and "Scroll" aligned
-          together on the row beneath it; desktop keeps them stacked in
-          a left column next to the scroll cue on the right. */}
-      {isMobile ? (
-        <div style={{
-          position: "relative", zIndex: 3,
-          display: "flex",
-          flexDirection: "column",
-          gap: 16,
-          padding: "0 20px 28px",
-          opacity: loaded ? 1 : 0,
-          transform: loaded ? "translateY(0)" : "translateY(12px)",
-          transition: "opacity 900ms ease-out 1100ms, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 1100ms",
-        }}>
-          <p style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(20px, 2.2vw, 30px)",
-            lineHeight: 1.3,
-            color: "#F4F1EC",
-            fontWeight: 200,
-            maxWidth: "32ch",
-          }}>
+      {/* The former bottom grid becomes a wrapping top row: statement on
+          the left, work in the centre, and contact on the right. */}
+      <div className={`hero-intro-row${loaded ? " is-loaded" : ""}`}>
+        <div className="hero-intro-copy">
+          <p>
             I help complex organisations{" "}<br />ship products that feel simple.
           </p>
-
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <RollingLink href="#contact" className="mono" style={{ color: "#F4F1EC", paddingBottom: 4 }}>
-              Let's talk
-            </RollingLink>
-            <a href="#work" className="mono" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              color: "#F4F1EC", borderBottom: "1px solid rgba(244,241,236,0.5)",
-              paddingBottom: 4
-            }}>
-              Scroll <span style={{ fontSize: 14 }}>↓</span>
-            </a>
-          </div>
         </div>
-      ) : (
-        <div style={{
-          position: "relative", zIndex: 3,
-          display: "grid",
-          gridTemplateColumns: "3fr 1fr",
-          gap: 40,
-          alignItems: "end",
-          padding: "0 32px 40px",
-          opacity: loaded ? 1 : 0,
-          transform: loaded ? "translateY(0)" : "translateY(12px)",
-          transition: "opacity 900ms ease-out 1100ms, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 1100ms",
-        }}>
-          <div>
-            <p style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(20px, 2.2vw, 30px)",
-              lineHeight: 1.3,
-              color: "#F4F1EC",
-              fontWeight: 200,
-              maxWidth: "32ch",
-            }}>
-              I help complex organisations{" "}<br />ship products that feel simple.
-            </p>
-
-            <RollingLink href="#contact" className="mono" style={{ display: "inline-flex", marginTop: 16, color: "#F4F1EC", paddingBottom: 4 }}>
-              Let's talk
-            </RollingLink>
-          </div>
-
-          <div style={{ textAlign: "right" }}>
-            <a href="#work" className="mono" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              color: "#F4F1EC", borderBottom: "1px solid rgba(244,241,236,0.5)",
-              paddingBottom: 4
-            }}>
-              Scroll <span style={{ fontSize: 14 }}>↓</span>
-            </a>
-          </div>
+        <div className="hero-intro-action hero-intro-action--center">
+          <RollingLink href="#work" className="mono hero-intro-link">
+            Latest work
+          </RollingLink>
         </div>
-      )}
+        <div className="hero-intro-action hero-intro-action--end">
+          <RollingLink href="#contact" className="mono hero-intro-link">
+            Let's talk
+          </RollingLink>
+        </div>
+      </div>
+
+      <div className="hero-spacer" />
+
+      {/* Full-width name moves to the bottom while keeping the existing
+          staggered letter entrance and responsive single-line treatment. */}
+      <h1 className="hero-name">
+        <span className="hero-name-word">{renderStaggeredLetters("Elspeth", loaded, 600, { tracking: "-0.022em" })}</span>
+        <span className="hero-name-word">{renderStaggeredLetters("Belden", loaded, 845, { tracking: "-0.022em" })}</span>
+      </h1>
+
+      <style>{`
+        .hero-intro-row {
+          position: relative;
+          z-index: 3;
+          display: flex;
+          flex-wrap: wrap;
+          width: 100%;
+          height: 302px;
+          margin-top: 29px;
+          padding: 7px 32px;
+          color: inherit;
+          opacity: 0;
+          transform: translateY(12px);
+          transition:
+            opacity 900ms ease-out 1100ms,
+            transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 1100ms;
+        }
+
+        .hero-intro-row.is-loaded {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .hero-intro-copy,
+        .hero-intro-action {
+          flex: 1 1 33.333%;
+        }
+
+        .hero-intro-copy p {
+          max-width: 32ch;
+          margin: 0;
+          color: inherit;
+          font-family: var(--font-display);
+          font-size: clamp(20px, 2.2vw, 30px);
+          font-weight: 200;
+          line-height: 1.3;
+        }
+
+        .hero-intro-action {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          align-items: center;
+          padding: 7px 0;
+        }
+
+        .hero-intro-action--end {
+          align-items: flex-end;
+        }
+
+        .hero-intro-link {
+          color: inherit;
+          padding-bottom: 4px;
+        }
+
+        .hero-spacer {
+          flex: 1;
+        }
+
+        .hero-name {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          margin: 0;
+          padding: 0 32px 32px;
+          color: inherit;
+          font-family: var(--font-name);
+          font-size: clamp(58px, 14.5vw, 270px);
+          font-weight: 200;
+          line-height: 0.88;
+          letter-spacing: -0.022em;
+          white-space: nowrap;
+        }
+
+        .hero-name-word {
+          white-space: nowrap;
+        }
+
+        @media (max-width: 767px) {
+          .hero-intro-row {
+            height: auto;
+            min-height: 230px;
+            margin-top: 20px;
+            padding: 7px 20px;
+            row-gap: 20px;
+          }
+
+          .hero-intro-copy {
+            flex-basis: 100%;
+          }
+
+          .hero-intro-action {
+            flex-basis: 50%;
+            align-items: flex-start;
+          }
+
+          .hero-intro-action--end {
+            align-items: flex-end;
+          }
+
+          .hero-name {
+            justify-content: flex-start;
+            gap: 0.28em;
+            padding: 0 20px 28px;
+            font-size: calc((100vw - 40px) / 4.476);
+          }
+        }
+      `}</style>
     </section>
   );
 }
