@@ -207,7 +207,7 @@ function Opener() {
                 display: "flex",
                 justifyContent: "flex-end",
                 padding: "6px 0",
-                borderTop: "1px solid var(--line-faint)",
+                borderTop: "1px solid rgba(244,241,236,0.3)",
                 fontFamily: "var(--font-body)",
                 fontWeight: 400,
                 fontSize: 16,
@@ -238,7 +238,7 @@ function Opener() {
               display: "flex",
               justifyContent: "flex-start",
               padding: "6px 0",
-              borderTop: "1px solid var(--line-faint)",
+              borderTop: "1px solid rgba(244,241,236,0.3)",
               fontFamily: "var(--font-body)",
               fontWeight: 400,
               fontSize: 16,
@@ -259,16 +259,52 @@ function Opener() {
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
           INTRO
         </div>
-        <p style={{
-          fontFamily: "var(--font-body)",
-          fontSize: isMobile ? 18 : 20,
-          lineHeight: isMobile ? "26px" : "28px",
-          fontWeight: 300,
-          color: "var(--ink)",
-          paddingRight: isMobile ? 0 : 80
-        }}>
-          A redesign of the Costa Express interface for two screen formats: the new flagship machine and the compact unit found in service stations.
-        </p>
+        <div>
+          <p style={{
+            fontFamily: "var(--font-body)",
+            fontSize: isMobile ? 18 : 20,
+            lineHeight: isMobile ? "26px" : "28px",
+            fontWeight: 300,
+            color: "var(--ink)",
+            paddingRight: isMobile ? 0 : 80
+          }}>
+            Costa's rebrand left its self-serve machines looking out of step with the stores. I redesigned the interface for two screen formats, the new flagship machine and the compact unit in service stations.
+          </p>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
+            gap: isMobile ? 24 : 48,
+            marginTop: isMobile ? 32 : 64
+          }}>
+            <div style={{ borderTop: "1px solid rgba(244,241,236,0.3)", paddingTop: 20 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 12 }}>
+                Outcome
+              </div>
+              <p style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 17,
+                lineHeight: 1.6,
+                color: "var(--ink)"
+              }}>
+                Two formats, one brand. I redesigned the interface for the flagship machine and the compact unit, adapting it to each screen's orientation.
+              </p>
+            </div>
+            <div style={{ borderTop: "1px solid rgba(244,241,236,0.3)", paddingTop: 20 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 12 }}>
+                Impact
+              </div>
+              <p style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 17,
+                lineHeight: 1.6,
+                color: "var(--ink)"
+              }}>
+                Live on 7,000 machines across the UK. The interface now matches the high-street stores, and the new photography library grows with the menu, so seasonal drinks don't need a reshoot.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>);
 }

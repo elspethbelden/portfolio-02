@@ -188,7 +188,7 @@ function Opener() {
                 display: "flex",
                 justifyContent: "flex-end",
                 padding: "6px 0",
-                borderTop: "1px solid var(--line-faint)",
+                borderTop: "1px solid rgba(244,241,236,0.3)",
                 fontFamily: "var(--font-body)",
                 fontWeight: 400,
                 fontSize: 16,
@@ -223,7 +223,7 @@ function Opener() {
               display: "flex",
               justifyContent: "flex-start",
               padding: "6px 0",
-              borderTop: "1px solid var(--line-faint)",
+              borderTop: "1px solid rgba(244,241,236,0.3)",
               fontFamily: "var(--font-body)",
               fontWeight: 400,
               fontSize: 16,
@@ -245,16 +245,52 @@ function Opener() {
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
           INTRO
         </div>
-        <p style={{
-          fontFamily: "var(--font-body)",
-          fontSize: isMobile ? 18 : 20,
-          lineHeight: isMobile ? "26px" : "28px",
-          fontWeight: 300,
-          color: "var(--ink)",
-          paddingRight: isMobile ? 0 : 80
-        }}>
-          We collapsed four siloed UI kits into one tokenised system for hundreds of designers, and built the governance, documentation and federated contribution model to run it.
-        </p>
+        <div>
+          <p style={{
+            fontFamily: "var(--font-body)",
+            fontSize: isMobile ? 18 : 20,
+            lineHeight: isMobile ? "26px" : "28px",
+            fontWeight: 300,
+            color: "var(--ink)",
+            paddingRight: isMobile ? 0 : 80
+          }}>
+            NatWest was mid-rebrand, and its retail design teams weren't on the same page. Four channel UI kits, documentation scattered across five tools, and no shared naming between design and code meant every change had to be made four times. We collapsed them into one tokenised system for hundreds of designers, and built the governance, documentation and federated contribution model to run it.
+          </p>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
+            gap: isMobile ? 24 : 48,
+            marginTop: isMobile ? 32 : 64
+          }}>
+            <div style={{ borderTop: "1px solid rgba(244,241,236,0.3)", paddingTop: 20 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 12 }}>
+                Outcome
+              </div>
+              <p style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 17,
+                lineHeight: 1.6,
+                color: "var(--ink)"
+              }}>
+                One system, ready for the rebrand. Four kits became one Figma library, with tokens named to match code. The rebrand shipped as a library swap, updating components in hours, not months.
+              </p>
+            </div>
+            <div style={{ borderTop: "1px solid rgba(244,241,236,0.3)", paddingTop: 20 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 12 }}>
+                Impact
+              </div>
+              <p style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 17,
+                lineHeight: 1.6,
+                color: "var(--ink)"
+              }}>
+                Faster work, and a system that outlives the team. Time per screen improved 400% in year one. Designers across every channel now keep the library current.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>);
 

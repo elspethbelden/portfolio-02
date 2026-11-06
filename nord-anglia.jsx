@@ -265,16 +265,38 @@ function Opener() {
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
           INTRO
         </div>
-        <p style={{
-          fontFamily: "var(--font-body)",
-          fontSize: isMobile ? 18 : 20,
-          lineHeight: isMobile ? "26px" : "28px",
-          fontWeight: 300,
-          color: "var(--ink)",
-          paddingRight: isMobile ? 0 : 80
-        }}>
-          Nord Anglia runs 76 premium international schools, and the network is still growing. I worked with a brand agency to refresh its online identity and build one component system for the corporate site and every school site.
-        </p>
+        <div>
+          <p style={{
+            fontFamily: "var(--font-body)",
+            fontSize: isMobile ? 18 : 20,
+            lineHeight: isMobile ? "26px" : "28px",
+            fontWeight: 300,
+            color: "var(--ink)",
+            paddingRight: isMobile ? 0 : 80
+          }}>
+            I partnered with Nord Anglia's brand agency to define the digital interpretation of a new brand, replacing a fragmented identity across 76 international school websites with one premium look and feel. Alongside the visual language, I helped shape the key parent journeys, from understanding what makes Nord Anglia distinctive to finding the right school.
+          </p>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
+            gap: isMobile ? 24 : 48,
+            marginTop: isMobile ? 32 : 64
+          }}>
+            <div style={{ borderTop: "1px solid var(--line-faint)", paddingTop: 20 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 12 }}>Outcome</div>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.6, color: "var(--ink)" }}>
+                60+ modules, built while the brand was still changing. An embedded component library meant each brand update flowed into the page designs with little rework. A second round of testing with Chinese-speaking users led to a dedicated typographic treatment for China.
+              </p>
+            </div>
+            <div style={{ borderTop: "1px solid var(--line-faint)", paddingTop: 20 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 12 }}>Impact</div>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.6, color: "var(--ink)" }}>
+                One system for 76 schools. Each school builds its site from the same modules and adapts them to its own content and languages, so new schools can launch from the same kit.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

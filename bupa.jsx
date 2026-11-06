@@ -205,7 +205,7 @@ function Opener() {
                 display: "flex",
                 justifyContent: "flex-end",
                 padding: "6px 0",
-                borderTop: "1px solid var(--line-faint)",
+                borderTop: "1px solid rgba(244,241,236,0.3)",
                 fontFamily: "var(--font-body)",
                 fontWeight: 400,
                 fontSize: 16,
@@ -236,7 +236,7 @@ function Opener() {
               display: "flex",
               justifyContent: "flex-start",
               padding: "6px 0",
-              borderTop: "1px solid var(--line-faint)",
+              borderTop: "1px solid rgba(244,241,236,0.3)",
               fontFamily: "var(--font-body)",
               fontWeight: 400,
               fontSize: 16,
@@ -254,15 +254,51 @@ function Opener() {
         <div className="mono" style={{ color: "var(--ink-soft)" }}>
           INTRO
         </div>
-        <p style={{
-          fontFamily: "var(--font-body)",
-          fontSize: isMobile ? 18 : 20,
-          lineHeight: isMobile ? "26px" : "28px",
-          fontWeight: 300, color: "var(--ink)",
-          paddingRight: isMobile ? 0 : 80
-        }}>
-          Bupa's international health offering spanned several markets and apps, and customers couldn't find their way around it. I led the experience design for Bupa Global Connect, a single journey built into the existing local apps. Customers reach their global cover from the app they already use.
-        </p>
+        <div>
+          <p style={{
+            fontFamily: "var(--font-body)",
+            fontSize: isMobile ? 18 : 20,
+            lineHeight: isMobile ? "26px" : "28px",
+            fontWeight: 300, color: "var(--ink)",
+            paddingRight: isMobile ? 0 : 80
+          }}>
+            Bupa's international health offering spanned several markets and apps, and customers couldn't find their way around it. I led experience design for Bupa Global Connect, which lets customers reach their global cover from the local app they already use.
+          </p>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
+            gap: isMobile ? 24 : 48,
+            marginTop: isMobile ? 32 : 64
+          }}>
+            <div style={{ borderTop: "1px solid rgba(244,241,236,0.3)", paddingTop: 20 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 12 }}>
+                Outcome
+              </div>
+              <p style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 17,
+                lineHeight: 1.6,
+                color: "var(--ink)"
+              }}>
+                Two tested journeys in three weeks. We designed Global Connect in each app's existing design language, so the concepts could go into build with minimal rework. Customers in both markets validated the direction.
+              </p>
+            </div>
+            <div style={{ borderTop: "1px solid rgba(244,241,236,0.3)", paddingTop: 20 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 12 }}>
+                Impact
+              </div>
+              <p style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 17,
+                lineHeight: 1.6,
+                color: "var(--ink)"
+              }}>
+                £20m+ of follow-on work. The validated direction secured funding for the next phase, which aims to make cover clearer and cut manual support costs.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -625,8 +661,9 @@ function SolutionSection() {
           lineHeight: 1.1,
           fontWeight: 200,
           letterSpacing: "-0.025em",
-          color: "var(--ink)"
-        }}>Designed inside each market's app.</h2>
+          color: "var(--ink)",
+          maxWidth: "55ch"
+        }}>Putting the insights to work: Dan's journey.</h2>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr", gap: isMobile ? 12 : 64, marginTop: isMobile ? 24 : 40, marginBottom: isMobile ? 48 : 80 }}>
@@ -677,7 +714,7 @@ function SolutionSection() {
             letterSpacing: "-0.02em",
             color: "var(--ink)",
             marginBottom: 16
-          }}>Built into each app as it already was</h3>
+          }}>Designed inside each market's app.</h3>
           <div style={{ fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.7, color: "var(--ink-soft)" }}>
             <p style={{ marginBottom: "1.2em" }}>
               A key part of the brief was to fit the existing apps. MyBupa UK and Blua HK have different design languages and UX patterns, so we designed the same journey twice, once in each. We designed nothing from scratch. Every screen reuses the structure, components and navigation of the app it sits in.
