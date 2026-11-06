@@ -372,7 +372,7 @@ function HeroStacked() {
           </p>
         </div>
         <div className="hero-intro-action hero-intro-action--center">
-          <RollingLink href="#work" className="mono hero-intro-link">
+          <RollingLink href={`#${CASE_STUDIES[0].id}`} className="mono hero-intro-link">
             Latest work
           </RollingLink>
         </div>
@@ -1072,6 +1072,7 @@ function CaseStudyPanel({ cs, index, total }) {
 
   return (
     <article
+      id={cs.id}
       ref={articleRef}
       style={{
         position: "sticky",
