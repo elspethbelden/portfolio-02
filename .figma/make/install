@@ -1,4 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-exec pnpm dlx vite --version
+pnpm dlx vite --version
+
+vendor_dir=".figma/make/vendor"
+mkdir -p "$vendor_dir"
+
+download() {
+  url="$1"
+  destination="$2"
+  temporary="${destination}.tmp"
+
+  curl --fail --silent --show-error --location "$url" --output "$temporary"
+  mv "$temporary" "$destination"
+}
+
+download "https://unpkg.com/react@18.3.1/umd/react.development.js" "$vendor_dir/react.js"
+download "https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" "$vendor_dir/react-dom.js"
+download "https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" "$vendor_dir/babel.js"
+download "https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" "$vendor_dir/lenis.js"
