@@ -1,5 +1,5 @@
 // Portfolio landing page — Elspeth Belden
-const { useState, useEffect, useRef } = React;
+const { useState, useEffect, useLayoutEffect, useRef } = React;
 
 // "Hair like this" squiggle — 4 strand outlines, each drawn in sequence
 // with stroke-dasharray/dashoffset the first time it scrolls into view.
@@ -18,7 +18,7 @@ const HAIR_TIMING = [
   { delay: 740, duration: 580 },
 ];
 
-function AnimatedHair({ style }) {
+function AnimatedHair({ style, preserveAspectRatio }) {
   const svgRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const reduced = typeof window !== "undefined" && window.matchMedia
@@ -44,6 +44,7 @@ function AnimatedHair({ style }) {
       ref={svgRef}
       viewBox="0 0 379.776 449.085"
       xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio={preserveAspectRatio}
       style={{ height: "0.75em", width: "auto", flexShrink: 0, overflow: "visible", ...style }}
     >
       <style>{`
@@ -148,6 +149,30 @@ function RollingLink({ href, children, style, onClick, as = "a", className, hove
 }
 
 // ─────────────── DATA ───────────────
+// Shared with HeroStacked's own carousel and the intro overlay's image
+// flicker, so both stay in sync with whatever's in this folder.
+// Costa deliberately sits last — both the intro's flicker/expand sequence
+// (IntroOverlay) and HeroStacked's own carousel land on/start from this
+// order, and the intro is specifically meant to end on Costa, not
+// whichever happens to be the final entry here.
+const DESKTOP_HERO_IMAGES = [
+  "assets/hero/Desktop hp hero/Bupa.jpg",
+  "assets/hero/Desktop hp hero/HSBC.jpg",
+  "assets/hero/Desktop hp hero/NatWest.jpg",
+  "assets/hero/Desktop hp hero/NatWestWGDLL.jpg",
+  "assets/hero/Desktop hp hero/ArtFund.jpg",
+  "assets/hero/Desktop hp hero/Costa.jpg",
+];
+
+const MOBILE_HERO_IMAGES = [
+  "assets/hero/mobile/Bupa-Hero.jpg",
+  "assets/hero/mobile/Costa.jpg",
+  "assets/hero/mobile/HSBC-Hero.jpg",
+  "assets/hero/mobile/NatWest-Hero.jpg",
+  "assets/hero/mobile/NatWest-Hero-WGDLL.jpg",
+  "assets/hero/mobile/Costa.jpg",
+];
+
 const CASE_STUDIES = [
   {
     id: "goldman-ai",
@@ -242,6 +267,36 @@ const PAST_CLIENTS = [
   "Diageo", "Freeview", "NowTV", "Bethesda"
 ];
 
+// Whether the intro splash will actually play: an actual browser reload
+// (not a fresh arrival, not back/forward — see IntroOverlay), reduced
+// motion off, and GSAP loaded. A plain function, not a value read off
+// `window.__introActive`, specifically so components that need the
+// answer during their OWN first render (useState initializers, which run
+// before any effect — including the one that sets that flag — has had a
+// chance to fire) can call it directly instead of racing it. Several
+// components key their *resting* state off this (not just whether to
+// wait for an intro event), so getting it right on the very first render
+// matters — otherwise they're stuck waiting forever for an intro event
+// that was never going to fire.
+function willPlayIntro() {
+  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const navEntry = typeof performance !== "undefined" && performance.getEntriesByType
+    ? performance.getEntriesByType('navigation')[0]
+    : null;
+  const isReload = !!navEntry && navEntry.type === 'reload';
+  return isReload && !reduced && typeof window.gsap !== "undefined";
+}
+
+// `100vh` on mobile Safari/Chrome is the *largest* possible viewport —
+// taller than what's actually visible while the address bar is showing —
+// so full-bleed sections sized in vh (hero, case-study cards, footer) run
+// taller than the screen, pushing the real bottom of the page further
+// down than it looks like it should be. `dvh` tracks the real, current
+// viewport instead; feature-detected once at load (not per render, since
+// support can't change at runtime) and fallen back to `vh` wherever it's
+// unsupported.
+const VH = (typeof CSS !== "undefined" && CSS.supports && CSS.supports("height", "100dvh")) ? "dvh" : "vh";
+
 // ─────────────── RESPONSIVE HOOK ───────────────
 
 function useIsMobile(bp = 768) {
@@ -297,12 +352,58 @@ function renderStaggeredLetters(text, loaded, baseDelay, { stagger = 35, trackin
   return nodes;
 }
 
+// Same idea as renderStaggeredLetters above (translateY + opacity, same
+// 650ms cubic-bezier(0.2, 0.8, 0.2, 1)), one step coarser — whole words
+// rather than individual letters — for body copy where a letter-by-letter
+// reveal would be too fussy. `revealed` is a plain boolean (not tied to a
+// parent CSS class toggling), so the caller can key it off whatever event
+// it likes; baseDelay/stagger let multiple calls continue one shared
+// count — see the hero-intro-copy paragraph's two lines below.
+function renderStaggeredWords(text, revealed, baseDelay, stagger = 80) {
+  return text.split(" ").map((word, i) => {
+    const delay = baseDelay + i * stagger;
+    return (
+      <span
+        key={i}
+        style={{
+          display: "inline-block",
+          opacity: revealed ? 1 : 0,
+          transform: revealed ? "translateY(0)" : "translateY(12px)",
+          transition: `opacity 650ms cubic-bezier(0.2, 0.8, 0.2, 1) ${delay}ms, transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1) ${delay}ms`,
+        }}
+      >
+        {word}{" "}
+      </span>
+    );
+  });
+}
+
+// The hand-drawn scribble between client names in the marquee below —
+// a Figma asset (downloaded to assets/Client scribble.svg), with its
+// fills swapped for currentColor so it still picks up --ink like the ✺
+// character it replaces, instead of being stuck at the asset's own flat
+// grey.
+function ClientScribble({ style }) {
+  return (
+    <svg viewBox="0 0 21.1222 23.496" style={{ width: "0.32em", height: "auto", display: "block", ...style }} xmlns="http://www.w3.org/2000/svg">
+      <path d="M13.7603 2.5662C13.9888 2.22348 14.2173 1.88076 14.4457 1.53803C13.4873 0.896086 12.4126 0.393275 11.2507 0.159131C6.49364 -0.898656 2.60413 3.51128 1.80075 7.6353L1.80599 7.61421C0.299083 13.1162 1.79984 20.4262 7.75353 22.8897C8.04924 23.0015 8.34984 23.0955 8.65775 23.1723C15.3919 25.0825 20.8022 18.1638 21.0074 12.2357L21.0042 12.2618C21.4647 8.68844 20.6414 4.48045 17.3979 2.34289C16.4102 1.73695 15.166 1.52307 14.05 1.81337C14.0853 1.97254 14.1207 2.1317 14.1561 2.29086C15.1664 2.08502 16.2133 2.32157 17.0558 2.88851C19.8317 4.87776 20.5135 8.81712 19.9791 12.1099L19.9759 12.1359C19.5659 17.743 14.646 23.5751 8.97946 21.9088C8.71531 21.8425 8.46312 21.7635 8.21474 21.6696C3.21755 19.6815 1.63374 13.0291 3.04843 7.94553L3.05367 7.92444C3.80688 4.14864 7.14839 0.514278 11.0061 1.3837C11.9749 1.57472 12.905 1.99832 13.7603 2.5662ZM14.4457 1.53803L13.7603 2.5662L13.5663 2.43749L14.1561 2.29086L14.05 1.81337L14.4457 1.53803Z" fill="currentColor" />
+      <path d="M6.60824 20.4717C6.75834 20.0881 6.90844 19.7045 7.05854 19.3209C6.21046 18.9869 5.41643 18.5293 4.70875 17.9622C1.54001 15.4851 0.453665 10.861 1.92974 7.12511C3.3362 2.99974 9.02237 2.96988 12.5212 5.17061C12.5708 5.19905 12.6204 5.2279 12.67 5.25717L12.6561 5.24874C16.9085 7.8405 20.6997 13.5572 17.858 18.0594L17.8512 18.0697C16.3015 20.8133 12.7044 21.3287 9.66141 20.5362C8.73468 20.3212 7.82058 20.0234 6.92973 19.6715C6.8655 19.8214 6.80128 19.9712 6.73705 20.1211C7.62596 20.5312 8.5478 20.8875 9.49998 21.1597C12.5473 22.1539 16.8014 21.8056 18.7266 18.6387L18.7198 18.649C22.2209 13.2758 17.9094 6.93788 13.3474 4.14267L13.3335 4.13424C13.2791 4.10204 13.2245 4.0703 13.1699 4.039C9.42677 1.6391 2.57736 1.44873 0.720829 6.67575C-0.929885 10.8725 0.301861 16.1273 3.93036 18.9386C4.73955 19.5815 5.64639 20.0982 6.60824 20.4717ZM7.05854 19.3209L6.60824 20.4717L6.73705 20.1211L6.92973 19.6715L7.05854 19.3209Z" fill="currentColor" />
+      <path d="M5.15441 4.69592C5.53933 4.84256 5.92425 4.98919 6.30917 5.13583C6.60449 4.36572 7.03434 3.6607 7.59157 3.08055C9.71182 0.707535 13.7545 1.15743 15.5783 3.76853C18.2136 7.25789 17.6515 12.434 15.4482 16.1979C14.8931 17.1425 14.2217 18.0209 13.4397 18.766L13.411 18.7949C12.226 20.1147 10.4224 20.889 8.8351 20.3035C7.23752 19.7477 6.20668 18.0414 5.80186 16.2604L5.79537 16.2339C4.9763 13.4123 4.60173 10.406 5.16073 7.51507C5.32951 6.65848 5.58544 5.81669 5.95054 5.02525C5.80471 4.95233 5.65887 4.87941 5.51304 4.8065C5.0787 5.61484 4.75883 6.48388 4.53257 7.373C3.77968 10.3751 4.03501 13.5438 4.78702 16.5089L4.78053 16.4824C5.16382 18.4545 6.2649 20.6112 8.41838 21.4359C10.58 22.2845 12.9698 21.2145 14.3547 19.6757L14.326 19.7045C15.2164 18.8689 15.9625 17.8968 16.5728 16.8586C18.9629 12.74 19.6702 7.10041 16.5972 2.98412C14.4635 -0.142392 9.26768 -0.754547 6.68836 2.21824C6.00785 2.93332 5.49711 3.78814 5.15441 4.69592ZM6.30917 5.13583L5.15441 4.69592L5.51304 4.8065L5.95054 5.02525L6.30917 5.13583Z" fill="currentColor" />
+      <path d="M17.0771 6.37622C16.8572 6.72448 16.6372 7.07274 16.4172 7.421C17.0538 7.82543 17.6116 8.33052 18.0522 8.92444C20.1138 11.5277 18.9765 15.6651 15.9959 17.1283L15.9786 17.1381C12.9404 18.9159 8.80607 17.8811 6.03786 15.6768C4.75656 14.6533 3.68772 13.3147 3.25936 11.7988L3.24917 11.7651C1.84393 8.33246 5.75605 5.47867 9.28035 5.38216L9.32306 5.37805C11.0706 5.08837 12.9156 5.20435 14.5758 5.85227C15.3081 6.14132 16.0015 6.53859 16.5742 7.07154C16.6895 6.95625 16.8048 6.84096 16.9201 6.72567C16.3297 6.09844 15.6029 5.62042 14.8303 5.26067C13.0788 4.45418 11.1008 4.22505 9.19102 4.4538L9.23373 4.44969C7.27302 4.5129 5.24692 5.05583 3.652 6.39827C2.00878 7.68495 1.3034 10.1943 2.04701 12.1658L2.03682 12.1322C2.54469 14.0116 3.78732 15.5443 5.22396 16.6961C8.32306 19.1369 12.8948 20.3927 16.6346 18.2483L16.6173 18.2582C20.1699 16.5396 21.6244 11.3553 19.0528 8.17738C18.5106 7.45402 17.832 6.8498 17.0771 6.37622ZM16.4172 7.421L17.0771 6.37622L16.9201 6.72567L16.5742 7.07154L16.4172 7.421Z" fill="currentColor" />
+      <path d="M10.4144 3.706C10.5605 3.63238 10.6717 3.50394 10.7234 3.3486C10.7751 3.19326 10.763 3.02381 10.6898 2.87747C10.6167 2.73113 10.4883 2.61982 10.3331 2.56797C10.1778 2.51611 10.0083 2.52801 9.86172 2.60074C9.86172 2.60074 9.86172 2.60074 9.86172 2.60074C9.12002 2.96861 8.44333 3.45563 7.85214 4.02292C4.39502 7.47833 3.72976 12.9231 5.57758 17.2909C6.09751 18.4451 6.91263 19.6046 8.21129 20.1988C9.50755 20.8151 11.0935 20.5317 12.1923 19.796C13.633 18.8567 14.5356 17.4229 15.1328 15.9513L15.1274 15.964C16.78 11.8242 17.1913 5.72599 12.4753 3.21797L12.5196 3.23686C11.6765 2.82371 10.6072 2.75102 9.74102 3.1524C8.96686 3.49648 8.37209 4.10291 7.95186 4.78009C7.91842 4.83438 7.90619 4.89966 7.91918 4.96247C7.93217 5.02528 7.96909 5.08031 8.02209 5.11565C8.07509 5.15098 8.1401 5.1639 8.20306 5.15173C8.26604 5.13956 8.3216 5.10316 8.35885 5.05142C8.35885 5.05142 8.35885 5.05142 8.35885 5.05142C8.78048 4.46728 9.34333 3.98308 9.98409 3.7488C10.7036 3.47735 11.4892 3.57952 12.1625 3.95107L12.2067 3.96996C15.8476 6.04589 15.578 11.7541 13.9606 15.4567L13.9552 15.4695C13.4096 16.7744 12.5941 17.9847 11.4893 18.6973C9.72915 19.9616 7.56432 18.8166 6.76441 16.7659C5.09663 12.9149 5.73878 7.88727 8.71861 4.92215C9.22319 4.43278 9.79341 4.01874 10.4144 3.706Z" fill="currentColor" />
+      <path d="M3.44714 15.3798C3.53496 15.5178 3.67383 15.6157 3.83353 15.6516C3.99323 15.6876 4.16062 15.6588 4.29894 15.5714C4.43725 15.484 4.53523 15.3453 4.57138 15.1856C4.60753 15.026 4.57883 14.8585 4.49192 14.7199C4.49192 14.7199 4.49192 14.7199 4.49192 14.7199C4.15189 14.178 3.90783 13.597 3.81602 13.0071C3.33188 9.93808 7.09667 7.85075 10.1686 7.76476L10.2181 7.7605C12.8472 7.3769 15.8802 8.42614 16.6694 10.871C17.041 11.9734 16.8883 13.2207 16.3862 14.3478L16.3718 14.3825C15.0064 18.4253 9.1359 19.3816 5.74288 16.7479L5.73167 16.7391C5.40305 16.5105 5.10705 16.2193 4.85268 15.8923C4.45072 15.3737 4.14674 14.7648 3.98905 14.1207C3.97415 14.0588 3.93663 14.0041 3.88306 13.9689C3.8295 13.9338 3.76456 13.921 3.70219 13.9334C3.63983 13.9459 3.5848 13.9827 3.54889 14.0358C3.51296 14.0888 3.49937 14.1538 3.50942 14.2166C3.50942 14.2166 3.50942 14.2166 3.50942 14.2166C3.62982 14.9483 3.91498 15.6471 4.32987 16.2683C4.59307 16.6601 4.91117 17.0221 5.29158 17.3259L5.28036 17.3172C8.8013 20.4693 15.689 19.842 17.5625 14.8361L17.5481 14.8707C18.1646 13.5473 18.4054 11.936 17.9073 10.4601C16.7984 7.16123 12.9987 6.03937 10.0577 6.47772L10.1071 6.47346C6.69306 6.61207 2.04944 8.81386 2.58296 13.2045C2.71224 13.9998 3.03561 14.7328 3.44714 15.3798Z" fill="currentColor" />
+      <path d="M13.6164 4.76367C13.4593 4.7181 13.2904 4.73636 13.1467 4.81483C13.0031 4.8933 12.8965 5.02549 12.8504 5.1824C12.8042 5.33931 12.8223 5.50818 12.9005 5.65192C12.9788 5.79566 13.1109 5.90244 13.2677 5.94917C13.2677 5.94917 13.2677 5.94917 13.2677 5.94917C13.7841 6.10297 14.2542 6.35771 14.653 6.70592C16.8668 8.71117 16.4613 12.6557 14.6752 15.1166C13.5728 16.8298 11.4186 17.604 9.93496 16.3246C9.12381 15.6799 8.58445 14.671 8.33537 13.5897L8.33152 13.5734C7.89807 11.8895 7.8585 10.0717 8.28994 8.38803C8.70004 6.75398 9.7681 5.01686 11.4313 5.08838L11.4593 5.08938C11.9815 5.06463 12.5408 5.29866 13.037 5.63548C13.5178 5.96144 13.9548 6.37819 14.3525 6.83099C14.3944 6.87879 14.4528 6.91 14.5164 6.91655C14.58 6.92311 14.6434 6.90467 14.693 6.86504C14.7425 6.82541 14.7744 6.7676 14.782 6.70408C14.7896 6.64056 14.7719 6.57673 14.7345 6.52543C14.7345 6.52543 14.7345 6.52543 14.7345 6.52543C14.3588 6.01414 13.9334 5.52958 13.4197 5.11754C12.8896 4.69695 12.235 4.32792 11.4593 4.30168L11.4874 4.30268C9.17995 4.07536 7.75197 6.30409 7.22935 8.08481C6.65961 9.97014 6.64394 11.9754 7.09701 13.8821L7.09316 13.8658C7.37155 15.1662 8.00989 16.4548 9.12356 17.3459C10.1075 18.1568 11.5629 18.5129 12.8258 18.1197C14.0951 17.7458 15.0506 16.8337 15.7336 15.8637C17.7472 12.9971 18.407 8.51407 15.4699 5.76145C14.9322 5.29744 14.2912 4.95844 13.6164 4.76367Z" fill="currentColor" />
+      <path d="M7.61633 9.17511C7.75208 9.08388 7.84646 8.94265 7.87845 8.78213C7.91044 8.62161 7.87747 8.45502 7.78674 8.31893C7.69602 8.18284 7.55492 8.08833 7.39445 8.05613C7.23397 8.02392 7.06731 8.05671 6.93088 8.14694C6.93088 8.14694 6.93088 8.14694 6.93088 8.14694C6.3428 8.53507 5.82078 9.05432 5.45924 9.69297C3.71812 12.9181 6.41643 16.6204 9.55679 17.2222L9.54026 17.2183C10.9538 17.5937 12.6719 17.4561 13.925 16.4572C15.18 15.484 15.8031 13.8754 15.6981 12.3487C15.6427 11.4615 15.3487 10.5936 14.8664 9.85389L14.8553 9.83725C13.8975 8.4505 12.4119 7.23833 10.5801 7.04939C8.74953 6.79115 6.84473 8.11058 6.37289 9.81849C5.66941 11.5469 6.57865 13.7798 8.22636 14.5089C8.81789 14.8159 9.45725 14.9913 10.0973 15.0706C10.1603 15.0783 10.2246 15.0626 10.2764 15.0249C10.3282 14.9874 10.3631 14.9313 10.3735 14.8687C10.3839 14.8061 10.3691 14.7418 10.3323 14.6894C10.2956 14.6371 10.2398 14.6013 10.1777 14.5881C10.1777 14.5881 10.1777 14.5881 10.1777 14.5881C9.59378 14.4634 9.03299 14.2542 8.54417 13.9488C7.18567 13.1607 6.68003 11.5198 7.29217 10.1498C7.77808 8.81257 9.10632 8.01804 10.4466 8.22893C11.7923 8.40829 12.9869 9.37273 13.791 10.569L13.7799 10.5523C14.1402 11.1193 14.3547 11.769 14.3964 12.4317C14.6364 14.8347 12.2265 16.7347 9.8535 15.9653L9.83697 15.9614C7.31833 15.5111 5.30284 12.494 6.54694 10.3064C6.79734 9.85752 7.16601 9.47766 7.61633 9.17511Z" fill="currentColor" />
+    </svg>
+  );
+}
+
 // One row of the footer's scrolling client-name marquee. `animationName`
 // picks the direction (see the client-scroll / client-scroll-reverse
 // keyframes in Contact) so two rows can run opposite ways. Giving the two
 // mobile rows different `duration`s (rather than just opposite direction
 // at the same speed) keeps their phase constantly drifting apart, so the
-// ✺ symbols don't keep lining up between rows the way they do at a
+// scribbles don't keep lining up between rows the way they do at a
 // shared speed. A negative `delay` starts the row as if it had already
 // been playing for that long — i.e. mid-cycle, not flush at the very
 // start of the loop — useful for the first row so its first name isn't
@@ -317,10 +418,15 @@ function renderClientMarqueeRow(list, animationName, duration = 60, delay = 0) {
     }}>
       {[...list, ...list].map((c, i) => (
         <span key={i} style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(32px, 4vw, 56px)",
-          fontWeight: 200,
-          letterSpacing: "-0.03em",
+          // Geist Light, not the theme's own --font-display (PP Editorial
+          // New in the default theme) — a deliberate, fixed choice for
+          // this carousel specifically, independent of whichever display
+          // font the rest of the page is currently set to.
+          fontFamily: "'Geist', system-ui, sans-serif",
+          fontSize: "clamp(28px, 4vw, 48px)",
+          fontWeight: 300,
+          lineHeight: 1.81,
+          letterSpacing: "-0.021em",
           padding: "0 24px",
           color: "var(--ink)",
           display: "inline-flex",
@@ -328,11 +434,7 @@ function renderClientMarqueeRow(list, animationName, duration = 60, delay = 0) {
           gap: 40,
         }}>
           {c}
-          <span style={{
-            color: "var(--ink)",
-            fontSize: "0.5em",
-            verticalAlign: "middle",
-          }}>✺</span>
+          <ClientScribble style={{ color: "var(--ink)", verticalAlign: "middle" }} />
         </span>
       ))}
     </div>
@@ -340,6 +442,331 @@ function renderClientMarqueeRow(list, animationName, duration = 60, delay = 0) {
 }
 
 // ─────────────── COMPONENTS ───────────────
+
+// Reload-only splash. Renders nothing (real layout shows immediately) for
+// prefers-reduced-motion, GSAP failing to load, or — the main gate — any
+// page load that isn't an actual browser reload (typed URL, external
+// link, back/forward, or a link back from a case study all skip it; see
+// the navigation-type check below). Never leaves a stuck white screen,
+// and never replays itself just because the user browsed back to the
+// homepage from somewhere else.
+//
+// Ported from a Figma prototype built specifically for this motion.
+// "Elspeth" and "Belden" are each independently positioned — Elspeth via
+// `right`, Belden via `left`, both with their own `top`/`fontSize` — not
+// laid out together in a shared flex row the way the real .hero-name is.
+// There's no shared layout calculation for the two words to disagree
+// about, so nothing can jump: each is just a plain tween from its own
+// start values to its own (measured, pixel-exact) end values. The photo
+// is a single element that grows from a small centred square to
+// fullscreen via top/left/width/height — not a transform/scale — then
+// fades to reveal the real page underneath.
+//
+// Because the real .hero-name's position is only ever read once (its
+// section stays 100vh — unchanged — for this component's entire life;
+// see 'intro-hero-settle' below), there's no need to keep re-measuring it
+// every frame the way a shared-box FLIP would.
+//
+// The real page's own background/nav/name animations (Hero's image
+// fade/scale-in, the nav row's fade-up, etc.) are never duplicated or
+// overridden here — they're untouched. HeroStacked just waits for this
+// component's 'intro-reveal' event instead of firing on its own mount, so
+// the viewer actually sees them play out — concurrently with the wordmark
+// growing, not as a separate wipe revealed afterward.
+function IntroOverlay() {
+  const isMobile = useIsMobile();
+  const rootRef = useRef(null);
+  const panelRef = useRef(null);
+  const photoRef = useRef(null);
+  const elspethRef = useRef(null);
+  const beldenRef = useRef(null);
+  const [active, setActive] = useState(null); // null = deciding, true = playing
+  const [lettersIn, setLettersIn] = useState(false);
+  const [flickerIndex, setFlickerIndex] = useState(0);
+
+  useEffect(() => {
+    // Only an actual browser reload (F5 / Cmd+R) plays the splash — not a
+    // fresh arrival from elsewhere (typed URL, external link), and not
+    // navigating back to the homepage from a case study or via back/
+    // forward, all of which land here with the page already scrolled to
+    // wherever the browser's own history/back-forward cache has it. The
+    // splash assumes it's covering the very top of the page, so playing
+    // it under any of those only reads as broken, not intentional.
+    const willPlay = willPlayIntro();
+    // Set synchronously (not via the state below) so HeroStacked's own
+    // mount effect — which runs right after this one — can read it
+    // immediately, before any state update has flushed.
+    window.__introActive = willPlay;
+    setActive(willPlay);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (active !== true) return;
+    window.__lenis && window.__lenis.stop();
+    const raf = requestAnimationFrame(() => setLettersIn(true));
+    // Hides the real .hero-name for as long as this clone exists; the two
+    // are pixel-identical by the time this class comes off in cleanup, so
+    // nothing visibly changes at handoff.
+    document.body.classList.add('intro-active');
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const elspethEl = elspethRef.current;
+    const beldenEl = beldenRef.current;
+
+    // Phase A (hold): small, centred — a bit smaller than the prototype's
+    // own clamp(52px, 4.98vw, 76px) starting size, scaled down by ~15%.
+    const holdFontSizePx = Math.min(65, Math.max(44, vw * 0.042));
+    const holdGapPx = holdFontSizePx * 0.18;
+    const photoSize = 224;
+    // Phase B (open gap): same size, gap widens to make room for the
+    // photo. Half the photo's size plus a margin either side, rather than
+    // the prototype's flat 7.8vw — that came out within a pixel of the
+    // photo's own width (no breathing room at all, the photo sitting
+    // edge-to-edge against both words).
+    const openGapPx = photoSize / 2 + 28;
+    // Mobile has no room to open a gap beside "Elspeth Belden" for the
+    // photo (see the `!isMobile` gap-open tween below), so it stacks
+    // instead: a smaller square sits above the held wordmark, both
+    // nudged apart from true centre by half their combined height so
+    // the pair reads as one centred group.
+    const mobilePhotoSize = Math.min(160, vw * 0.42);
+    const mobilePhotoGap = 24;
+    // Line box height (line-height 0.88), so the gap is measured from the
+    // text itself rather than from its centre.
+    const mobileTextHeight = holdFontSizePx * 0.88;
+    const mobileStackTop = vh / 2 - (mobilePhotoSize + mobilePhotoGap + mobileTextHeight) / 2;
+    const mobilePhotoCenterY = mobileStackTop + mobilePhotoSize / 2;
+    const textHoldTop = isMobile
+      ? mobileStackTop + mobilePhotoSize + mobilePhotoGap + mobileTextHeight / 2
+      : vh / 2;
+
+    // `top` is animated directly (in px) and `yPercent` handles the
+    // vertical-centring half of it (equivalent to the prototype's
+    // `transform: translate(0, -50%)`) — GSAP's percentage-of-self
+    // transform, cleared back to 0 once `top` holds the real, final pixel
+    // position in phase D below.
+    gsap.set([elspethEl, beldenEl], { top: textHoldTop, yPercent: -50, fontSize: holdFontSizePx });
+    gsap.set(elspethEl, { right: vw / 2 + holdGapPx });
+    gsap.set(beldenEl, { left: vw / 2 + holdGapPx });
+
+    if (photoRef.current) {
+      const ps = isMobile ? mobilePhotoSize : photoSize;
+      const photoCenterY = isMobile ? mobilePhotoCenterY : vh / 2;
+      gsap.set(photoRef.current, {
+        top: photoCenterY - ps / 2,
+        left: vw / 2 - ps / 2,
+        width: ps,
+        height: ps,
+        opacity: 0,
+      });
+    }
+
+    const tl = gsap.timeline({
+      // Mobile starts the photo alongside the letter stagger rather than
+      // after it, to get people into the site sooner.
+      delay: isMobile ? 0 : 1.1,
+      defaults: { ease: "power2.inOut" },
+      onComplete: () => {
+        window.__lenis && window.__lenis.start();
+        // Only now — once the clone is actually gone and the real
+        // .hero-name is visible again — is it safe to start the section's
+        // own height shrink (see HeroStacked below). 'intro-settle' (the
+        // white "Approach" section's own reveal, below) fires in the same
+        // breath rather than several seconds earlier, so the section
+        // actually becomes visible at the same moment the shrinking hero
+        // pulls it into view, instead of sitting ready-but-unmoved for a
+        // beat first.
+        window.dispatchEvent(new CustomEvent('intro-hero-settle'));
+        window.dispatchEvent(new CustomEvent('intro-settle'));
+        setActive(false);
+      },
+    });
+
+    // t1: gap opens / photo appears — immediately, no held pause once the
+    // name has landed. t4: photo has reached fullscreen and starts its
+    // own fade to the real page.
+    const t1 = isMobile ? 0 : 0.4;
+    // The gap-opening slide and the photo's own fade-in are quick (not
+    // stretched across the whole hold) — the photo is meant to already be
+    // flicking through images almost as soon as it's visible, not sitting
+    // on a static first frame until some later moment.
+    const openDuration = 0.4;
+    const introImages = isMobile ? MOBILE_HERO_IMAGES : DESKTOP_HERO_IMAGES;
+    // Each image gets a proper beat on screen rather than a rapid-fire
+    // flick. One pass through the set, landing on its last image (Costa).
+    const flickerCount = introImages.length;
+    const flickerStep = 0.3;
+    // t3: grow begins — text and photo both animate to their final
+    // state, nav/intro copy reveal. This follows directly from how long
+    // the flicker itself takes, not a fixed number independent of it —
+    // no extra pause here, the grow starts the instant the flicker lands
+    // on Costa.
+    const t3 = t1 + flickerCount * flickerStep;
+    const t4 = t3 + 1.45;
+    // No hold once Costa fills the screen: cut to the site straight away.
+    const costaHoldExtra = 0;
+    const t5 = t4 + costaHoldExtra;
+
+    // The gap between "Elspeth" and "Belden" only opens on desktop, where
+    // there's room either side for the photo to drop into — mobile stacks
+    // the photo above the (already-together) wordmark instead (see
+    // mobileStackTop above), so there's no gap to open.
+    if (!isMobile) {
+      tl.to(elspethEl, { right: vw / 2 + openGapPx, duration: openDuration }, t1)
+        .to(beldenEl, { left: vw / 2 + openGapPx, duration: openDuration }, t1);
+    }
+
+    if (photoRef.current) {
+      tl.to(photoRef.current, { opacity: 1, duration: openDuration }, t1);
+
+      // Flicks through the hero carousel's images, twice through the
+      // set, starting the instant the photo appears and landing on the
+      // last one just before the grow begins.
+      for (let i = 0; i < flickerCount; i++) {
+        const imgIndex = i % introImages.length;
+        tl.call(() => setFlickerIndex(imgIndex), [], t1 + i * flickerStep);
+      }
+
+      tl.to(photoRef.current, { top: 0, left: 0, width: vw, height: vh, duration: t4 - t3 }, t3);
+    }
+
+    // No fade at the handoff: the hero underneath is showing the same
+    // last image (HeroStacked starts its carousel there while the intro
+    // plays) with the same gradient, so the overlay just unmounts at t5
+    // in a single frame — a direct cut between identical pictures. Any
+    // fade here stacked two gradients and briefly showed the panel.
+    tl.set({}, {}, t5);
+
+    tl.call(() => window.dispatchEvent(new CustomEvent('intro-reveal')), [], t3)
+      // Measured here, right as the grow begins — not at mount, several
+      // seconds earlier — so there's no chance of racing the custom
+      // webfont's own load (a fallback-font measurement taken before it
+      // swaps in would quietly target the wrong position). Elspeth and
+      // Belden then grow independently, each a single tween from its own
+      // phase-A/B values straight to its own measured, final position —
+      // no shared box, no correction, nothing for either one to jump
+      // against.
+      .call(() => {
+        const realEl = document.querySelector('.hero-name:not([data-intro-clone])');
+        const realWords = realEl ? realEl.querySelectorAll('.hero-name-word') : [];
+        const realFirstRect = realWords[0] ? realWords[0].getBoundingClientRect() : null;
+        const realLastRect = realWords[realWords.length - 1] ? realWords[realWords.length - 1].getBoundingClientRect() : null;
+        const realFontSizePx = realEl ? parseFloat(getComputedStyle(realEl).fontSize) : 0;
+        const duration = t4 - t3;
+        gsap.to(elspethEl, {
+          top: realFirstRect ? realFirstRect.top : vh * 0.7,
+          right: realFirstRect ? vw - realFirstRect.right : vw * 0.37,
+          yPercent: 0,
+          fontSize: realFontSizePx || holdFontSizePx * 3,
+          duration,
+          ease: "power2.inOut",
+        });
+        gsap.to(beldenEl, {
+          top: realLastRect ? realLastRect.top : vh * 0.7,
+          left: realLastRect ? realLastRect.left : vw * 0.63,
+          yPercent: 0,
+          fontSize: realFontSizePx || holdFontSizePx * 3,
+          duration,
+          ease: "power2.inOut",
+        });
+      }, [], t3);
+
+    // Resume scrolling as soon as the grow begins rather than waiting for
+    // the whole timeline (including the photo's own fade-out) to finish,
+    // so scrolling isn't left locked any longer than it needs to be.
+    tl.call(() => window.__lenis && window.__lenis.start(), [], t3);
+
+    // The hero's paragraph + nav (HeroStacked's 'intro-top-reveal' listener)
+    // are fired at the cut (t5), not at t4: anything revealed earlier finishes
+    // animating hidden behind the overlay and then pops in at the cut.
+    tl.call(() => window.dispatchEvent(new CustomEvent('intro-top-reveal')), [], t5);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      tl.kill();
+      // The final grow tweens for Elspeth/Belden are created dynamically
+      // inside the tl.call() above (so their target can be measured at
+      // the last possible moment — see the comment there), so they're not
+      // part of `tl` itself and `tl.kill()` doesn't reach them.
+      gsap.killTweensOf([elspethEl, beldenEl]);
+      document.body.classList.remove('intro-active');
+    };
+  }, [active, isMobile]);
+
+  if (active !== true) return null;
+
+  return (
+    <div ref={rootRef} style={{ position: "fixed", inset: 0, zIndex: 99999 }}>
+      <style>{`body.intro-active .hero-name:not([data-intro-clone]) { visibility: hidden; }`}</style>
+      <div ref={panelRef} style={{ position: "absolute", inset: 0, background: "#1A1A1A" }} />
+      {/* Grows from a small centred square (beside the wordmark on
+          desktop, stacked above it on mobile — see the timeline above)
+          to fullscreen via its own top/left/width/height — never a
+          transform, so there's no scale origin math needed at all. */}
+      <div ref={photoRef} style={{ position: "fixed", overflow: "hidden", zIndex: 2, background: "#1F1A14" }}>
+        <img
+          src={(isMobile ? MOBILE_HERO_IMAGES : DESKTOP_HERO_IMAGES)[flickerIndex]}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        />
+      </div>
+      {/* Same darken-for-legibility gradient as the real hero's own
+          background (see HeroStacked) — fixed at full viewport size and
+          full strength from the very first frame, not tied to the
+          photo's own grow tween at all. Trying to fade this in sync with
+          the grow kept reading as late no matter how it was eased, since
+          a dark value easing off opacity 1 barely registers next to the
+          same fraction of the photo's own size change. Putting it in
+          place from the start — in front of the photo, so it's there
+          however small or large the photo currently is — sidesteps the
+          sync problem entirely: there's nothing left to time, and it
+          matches the real hero's identical (also now static) gradient
+          exactly, so the eventual handoff has no visible change either. */}
+      <div style={{
+        position: "fixed", inset: 0, zIndex: 3, pointerEvents: "none",
+        background: "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.55) 100%)",
+      }} />
+      {/* Matches HeroStacked's extra mobile bottom darkening, so nothing changes at the cut. */}
+      {isMobile && (
+        <div style={{
+          position: "fixed", left: 0, right: 0, bottom: 0, height: "38%",
+          zIndex: 3, pointerEvents: "none",
+          background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%)",
+        }} />
+      )}
+      <h1
+        data-intro-clone="true"
+        // No .hero-name class here on purpose — every position/size value
+        // is set directly below (and animated), so the class's own flex
+        // layout would only be dead weight to override. zIndex: 4 keeps
+        // the wordmark above the photo and its darkening gradient
+        // (zIndex: 2 / 3): it needs to actually be visible while it
+        // grows — name over photo is the point of this beat — rather
+        // than sitting hidden underneath it.
+        style={{
+          position: "fixed", inset: 0, margin: 0, padding: 0,
+          color: "#F4F1EC", fontFamily: "var(--font-name)", fontWeight: 200,
+          lineHeight: 0.88,
+          zIndex: 4, pointerEvents: "none",
+        }}
+      >
+        {/* letterSpacing lives on each word span (not the h1 above) because
+            it's an em value, and GSAP animates fontSize directly on these
+            spans, not on the h1 — set a level up, "em" would resolve
+            against the h1's own (unrelated, unanimated) inherited
+            font-size instead of the word's real, growing one, computing a
+            near-zero px value that let the two words render visibly wider
+            than the real heading despite an identical fontSize target. */}
+        <span ref={elspethRef} style={{ position: "absolute", whiteSpace: "nowrap", letterSpacing: "-0.022em" }}>
+          {renderStaggeredLetters("Elspeth", lettersIn, 120, { stagger: 65, tracking: "-0.022em" })}
+        </span>
+        <span ref={beldenRef} style={{ position: "absolute", whiteSpace: "nowrap", letterSpacing: "-0.022em" }}>
+          {renderStaggeredLetters("Belden", lettersIn, 575, { stagger: 65, tracking: "-0.022em" })}
+        </span>
+      </h1>
+    </div>
+  );
+}
 
 function Hero() {
   const [layout, setLayout] = useState(window.__tweaks.heroLayout);
@@ -356,15 +783,23 @@ function Hero() {
 
 function HeroStacked() {
   const isMobile = useIsMobile();
-  const HERO_IMAGES = [
-    isMobile ? "assets/hero/mobile/Bupa-Hero.jpg" : "assets/hero/Bupa.png",
-    isMobile ? "assets/hero/mobile/Costa.jpg" : "assets/hero/Costa.png",
-    isMobile ? "assets/hero/mobile/HSBC-Hero.jpg" : "assets/hero/HSBC-Hero.jpg",
-    isMobile ? "assets/hero/mobile/NatWest-Hero.jpg" : "assets/hero/NatWest-Hero.png",
-    isMobile ? "assets/hero/mobile/NatWest-Hero-WGDLL.jpg" : "assets/hero/NatWest-Hero-WGDLL.png",
-  ];
+  const HERO_IMAGES = isMobile ? MOBILE_HERO_IMAGES : DESKTOP_HERO_IMAGES;
   const [loaded, setLoaded] = useState(false);
-  const [activeImg, setActiveImg] = useState(0);
+  // Starts on the intro's final image (it lands on the last one) so the
+  // intro can cut straight to the hero with no visible change.
+  const [activeImg, setActiveImg] = useState(() => willPlayIntro() ? HERO_IMAGES.length - 1 : 0);
+  // The paragraph + nav row reveals on its own signal — 'intro-top-reveal',
+  // fired the instant the intro's photo fills the viewport — rather than
+  // tagging along on `loaded` above (which fires earlier, at
+  // 'intro-reveal', for the background/name/letter-stagger) or waiting for
+  // 'intro-settle' (much later: only once the photo has also faded and the
+  // white "Approach" section is on its way up).
+  const [introRowRevealed, setIntroRowRevealed] = useState(() => !willPlayIntro());
+  // Full-screen for the duration of the splash (so the wordmark clone's
+  // measured position lines up cleanly with the viewport), settling back
+  // to the normal 92vh the moment the white "Approach" section pops up —
+  // part of the same push-up beat as that section's own entrance.
+  const [fullHeight, setFullHeight] = useState(() => willPlayIntro());
   const heroRef = useRef(null);
   // Same scroll-linked reveal as the case study covers: the carousel is
   // static, and scrolling past the hero pans it down and fades it out.
@@ -373,21 +808,66 @@ function HeroStacked() {
   const scrollY = scrollProgress * heroHeight * 0.7;
   const scrollOpacity = mapRange(scrollProgress, [0, 0.5, 1], [1, 1, 0]);
   useEffect(() => {
-    // Trigger the loading animation on next frame so transitions apply.
+    // Normally trigger the loading animation on next frame so transitions
+    // apply. But while the intro splash is covering the page, its own
+    // reveal animations (background scale/blur, nav-row fade, name
+    // stagger — all untouched, unmodified) should only actually start
+    // once the splash is ready to uncover them, not get a head start
+    // hidden behind it. IntroOverlay sets this flag synchronously before
+    // this effect runs, and fires 'intro-reveal' when it's ready.
+    if (window.__introActive) {
+      const onReveal = () => setLoaded(true);
+      window.addEventListener('intro-reveal', onReveal);
+      return () => window.removeEventListener('intro-reveal', onReveal);
+    }
     const id = requestAnimationFrame(() => setLoaded(true));
     return () => cancelAnimationFrame(id);
   }, []);
   useEffect(() => {
-    // Gentle cycle every 5s with a long crossfade.
-    const t = setInterval(() => {
-      setActiveImg(i => (i + 1) % HERO_IMAGES.length);
-    }, 5000);
-    return () => clearInterval(t);
+    if (introRowRevealed) return;
+    const onTopReveal = () => setIntroRowRevealed(true);
+    window.addEventListener('intro-top-reveal', onTopReveal);
+    return () => window.removeEventListener('intro-top-reveal', onTopReveal);
+  }, [introRowRevealed]);
+  useEffect(() => {
+    // Gentle cycle every 5s with a long crossfade — held until the intro
+    // has handed off, so the hero is still on the intro's image at the cut.
+    let t;
+    const start = () => {
+      t = setInterval(() => {
+        setActiveImg(i => (i + 1) % HERO_IMAGES.length);
+      }, 5000);
+    };
+    if (window.__introActive) {
+      window.addEventListener('intro-hero-settle', start, { once: true });
+    } else {
+      start();
+    }
+    return () => {
+      window.removeEventListener('intro-hero-settle', start);
+      clearInterval(t);
+    };
   }, []);
+  useEffect(() => {
+    if (!fullHeight) return;
+    // Waits for 'intro-hero-settle' (dispatched once the intro clone has
+    // actually unmounted), not the earlier 'intro-settle' — so the whole
+    // 900ms shrink plays out visibly instead of starting hidden behind
+    // the still-animating clone.
+    const onSettle = () => setFullHeight(false);
+    window.addEventListener('intro-hero-settle', onSettle);
+    return () => window.removeEventListener('intro-hero-settle', onSettle);
+  }, [fullHeight]);
+  const restingHeight = isMobile ? `100${VH}` : `92${VH}`;
   return (
     <section ref={heroRef} style={{
-      minHeight: isMobile ? "100vh" : "92vh",
-      height: isMobile ? "100vh" : "92vh",
+      minHeight: fullHeight ? `100${VH}` : restingHeight,
+      height: fullHeight ? `100${VH}` : restingHeight,
+      // A gentler curve than the page's usual cubic-bezier(0.2, 0.8, 0.2, 1)
+      // on purpose: that one reaches ~80% of its travel in the first 20% of
+      // its duration, which (coinciding with the intro clone unmounting)
+      // read as an instant snap rather than a 900ms shrink.
+      transition: fullHeight ? undefined : "height 900ms cubic-bezier(0.4, 0, 0.2, 1), min-height 900ms cubic-bezier(0.4, 0, 0.2, 1)",
       padding: 0,
       display: "flex",
       flexDirection: "column",
@@ -407,16 +887,17 @@ function HeroStacked() {
       }}>
         <div style={{
           position: "absolute", inset: 0,
-          transform: loaded ? "scale(1)" : "scale(1.1)",
+          transform: loaded ? "scale(1)" : "scale(1.25)",
           filter: loaded ? "blur(0px)" : "blur(20px)",
-          transition: "transform 1800ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 1400ms cubic-bezier(0.2, 0.8, 0.2, 1)",
-          willChange: "transform, filter",
+          opacity: loaded ? 1 : 0,
+          transition: "transform 1800ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 1400ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 1400ms ease-out",
+          willChange: "transform, filter, opacity",
           // Fallback color in case images haven't loaded
           background: "#1F1A14",
         }}>
           {HERO_IMAGES.map((src, i) => (
             <div
-              key={src}
+              key={i}
               style={{
                 position: "absolute",
                 inset: 0,
@@ -431,56 +912,21 @@ function HeroStacked() {
         </div>
       </div>
 
-      {/* Darken for legibility */}
+      {/* Darken for legibility — static, not tied to `loaded`. This whole
+          hero sits behind the intro overlay's own opaque curtain until
+          long after this div's own transition would have finished, so
+          animating it here was invisible: by the time the curtain lifts,
+          it's already settled. The intro overlay renders this identical
+          gradient as a permanent, unanimated layer over its own growing
+          photo (see IntroOverlay) so the two always match and the
+          handoff has nothing left to fade. */}
       <div style={{
         position: "absolute", inset: 0,
         background: "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.55) 100%)",
         zIndex: 1,
       }} />
 
-      {/* Foreground text wrapper — fades in on load. */}
-      <div style={{
-        position: "relative",
-        zIndex: 3,
-        display: "contents",
-        // Note: display:contents lets children keep their original layout.
-      }}>
-      {/* Inner fade-in wrapper handled per child below via `loaded` opacity. */}
-      </div>
-
-      {/* Full-width name — each letter fades/rises in on its own staggered
-          delay rather than the whole word arriving as one block. */}
-      <div style={{
-        position: "relative",
-        zIndex: 2,
-        padding: isMobile ? "48px 20px 0" : "56px 24px 0",
-      }}>
-        <h1 style={{
-          fontFamily: "var(--font-name)",
-          // Kept on one line on mobile too — sized so "Elspeth Belden"
-          // (no image, unlike the footer treatment) fills edge to edge
-          // against the 20px side padding, measured directly.
-          fontSize: isMobile ? "calc((100vw - 40px) / 4.476)" : "clamp(58px, 14.5vw, 270px)",
-          lineHeight: 0.88,
-          fontWeight: 200,
-          letterSpacing: "-0.022em",
-          margin: 0,
-          color: "#F4F1EC",
-          whiteSpace: "nowrap",
-          display: "flex",
-          justifyContent: isMobile ? "flex-start" : "space-between",
-          gap: isMobile ? "0.28em" : 0,
-          width: "100%",
-        }}>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", loaded, 600, { tracking: "-0.022em" })}</span>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", loaded, 845, { tracking: "-0.022em" })}</span>
-        </h1>
-      </div>
-
-      {/* Spacer pushes tagline to bottom */}
-      <div style={{ flex: 1 }} />
-
-      {/* Extra darkening behind the mobile tagline/links, on top of the
+      {/* Extra darkening behind the mobile foreground content, on top of the
           hero-wide gradient above, since that one alone wasn't enough
           contrast for this text specifically. */}
       {isMobile && (
@@ -493,85 +939,172 @@ function HeroStacked() {
         }} />
       )}
 
-      {/* Bottom: tagline + scroll cue. On mobile the tagline spans full
-          width on its own row, with "Let's talk" and "Scroll" aligned
-          together on the row beneath it; desktop keeps them stacked in
-          a left column next to the scroll cue on the right. */}
-      {isMobile ? (
-        <div style={{
-          position: "relative", zIndex: 3,
-          display: "flex",
-          flexDirection: "column",
-          gap: 16,
-          padding: "0 20px 28px",
-          opacity: loaded ? 1 : 0,
-          transform: loaded ? "translateY(0)" : "translateY(12px)",
-          transition: "opacity 900ms ease-out 1100ms, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 1100ms",
-        }}>
-          <p style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(20px, 2.2vw, 30px)",
-            lineHeight: 1.3,
-            color: "#F4F1EC",
-            fontWeight: 200,
-            maxWidth: "32ch",
-          }}>
-            I help complex organisations{" "}<br />ship products that feel simple.
+      {/* Four equal columns: the statement now spans the first two (it
+          needs the room — at a single column's width each line was
+          re-wrapping mid-phrase instead of breaking evenly at the
+          intended spot), then one nav link per remaining column. */}
+      <div className="hero-intro-row">
+        <div className="hero-intro-copy">
+          <p>
+            {renderStaggeredWords("I help complex organisations", introRowRevealed, 0)}
+            <br />
+            {renderStaggeredWords("ship products that feel simple.", introRowRevealed, 4 * 80)}
           </p>
-
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <RollingLink href="#contact" className="mono" style={{ color: "#F4F1EC", paddingBottom: 4 }}>
-              Let's talk
-            </RollingLink>
-            <a href="#work" className="mono" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              color: "#F4F1EC", borderBottom: "1px solid rgba(244,241,236,0.5)",
-              paddingBottom: 4
-            }}>
-              Scroll <span style={{ fontSize: 14 }}>↓</span>
-            </a>
-          </div>
         </div>
-      ) : (
-        <div style={{
-          position: "relative", zIndex: 3,
-          display: "grid",
-          gridTemplateColumns: "3fr 1fr",
-          gap: 40,
-          alignItems: "end",
-          padding: "0 32px 40px",
-          opacity: loaded ? 1 : 0,
-          transform: loaded ? "translateY(0)" : "translateY(12px)",
-          transition: "opacity 900ms ease-out 1100ms, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 1100ms",
-        }}>
-          <div>
-            <p style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(20px, 2.2vw, 30px)",
-              lineHeight: 1.3,
-              color: "#F4F1EC",
-              fontWeight: 200,
-              maxWidth: "32ch",
-            }}>
-              I help complex organisations{" "}<br />ship products that feel simple.
-            </p>
-
-            <RollingLink href="#contact" className="mono" style={{ display: "inline-flex", marginTop: 16, color: "#F4F1EC", paddingBottom: 4 }}>
-              Let's talk
+        {/* The two links reveal in sequence (200ms apart), not together —
+            desktop only. Mobile has no room for "Latest work" alongside
+            the copy, and the footer (the other way to reach "Let's
+            talk") sits a long scroll away, so mobile keeps just that one
+            link, pinned to the top-right corner instead of trailing
+            below the copy. */}
+        {!isMobile && (
+          <div className="hero-intro-action" style={{
+            opacity: introRowRevealed ? 1 : 0,
+            transition: "opacity 650ms cubic-bezier(0.2, 0.8, 0.2, 1) 400ms",
+          }}>
+            <RollingLink href={`#${CASE_STUDIES[0].id}`} className="mono hero-intro-link">
+              Latest work
             </RollingLink>
           </div>
-
-          <div style={{ textAlign: "right" }}>
-            <a href="#work" className="mono" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              color: "#F4F1EC", borderBottom: "1px solid rgba(244,241,236,0.5)",
-              paddingBottom: 4
-            }}>
-              Scroll <span style={{ fontSize: 14 }}>↓</span>
-            </a>
-          </div>
+        )}
+        <div
+          className={isMobile ? "hero-intro-action hero-intro-action-mobile" : "hero-intro-action"}
+          style={{
+            opacity: introRowRevealed ? 1 : 0,
+            transition: `opacity 650ms cubic-bezier(0.2, 0.8, 0.2, 1) ${isMobile ? 400 : 600}ms`,
+          }}
+        >
+          <RollingLink href="#contact" className="mono hero-intro-link">
+            Let's talk
+          </RollingLink>
         </div>
-      )}
+      </div>
+
+      <div className="hero-spacer" />
+
+      {/* Full-width name moves to the bottom while keeping the existing
+          staggered letter entrance and responsive single-line treatment. */}
+      <h1 className="hero-name">
+        <span className="hero-name-word">{renderStaggeredLetters("Elspeth", loaded, 600, { tracking: "-0.022em" })}</span>
+        <span className="hero-name-word">{renderStaggeredLetters("Belden", loaded, 845, { tracking: "-0.022em" })}</span>
+      </h1>
+
+      <style>{`
+        .hero-intro-row {
+          position: relative;
+          z-index: 3;
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          width: 100%;
+          height: 302px;
+          margin-top: 29px;
+          padding: 7px 32px;
+          color: inherit;
+        }
+
+        .hero-intro-copy {
+          grid-column: span 2;
+        }
+
+        .hero-intro-copy p {
+          /* No max-width here on purpose — the column itself (now 2 of 4
+             tracks, not 1) is what each line should fit within; a ch-based
+             cap narrower than that was forcing "I help complex
+             organisations" to re-wrap a second time instead of landing on
+             its own single, even line. white-space: nowrap guarantees
+             each of the two explicit lines stays exactly one line,
+             regardless of width. */
+          margin: 0;
+          color: inherit;
+          font-family: var(--font-display);
+          font-size: clamp(20px, 2.2vw, 30px);
+          font-weight: 200;
+          line-height: 1.3;
+          white-space: nowrap;
+        }
+
+        .hero-intro-action {
+          display: flex;
+          align-items: flex-start;
+          justify-content: flex-end;
+          padding: 7px 0;
+        }
+
+        .hero-intro-link {
+          color: inherit;
+          padding-bottom: 4px;
+        }
+
+        .hero-spacer {
+          flex: 1;
+        }
+
+        .hero-name {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          margin: 0;
+          padding: 0 32px 32px;
+          color: inherit;
+          font-family: var(--font-name);
+          font-size: clamp(58px, 14.5vw, 270px);
+          font-weight: 200;
+          line-height: 0.88;
+          letter-spacing: -0.022em;
+          white-space: nowrap;
+        }
+
+        .hero-name-word {
+          white-space: nowrap;
+        }
+
+        @media (max-width: 767px) {
+          .hero-intro-row {
+            height: auto;
+            min-height: 230px;
+            margin-top: 20px;
+            padding: 7px 20px;
+            row-gap: 20px;
+            grid-template-columns: 1fr 1fr;
+          }
+
+          .hero-intro-copy {
+            grid-column: 1 / -1;
+          }
+
+          .hero-intro-copy p {
+            font-size: 17px;
+          }
+
+          /* Detached from the grid flow entirely — pinned to the row's
+             own top-right padding edge so it reads as a persistent nav
+             link rather than a second line trailing under the copy.
+             top/right match the row's own padding (7px 20px) exactly —
+             an absolutely positioned child's containing block is the
+             padding BOX, whose edge sits flush with the row's outer
+             edge, not inset by that padding, so 0/0 here would ignore
+             it and run the link off the screen's right edge. */
+          .hero-intro-action-mobile {
+            position: absolute;
+            top: 7px;
+            right: 20px;
+          }
+
+          .hero-name {
+            justify-content: flex-start;
+            gap: 0.28em;
+            padding: 0 20px 28px;
+            /* "Elspeth Belden" (incl. the gap above) renders at ~5.04x its
+               own font-size at this tracking — 4.476 undersized that,
+               letting "Belden" run past the right edge on every mobile
+               width instead of landing flush with the same 20px the left
+               side already gets. */
+            font-size: calc((100vw - 40px) / 5.04);
+          }
+        }
+      `}</style>
     </section>
   );
 }
@@ -750,38 +1283,157 @@ function ImagePlaceholder({ label = "image", aspect = "4/3", full = false, tint 
 
 // ─────────────── PULL QUOTE ───────────────
 
+// The first white section after the hero. When the intro splash plays, it
+// stays hidden below its resting position until a second after the hero's
+// own animations have settled, then pops up into place. The hero visibly
+// recedes on its own at the same moment (see HeroStacked's fullHeight —
+// shrinking it back to 92vh pulls this section up through normal layout
+// flow), so there's no separate scroll nudge here. Skips straight to its
+// resting state when there's no splash to key off (reduced motion, GSAP
+// unavailable).
 function PullQuote() {
   const isMobile = useIsMobile();
+  const [revealed, setRevealed] = useState(() => !willPlayIntro());
+
+  useEffect(() => {
+    if (revealed) return;
+    const onSettle = () => setRevealed(true);
+    window.addEventListener('intro-settle', onSettle);
+    return () => window.removeEventListener('intro-settle', onSettle);
+  }, [revealed]);
+
   return (
     <section id="approach" style={{
+      // Pulls up 1px to overlap the hero's bottom edge, covering the
+      // sub-pixel rounding seam that a vh-based height (hero's resting
+      // 92vh) can leave against the next section at certain viewport
+      // heights — same fix as the footer's own marginTop below.
+      marginTop: "-1px",
       padding: isMobile ? "60px 20px" : "120px 32px",
       borderTop: "1px solid var(--line-faint)",
-      borderBottom: "1px solid var(--line-faint)",
+      opacity: revealed ? 1 : 0,
+      transform: revealed ? "translateY(0)" : "translateY(56px)",
+      transition: "opacity 900ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 900ms cubic-bezier(0.34, 1.56, 0.64, 1)",
     }}>
+      {/* Four-image editorial collage above the quote — staggered across
+          two rows of a 12-col grid at uneven spans/offsets so it reads as
+          a magazine spread rather than a product grid. Each slot's
+          aspectRatio matches its screengrab so nothing is cropped.
+          Desktop: wide Innocent top-left, Art Fund dropped lower on the
+          right; tado tucked up under Innocent (negative margin closes the
+          gap Art Fund's offset leaves), banking stepped down on the right.
+          Mobile: Innocent wide, tado + Art Fund side by side, banking
+          indented on its own row. */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr 1fr",
-        gap: 40,
+        gridTemplateColumns: "repeat(12, 1fr)",
+        columnGap: isMobile ? 16 : 24,
+        rowGap: isMobile ? 16 : 24,
+        alignItems: "start",
+        marginBottom: isMobile ? 48 : 88,
       }}>
-        <div className="mono" style={{ color: "var(--ink-soft)" }}>
-          APPROACH
-        </div>
+        {[
+          { id: "approach-collage-1", src: "assets/Screenshot 2026-11-13 at 19.12.55.png", ar: "2448 / 1476",
+            d: { gridColumn: "1 / span 7", gridRow: 1 },
+            m: { gridColumn: "1 / span 10", gridRow: 1 } },
+          { id: "approach-collage-2", src: "assets/Screenshot 2026-11-13 at 19.12.10.png", ar: "1610 / 1762",
+            d: { gridColumn: "9 / span 4", gridRow: 1, marginTop: 120 },
+            m: { gridColumn: "7 / span 6", gridRow: 2, marginTop: 40 } },
+          { id: "approach-collage-3", src: "assets/Screenshot 2026-11-13 at 19.12.31.png", ar: "1712 / 1752",
+            d: { gridColumn: "3 / span 4", gridRow: 2, marginTop: -80 },
+            m: { gridColumn: "1 / span 6", gridRow: 2 } },
+          { id: "approach-collage-4", src: "assets/Screenshot 2026-11-13 at 19.11.30.png", ar: "1372 / 858",
+            d: { gridColumn: "8 / span 5", gridRow: 2, marginTop: 48 },
+            m: { gridColumn: "3 / span 10", gridRow: 3 } },
+        ].map(s => (
+          <image-slot
+            key={s.id}
+            id={s.id}
+            src={s.src}
+            placeholder="Drop an image"
+            fit="cover"
+            shape="rect"
+            style={{ ...(isMobile ? s.m : s.d), aspectRatio: s.ar, width: "100%", height: "auto", display: "block", minWidth: 0 }}
+          ></image-slot>
+        ))}
+      </div>
+
+      {/* Big display quote — spans the first two of the three columns
+          below it; the third is left empty, same "deliberately blank
+          column" language as the hero intro row and case-study grid. */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: isMobile ? "1fr" : "minmax(0,1fr) minmax(0,3fr) minmax(0,1fr)",
+        gap: 40,
+        paddingBottom: isMobile ? 56 : 104,
+      }}>
         <blockquote style={{
+          gridColumn: isMobile ? "1" : "1 / span 2",
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(32px, 3.9vw, 56px)",
-          lineHeight: 1.15,
+          fontSize: "clamp(40px, 7vw, 112px)",
+          lineHeight: 1.12,
           fontWeight: 200,
-          letterSpacing: "-0.02em",
+          letterSpacing: "-0.5px",
           color: "var(--ink)",
           margin: 0,
         }}>
-          I've spent over a decade designing digital products for{" "}
-          <span style={{ color: "var(--accent)" }}>finance, healthcare</span>
-          {" "}and{" "}
-          <span style={{ color: "var(--accent)" }}>retail</span>
-          . Lately, most of that has been AI products. I set the vision, design the product, and build the component libraries teams ship from.
+          Visual designer's eye.<br />
+          Problem-solver's brain.
         </blockquote>
-        <div />
+        {!isMobile && <div />}
+      </div>
+
+      {/* Photo + bio — four equal columns; the bio now spans two of them
+          (3 and 4, same "span 2" treatment as the quote above it), so
+          only column 2 is left empty for breathing room. */}
+      <div style={{
+        display: isMobile ? "flex" : "grid",
+        flexDirection: isMobile ? "column" : undefined,
+        gridTemplateColumns: isMobile ? undefined : "repeat(4, 1fr)",
+        gap: isMobile ? 32 : 40,
+      }}>
+        <div style={{
+          gridColumn: isMobile ? undefined : "1",
+          aspectRatio: "332 / 416",
+          overflow: "hidden",
+        }}>
+          <image-slot
+            placeholder="Elly"
+            fit="cover"
+            src="assets/About photo.png"
+            shape="rect"
+            style={{ width: "100%", height: "100%", display: "block", transform: "scaleX(-1)" }}
+          ></image-slot>
+        </div>
+        {!isMobile && <div style={{ gridColumn: "2" }} />}
+        <div style={{ gridColumn: isMobile ? undefined : "3 / span 2", maxWidth: isMobile ? undefined : 704 }}>
+          <div className="mono" style={{
+            color: "var(--ink-soft)",
+            marginBottom: 24,
+            fontSize: 16,
+            lineHeight: 1,
+            letterSpacing: "1.44px",
+          }}>
+            ABOUT ME
+          </div>
+          <div style={{
+            fontFamily: "'Geist', system-ui, sans-serif",
+            fontSize: 22,
+            letterSpacing: "-0.3px",
+            lineHeight: 1.3,
+            color: "var(--ink)",
+          }}>
+            <p style={{ margin: "0 0 20px" }}>
+              Hi, I'm Elly. I'm a product designer who's as good with the pixels as I am with the problem, and I've spent over a decade designing across finance, retail, healthcare and the public sector.
+            </p>
+            <p style={{ margin: "0 0 20px" }}>
+              I set the visual direction from a blank page, design the product end to end, and build the component library so it still looks right after I've left the room.
+            </p>
+            <p style={{ margin: 0 }}>
+              Most recently, I led design on an AI assistant for a global investment bank, from first sketch to launch. 40,000 people now use it every week.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -807,8 +1459,11 @@ function SelectedWork() {
   const stackRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Tracked on every viewport size, not just mobile — besides driving the
+  // mobile "N / total" indicator below, it's also how each panel knows
+  // whether it's the one currently filling most of the screen, so only
+  // that one's photo layer reacts to the mouse (see useMouseDrift).
   useEffect(() => {
-    if (!isMobile) return;
     let raf = null;
     const onScroll = () => {
       if (raf) return;
@@ -829,7 +1484,7 @@ function SelectedWork() {
       window.removeEventListener('scroll', onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [isMobile]);
+  }, []);
 
   // Mirrors the last card's own closing fade (see CaseStudyPanel) so the
   // sticky "N / total" indicator — which lives here, not on the card
@@ -848,7 +1503,10 @@ function SelectedWork() {
         if (!footer) return;
         const vh = window.innerHeight || 1;
         const rect = footer.getBoundingClientRect();
-        const p = Math.max(0, Math.min(1, (vh - rect.top) / vh));
+        // Over the footer's own height (it's shorter than the screen on
+        // mobile), so this reaches 1 at the page bottom, in step with the
+        // last card's text fade.
+        const p = Math.max(0, Math.min(1, (vh - rect.top) / (rect.height || 1)));
         setFooterCloseProgress(p);
       });
     };
@@ -874,7 +1532,12 @@ function SelectedWork() {
         gap: 32,
         alignItems: "start",
       }}>
-        <div className="mono" style={{ color: "var(--ink-soft)" }}>
+        <div className="mono" style={{
+          color: "var(--ink-soft)",
+          fontSize: 16,
+          lineHeight: 1,
+          letterSpacing: "1.44px",
+        }}>
           CASE STUDIES
         </div>
         <h2 style={{
@@ -885,7 +1548,7 @@ function SelectedWork() {
           letterSpacing: "-0.035em",
           color: "var(--ink)",
         }}>
-          Recent <span style={{ color: "var(--accent)" }}>work</span>
+          Recent work
         </h2>
         <div />
       </div>
@@ -949,17 +1612,53 @@ function SelectedWork() {
         )}
 
         {CASE_STUDIES.map((cs, i) => (
-          <CaseStudyPanel key={cs.id} cs={cs} index={i} total={CASE_STUDIES.length} />
+          <CaseStudyPanel key={cs.id} cs={cs} index={i} total={CASE_STUDIES.length} isActive={i === activeIndex} />
         ))}
       </div>
     </section>
   );
 }
 
-function CaseStudyPanel({ cs, index, total }) {
+// Subtle mouse-reactive drift for the blurred case-study photo layer. The
+// photo is oversized (see the inset on its div) so the drift never pulls
+// an edge into view, and a CSS transition eases each update so the photo
+// trails the pointer instead of snapping straight to it. Only the panel
+// currently filling most of the screen (`active`) listens and drifts —
+// the rest sit still and ease back to center if they were mid-drift.
+function useMouseDrift(active, strength = 16) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!active) {
+      if (el) el.style.transform = "translate3d(0px, 0px, 0)";
+      return;
+    }
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = null;
+    const onMove = (e) => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = null;
+        if (!el) return;
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        el.style.transform = `translate3d(${(x * strength).toFixed(2)}px, ${(y * strength).toFixed(2)}px, 0)`;
+      });
+    };
+    window.addEventListener('mousemove', onMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [active, strength]);
+  return ref;
+}
+
+function CaseStudyPanel({ cs, index, total, isActive }) {
   const isMobile = useIsMobile();
   const tint = TINT_COLORS[cs.imageTint] || TINT_COLORS.warm;
   const articleRef = useRef(null);
+  const driftRef = useMouseDrift(isActive, 16);
   const [revealed, setRevealed] = useState(false);
   const isBento = index === 0 && !!cs.bgImage;
   const [bentoProgress, setBentoProgress] = useState(0);
@@ -1034,7 +1733,20 @@ function CaseStudyPanel({ cs, index, total }) {
   // on screen) rather than this panel's position, since by the time the
   // footer is on screen this panel itself may already be mid-cover.
   const isLast = index === total - 1;
-  const [closeProgress, setCloseProgress] = useState(0);
+  // Driven by direct ref mutation (see below), not React state — this is
+  // the most expensive thing happening on screen while the footer rises
+  // (three full-viewport clip-path layers plus two text fades), all
+  // stacked on top of the last card's own blurred photo layer. Routing
+  // it through setState forced a full re-render of this whole component
+  // on every scroll tick, on top of the paint cost of the layers
+  // themselves — which was enough to visibly flicker. Mirrors the same
+  // ref + rAF pattern useMouseDrift already uses for the same reason.
+  const bar1Ref = useRef(null);
+  const bar2Ref = useRef(null);
+  const bar3Ref = useRef(null);
+  const clientColRef = useRef(null);
+  const metaColRef = useRef(null);
+  const contentWrapRef = useRef(null);
 
   useEffect(() => {
     if (!isLast) return;
@@ -1046,14 +1758,55 @@ function CaseStudyPanel({ cs, index, total }) {
         const footer = document.getElementById('contact');
         if (!footer) return;
         const vh = window.innerHeight || 1;
-        // On mobile, wait until the footer is already a quarter of a
-        // viewport-height into view before starting to close, rather
-        // than the instant it starts peeking in — it was starting to
-        // shrink too early. Desktop keeps the original immediate start.
-        const startThreshold = isMobile ? vh * 0.75 : vh;
         const rect = footer.getBoundingClientRect();
-        const p = Math.max(0, Math.min(1, (startThreshold - rect.top) / startThreshold));
-        setCloseProgress(p);
+        // Mobile's footer is shorter than the screen, so the card never
+        // fully leaves: it narrows to its framed width (side bars only —
+        // no bottom bar, whose red band read as extra space above the
+        // footer) and its text fades, both over the footer's own arrival,
+        // finishing exactly at the page bottom with the photo still visible.
+        if (isMobile) {
+          const pm = Math.max(0, Math.min(1, (vh - rect.top) / (rect.height || 1)));
+          if (bar2Ref.current) bar2Ref.current.style.transform = `scaleX(${pm})`;
+          if (bar3Ref.current) bar3Ref.current.style.transform = `scaleX(${pm})`;
+          if (contentWrapRef.current) {
+            contentWrapRef.current.style.clipPath = `inset(0 ${pm * sideBarMaxWidth}% 0 ${pm * sideBarMaxWidth}%)`;
+          }
+          const o = String(1 - pm);
+          if (clientColRef.current) clientColRef.current.style.opacity = o;
+          if (metaColRef.current) metaColRef.current.style.opacity = o;
+          return;
+        }
+        const p = Math.max(0, Math.min(1, (vh - rect.top) / vh));
+
+        // scaleY/scaleX, not clip-path: clip-path still forces a repaint
+        // of the whole (near-fullscreen) layer every frame even when set
+        // via a ref outside React — it's the animatable-property fallback
+        // for "compositor-only", not an actual member of it. A transform
+        // on an already-painted solid-colour rect is composite-only, no
+        // repaint, which is what this card's closing sequence needs when
+        // it's already sharing the frame with a blurred photo layer and
+        // the footer's own marquee animation.
+        if (bar1Ref.current) bar1Ref.current.style.transform = `scaleY(${p})`;
+        if (bar2Ref.current) bar2Ref.current.style.transform = `scaleX(${p})`;
+        if (bar3Ref.current) bar3Ref.current.style.transform = `scaleX(${p})`;
+        const textOpacity = String(1 - p);
+        if (clientColRef.current) clientColRef.current.style.opacity = textOpacity;
+        if (metaColRef.current) metaColRef.current.style.opacity = textOpacity;
+        // The bars visually cover the photo because they're opaque and
+        // painted above it — but the client-name/meta text sits above the
+        // bars too (same z-index, later in the DOM), so it was never
+        // actually covered, just fading in place while the "window" around
+        // it narrowed, leaving the text looking like it hung off the edge
+        // of a now-narrower frame. Clipping the text/thumbnail wrapper to
+        // the same, still-open width keeps it visually inside whatever's
+        // left of the frame instead of floating outside it. This wrapper
+        // has no blurred image or filter in it — just text and a small
+        // thumbnail — so clip-path's repaint cost here is negligible,
+        // unlike it was on the full-bleed photo layer.
+        if (contentWrapRef.current) {
+          contentWrapRef.current.style.clipPath =
+            `inset(0 ${p * sideBarMaxWidth}% ${p * 10}% ${p * sideBarMaxWidth}%)`;
+        }
       });
     };
     onScroll();
@@ -1116,7 +1869,6 @@ function CaseStudyPanel({ cs, index, total }) {
   // 100% (full-bleed, no margin) on both mobile and desktop.
   const vw = typeof window !== "undefined" ? window.innerWidth : 375;
   const startSide = isMobile ? 100 - (20 / vw) * 100 : 92.5;
-  const endSide = 100;
 
   // Everything besides the client name's own letter-stagger (the index
   // label, title and tags) fades in as a block on the bento panel's
@@ -1126,31 +1878,34 @@ function CaseStudyPanel({ cs, index, total }) {
     ? { opacity: revealed ? 1 : 0, transition: "opacity 700ms ease-out" }
     : {};
 
-  // Starts at its smallest margin and opens linearly to full-bleed as
-  // bentoProgress runs 0→1. The last panel's bars are the footer's own
-  // red, not the page background, so the shrink reads as revealing the
-  // footer behind it rather than the page.
-  // Text fades out faster than the bars close, so on the last card the
-  // client name/title are gone well before the frame finishes shrinking.
-  const textCloseProgress = Math.min(1, closeProgress * 2.2);
-
-  let barBottom = 90, barSide = startSide, barColor = "var(--bg)";
+  // How much of each bar is covering (1 = fully covering/framed, 0 = open/
+  // revealed) — starts at its smallest margin and opens linearly to
+  // full-bleed as bentoProgress runs 0→1. The last panel's bars are the
+  // footer's own red, not the page background, so the shrink reads as
+  // revealing the footer behind it rather than the page.
+  let coverFraction = 0, barColor = "var(--bg)";
   if (isBento) {
-    barBottom = 90 + bentoProgress * 10;
-    barSide = startSide + bentoProgress * (endSide - startSide);
+    coverFraction = 1 - bentoProgress;
   } else if (isLast) {
-    barBottom = 100 - closeProgress * 10;
-    barSide = endSide - closeProgress * (endSide - startSide);
+    // Open (p=0) starting point — the scroll effect above takes over
+    // from here via direct ref mutation (scaleY/scaleX), not re-renders.
+    coverFraction = 0;
     barColor = "var(--accent)";
   }
+  // Side bars' max width (the fully-covered, coverFraction=1 state) —
+  // same 92.5%/mobile-20px-margin starting point as the bento panel's own
+  // open margin, just expressed as how much of each edge the bar needs to
+  // be able to cover rather than where the card's edge itself sits.
+  const sideBarMaxWidth = 100 - startSide;
 
   return (
     <article
+      id={cs.id}
       ref={articleRef}
       style={{
         position: "sticky",
         top: 0,
-        height: "100vh",
+        height: `100${VH}`,
         minHeight: 640,
         overflow: "hidden",
         display: "flex",
@@ -1179,22 +1934,30 @@ function CaseStudyPanel({ cs, index, total }) {
         opacity: cs.bgImage ? 0.30 : 1,
       }} />
 
-      {/* Photo texture. The panel is position:sticky/top:0, so while it's
-          pinned (almost all of its visible scroll life) its own box never
-          moves in the viewport anyway — a plain background scrolls with
-          it the same as backgroundAttachment:fixed would, but without
-          forcing the browser to repaint it on every scroll frame, which
-          is what fixed attachment does regardless of visual change. */}
+      {/* Photo texture — scrolls with the card's own sticky frame rather
+          than being pinned to the viewport. (It used to use
+          background-attachment:fixed for a "frame reveals a stationary
+          backdrop" effect during the slide-in, but a fixed background on
+          the same element as the mouse-drift transform below is a known
+          conflict: the browser can't cheaply composite a viewport-fixed
+          background on a transformed/sticky-descendant layer, so it fell
+          back to repainting the full blurred layer on every scroll
+          frame — that's what was flickering on the last, busiest card.)
+          Oversized via the negative inset (so the mouse-drift transform
+          below never pulls a hard edge into frame) and nudged by
+          useMouseDrift for a slight parallax reaction to the pointer. */}
       {cs.bgImage && (
-        <div style={{
+        <div ref={driftRef} style={{
           position: "absolute",
-          inset: 0,
+          inset: "-5%",
           backgroundImage: `url("${cs.bgImage}")`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           filter: "blur(14px) saturate(0.75)",
           opacity: 0.85,
           zIndex: 1,
+          willChange: "transform",
+          transition: "transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)",
         }} />
       )}
 
@@ -1217,43 +1980,58 @@ function CaseStudyPanel({ cs, index, total }) {
         pointerEvents: "none",
       }} />
 
-      {/* Bento bars — solid, page-coloured strips over the photo,
-          clipped down with clip-path so only part of each shows.
-          Shrinking that visible part is what "opens" the first case
-          study; growing it back is what "closes" the last one as the
-          footer arrives, bookending the stack. No bottom strip — the
-          panel's bottom edge stays below the fold for the whole move. */}
+      {/* Bento bars — solid, page-coloured strips over the photo, each
+          sized to its own fully-covering max (10vh-equivalent bottom
+          strip, sideBarMaxWidth-wide side strips) and scaled down from
+          there with a transform rather than clip-path. clip-path still
+          repaints the whole layer it's set on every frame even when
+          driven outside React; scaleX/scaleY on an already-painted solid
+          rect is composite-only, which is what keeps this cheap while
+          it's sharing the frame with the blurred photo layer and (on the
+          last card) the footer's own marquee animation arriving behind
+          it. Growing from 0 to 1 is what "closes" the last case study as
+          the footer arrives; shrinking from 1 to 0 is what "opens" the
+          first one. No bottom strip on the sides — the panel's bottom
+          edge stays below the fold for the whole move. */}
       {(isBento || isLast) && (
         <>
-          <div style={{
-            position: "absolute", inset: 0,
+          {!(isLast && isMobile) && <div ref={bar1Ref} style={{
+            position: "absolute", left: 0, bottom: 0, width: "100%", height: "10%",
             background: barColor,
-            clipPath: `inset(0 0 ${barBottom}% 0)`,
-            willChange: "clip-path",
+            transformOrigin: "bottom",
+            transform: `scaleY(${coverFraction})`,
+            willChange: "transform",
+            zIndex: 2,
+            pointerEvents: "none",
+          }} />}
+          <div ref={bar2Ref} style={{
+            position: "absolute", left: 0, top: 0, width: `${sideBarMaxWidth}%`, height: "100%",
+            background: barColor,
+            transformOrigin: "left",
+            transform: `scaleX(${coverFraction})`,
+            willChange: "transform",
             zIndex: 2,
             pointerEvents: "none",
           }} />
-          <div style={{
-            position: "absolute", inset: 0,
+          <div ref={bar3Ref} style={{
+            position: "absolute", right: 0, top: 0, width: `${sideBarMaxWidth}%`, height: "100%",
             background: barColor,
-            clipPath: `inset(0 ${barSide}% 0 0)`,
-            willChange: "clip-path",
-            zIndex: 2,
-            pointerEvents: "none",
-          }} />
-          <div style={{
-            position: "absolute", inset: 0,
-            background: barColor,
-            clipPath: `inset(0 0 0 ${barSide}%)`,
-            willChange: "clip-path",
+            transformOrigin: "right",
+            transform: `scaleX(${coverFraction})`,
+            willChange: "transform",
             zIndex: 2,
             pointerEvents: "none",
           }} />
         </>
       )}
 
-      {/* Three-column composition: client | thumbnail | meta */}
-      <div style={{
+      {/* Three-column composition: client | thumbnail | meta. Clipped to
+          the same still-open width as the bars (see the isLast scroll
+          effect above, and bentoEntranceFade's coverFraction below) so
+          the text doesn't just fade in place while sitting outside a
+          frame that's visually narrowed around it — it needs to actually
+          disappear at the same edge the bars are closing in from. */}
+      <div ref={contentWrapRef} style={{
         position: "relative",
         zIndex: 2,
         width: "100%",
@@ -1264,6 +2042,9 @@ function CaseStudyPanel({ cs, index, total }) {
         alignItems: "center",
         gap: isMobile ? 16 : "clamp(16px, 3vw, 40px)",
         padding: isMobile ? "56px 20px 40px" : "0 48px",
+        ...((isBento || isLast) && {
+          clipPath: `inset(0 ${coverFraction * sideBarMaxWidth}% ${coverFraction * 10}% ${coverFraction * sideBarMaxWidth}%)`,
+        }),
       }}>
         {/* Left / Top: client name — vertically centred in the space
             above the thumbnail on mobile. Fades out on its own (not the
@@ -1271,7 +2052,7 @@ function CaseStudyPanel({ cs, index, total }) {
             the closing bars start moving, first card as it's scrolled
             back up and out of view — the same closing/opening-reversed
             fade, just scoped to text instead of the whole composition. */}
-        <div style={{
+        <div ref={clientColRef} style={{
           flex: isMobile ? 1 : undefined,
           display: isMobile ? "flex" : undefined,
           flexDirection: isMobile ? "column" : undefined,
@@ -1279,11 +2060,18 @@ function CaseStudyPanel({ cs, index, total }) {
           alignItems: isMobile ? "center" : undefined,
           width: isMobile ? "100%" : undefined,
           textAlign: isMobile ? "center" : "left",
-          ...(isLast && { opacity: 1 - textCloseProgress }),
+          ...(isLast && { opacity: 1 }),
           ...(isBento && { opacity: 1 - openBackProgress }),
         }}>
           {!isMobile && (
-            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 32, ...bentoEntranceFade }}>
+            <div className="mono" style={{
+              color: "var(--ink-soft)",
+              marginBottom: 32,
+              fontSize: 13,
+              lineHeight: "17.05px",
+              letterSpacing: "1.32px",
+              ...bentoEntranceFade,
+            }}>
               {cs.num} / {String(total).padStart(2, "0")}
             </div>
           )}
@@ -1311,7 +2099,6 @@ function CaseStudyPanel({ cs, index, total }) {
             position: "relative",
             cursor: (cs.href && !cs.locked) ? "pointer" : "default",
             overflow: "hidden",
-            borderRadius: 12,
             boxShadow: isLast ? "none" : "0 24px 60px -20px rgba(0,0,0,0.3)",
             alignSelf: isMobile ? "center" : undefined,
             flexShrink: isMobile ? 0 : undefined,
@@ -1323,6 +2110,7 @@ function CaseStudyPanel({ cs, index, total }) {
             placeholder={cs.imageLabel}
             fit={cs.thumbFit || "cover"}
             src={cs.thumbSrc}
+            shape="rect"
             style={{ width: "100%", height: "100%", display: "block", background: cs.thumbBg || "var(--bg-alt)" }}
           ></image-slot>
           {cs.locked ? (
@@ -1330,10 +2118,11 @@ function CaseStudyPanel({ cs, index, total }) {
               position: "absolute",
               bottom: 16, right: 16,
               fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              letterSpacing: "0.14em",
+              fontSize: 12,
+              lineHeight: "17.05px",
+              letterSpacing: "1.32px",
               textTransform: "uppercase",
-              color: "#F4F1EC",
+              color: "rgba(244,241,236,0.75)",
               background: "rgba(26,26,26,0.85)",
               padding: "10px 14px",
               display: "flex",
@@ -1351,10 +2140,11 @@ function CaseStudyPanel({ cs, index, total }) {
               position: "absolute",
               bottom: 16, right: 16,
               fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              letterSpacing: "0.14em",
+              fontSize: 12,
+              lineHeight: "17.05px",
+              letterSpacing: "1.32px",
               textTransform: "uppercase",
-              color: "#F4F1EC",
+              color: "rgba(244,241,236,0.75)",
               background: "rgba(26,26,26,0.85)",
               padding: "10px 14px",
               display: "flex",
@@ -1375,27 +2165,36 @@ function CaseStudyPanel({ cs, index, total }) {
         {/* Right / Bottom: title + tags — vertically centred in the
             space below the thumbnail on mobile. Same text-only fade as
             the client name on the left. */}
-        <div style={{
+        <div ref={metaColRef} style={{
           flex: isMobile ? 1 : undefined,
           display: isMobile ? "flex" : undefined,
           flexDirection: isMobile ? "column" : undefined,
           justifyContent: isMobile ? "center" : undefined,
-          alignItems: isMobile ? "center" : undefined,
-          width: isMobile ? "100%" : undefined,
-          textAlign: isMobile ? "center" : "right",
-          ...(isLast && { opacity: 1 - textCloseProgress }),
+          alignItems: isMobile ? "flex-start" : undefined,
+          // Mobile: same width as the square thumbnail above and centred
+          // like it, so the text starts on the thumbnail's left edge; the
+          // title's own 28ch max-width keeps it from running the full width.
+          width: isMobile ? "min(85vw, 380px)" : undefined,
+          alignSelf: isMobile ? "center" : undefined,
+          textAlign: isMobile ? "left" : "right",
+          ...(isLast && { opacity: 1 }),
           ...(isBento && { opacity: 1 - openBackProgress }),
         }}>
           <h4 style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(24px, 2.5vw, 34px)",
-            lineHeight: 1.3,
-            fontWeight: 200,
+            // Geist Regular, not the serif --font-display the client name
+            // and page headings use — a deliberate, fixed choice for this
+            // title specifically, matching the client-marquee's own
+            // recent switch to Geist.
+            fontFamily: "'Geist', system-ui, sans-serif",
+            fontSize: "clamp(20px, 2.1vw, 29px)",
+            lineHeight: 1.25,
+            fontWeight: 400,
+            letterSpacing: "-0.3px",
             color: "var(--ink)",
-            marginBottom: isMobile ? 12 : 24,
+            marginBottom: isMobile ? 12 : 32,
             maxWidth: isMobile ? "28ch" : "32ch",
-            marginLeft: isMobile ? "auto" : "auto",
-            marginRight: isMobile ? "auto" : undefined,
+            marginLeft: isMobile ? 0 : "auto",
+            marginRight: isMobile ? 0 : undefined,
             ...bentoEntranceFade,
           }}>
             {cs.title}
@@ -1405,7 +2204,10 @@ function CaseStudyPanel({ cs, index, total }) {
               color: "var(--ink-soft)",
               display: "flex",
               flexDirection: "column",
-              gap: 6,
+              gap: 8,
+              fontSize: 13,
+              lineHeight: "17.05px",
+              letterSpacing: "1.32px",
               ...bentoEntranceFade,
             }}>
               {cs.tags.map(t => (
@@ -1427,7 +2229,7 @@ function CaseStudyPanel({ cs, index, total }) {
           alignItems: "end",
           zIndex: 3,
         }}>
-          <div className="mono" style={{ color: "var(--ink-soft)" }}>
+          <div className="mono" style={{ color: "var(--ink-soft)", fontSize: 13, lineHeight: "17.05px", letterSpacing: "1.32px" }}>
             Scroll ↓
           </div>
         </div>
@@ -1440,6 +2242,38 @@ function CaseStudyPanel({ cs, index, total }) {
 
 function Contact() {
   const isMobile = useIsMobile();
+  // Big name — the same split "Elspeth" / "Belden" construction and size
+  // as the hero; shared by the mobile and desktop footer layouts.
+  const nameHeading = (
+    <h2 style={{
+        fontFamily: "var(--font-name)",
+        // Kept on one line on mobile too, sized so "Elspeth" + the
+        // signature image + "Belden" fill the available width edge to
+        // edge — the ratio (100vw minus the 20px side padding, divided
+        // by the measured width-per-font-size of this exact string +
+        // image combo in Perfektta) solves for the font-size that does
+        // that at any mobile viewport.
+        // (6.068 rather than 6.008 since mobile's scribble is drawn
+        // taller — at the letters' ascender height — and so wider.)
+        fontSize: isMobile ? "calc((100vw - 40px) / 6.068)" : "clamp(58px, 14.5vw, 270px)",
+        lineHeight: 0.88,
+        fontWeight: 200,
+        letterSpacing: "-0.022em",
+        margin: 0,
+        color: "var(--ink)",
+        whiteSpace: "nowrap",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+      }}>
+        <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", true, 0, { tracking: "-0.022em" })}</span>
+        {/* Mobile matches the letters' ascender height (0.82em), nudged up
+            to sit on the letters rather than the centre of the line box. */}
+        <AnimatedHair style={isMobile ? { height: "0.82em", transform: "translateY(-0.1em)" } : undefined} />
+        <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", true, 0, { tracking: "-0.022em" })}</span>
+      </h2>
+  );
   return (
     <section id="contact" style={{
       position: "relative",
@@ -1454,11 +2288,16 @@ function Contact() {
       // 100vh cards, 90vh footer, all rounding independently) can leave
       // between sections at certain viewport heights.
       marginTop: "-1px",
-      height: "90vh",
+      // Mobile fills the viewport (Figma 141:3, a 375×800 frame) with
+      // fixed 48px gaps between blocks; the "Let's talk" block flexes to
+      // absorb the leftover height so the name sits on the bottom edge.
+      height: isMobile ? undefined : `90${VH}`,
+      minHeight: isMobile ? `100${VH}` : undefined,
       padding: isMobile ? "56px 20px 32px" : "90px 32px 44px",
       display: "flex",
       flexDirection: "column",
-      justifyContent: "space-between",
+      justifyContent: isMobile ? "flex-start" : "space-between",
+      gap: isMobile ? 48 : undefined,
       overflow: "hidden",
       background: "var(--accent)",
       "--ink": "#F4F1EC",
@@ -1468,35 +2307,84 @@ function Contact() {
     }}>
       {/* Scrolling client marquee — now part of the footer module's
           own height rather than a separate section above it. */}
-      <div style={{ borderBottom: "1px solid var(--line-faint)", paddingBottom: isMobile ? 32 : 40 }}>
-        <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: isMobile ? 24 : 32 }}>
+      <div style={{ borderBottom: "1px solid var(--line-faint)", paddingBottom: isMobile ? 48 : 40 }}>
+        {/* .mono's own defaults (12px, 0.12em tracking) are close but not
+            this label's own spec — sized and tracked to match exactly
+            (13px / 1.44px, not 0.12em, which only happens to equal 1.44px
+            at 12px) rather than nudging the shared utility class itself. */}
+        <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: isMobile ? 24 : 32, fontSize: 13, lineHeight: "18.6px", letterSpacing: "1.44px" }}>
           I'VE ALSO WORKED WITH
         </div>
-        {/* On mobile, two rows moving in opposite directions fill the
-            extra vertical space better than one thin line would; desktop
-            keeps the single row with the full client list. */}
+        {/* On mobile, two rows in opposite directions, each a separate
+            slice of the list so no client appears in both, at different
+            speeds so they never line up. Desktop keeps the single row with
+            the full client list. */}
         {isMobile ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {renderClientMarqueeRow(PAST_CLIENTS.slice(0, 8), "client-scroll", 30, -10)}
-            {renderClientMarqueeRow(PAST_CLIENTS.slice(8), "client-scroll-reverse", 23)}
+            {renderClientMarqueeRow(PAST_CLIENTS.slice(0, 6), "client-scroll", 24, -10)}
+            {renderClientMarqueeRow(PAST_CLIENTS.slice(6, 11), "client-scroll-reverse", 20, -4)}
           </div>
         ) : (
           renderClientMarqueeRow(PAST_CLIENTS, "client-scroll")
         )}
       </div>
 
+      {/* Mobile (Figma 141:254): "Let's talk" on the left, a vertical
+          hairline, then the links stacked in a column with "Back to top"
+          set apart below them. The block flexes to fill the section's
+          spare height with the links centred in it and the name pinned
+          beneath. Labels 13px at 65%, values 12px underlined. */}
+      {isMobile && (
+        <div style={{ flex: "1 0 auto", display: "flex", flexDirection: "column" }}>
+          <div style={{ flex: "1 0 auto", display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 23 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", fontSize: 13, lineHeight: "18.6px", letterSpacing: "1.44px", whiteSpace: "nowrap" }}>
+                Let's talk
+              </div>
+              <div aria-hidden="true" style={{ alignSelf: "stretch", width: 1, background: "var(--line-faint)" }} />
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 36 }}>
+                {[
+                  { label: "LINKEDIN", link: <RollingLink href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener">/in/elspethbelden ↗</RollingLink> },
+                  { label: "CV", link: <RollingLink href="assets/Elspeth-Belden-CV.pdf" download>Download ↓</RollingLink> },
+                  { label: "EMAIL", link: <RollingLink href="mailto:elspethbelden@gmail.com">elspethbelden@gmail.com</RollingLink> },
+                ].map(({ label, link }) => (
+                  <div key={label} className="mono" style={{ color: "var(--ink-soft)" }}>
+                    <div style={{ paddingBottom: 6, color: "var(--ink-faint)", fontSize: 13, lineHeight: "18.6px", letterSpacing: "1.44px" }}>{label}</div>
+                    {link}
+                  </div>
+                ))}
+                <div className="mono" style={{ color: "var(--ink-soft)", paddingTop: 25, paddingBottom: 4 }}>
+                  <RollingLink
+                    href="#top"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (window.__lenis) window.__lenis.scrollTo(0);
+                      else window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                  >Back to top ↑</RollingLink>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{ paddingTop: 48 }}>
+            {nameHeading}
+          </div>
+        </div>
+      )}
+
       {/* Contact info + name, grouped so the small-caps links sit
           directly above the big name, both pinned to the bottom of
           the section via the outer space-between. Link styling matches
           the case-study footers: bracketed mono label, mono value with
-          an underline, no separate display-font treatment. */}
-      <div>
+          an underline, no separate display-font treatment. Desktop only;
+          mobile uses the Figma layout above. */}
+      {!isMobile && <div>
         <div style={{
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-between",
           alignItems: isMobile ? "flex-start" : "flex-end",
-          gap: isMobile ? 16 : 32,
+          gap: isMobile ? 36 : 32,
           marginBottom: isMobile ? 48 : 72,
         }}>
           <div className="mono" style={{ color: "var(--ink-soft)", alignSelf: isMobile ? undefined : "flex-start" }}>
@@ -1506,43 +2394,22 @@ function Contact() {
             <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>EMAIL</div>
             <RollingLink href="mailto:elspethbelden@gmail.com">elspethbelden@gmail.com</RollingLink>
           </div>
-          <div className="mono" style={{ color: "var(--ink-soft)" }}>
-            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>LINKEDIN</div>
-            <RollingLink href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener">/in/elspethbelden ↗</RollingLink>
-          </div>
-          <div className="mono" style={{ color: "var(--ink-soft)" }}>
-            <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>CV</div>
-            <RollingLink href="assets/Elspeth-Belden-CV.pdf" download>Download ↓</RollingLink>
+          {/* LinkedIn + CV share a row on mobile; on desktop this wrapper
+              is display:contents, so both stay direct items of the row above. */}
+          <div style={isMobile ? { display: "flex", gap: 36 } : { display: "contents" }}>
+            <div className="mono" style={{ color: "var(--ink-soft)" }}>
+              <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>LINKEDIN</div>
+              <RollingLink href="https://www.linkedin.com/in/elspethbelden/" target="_blank" rel="noopener">/in/elspethbelden ↗</RollingLink>
+            </div>
+            <div className="mono" style={{ color: "var(--ink-soft)" }}>
+              <div style={{ marginBottom: 6, color: "var(--ink-faint)" }}>CV</div>
+              <RollingLink href="assets/Elspeth-Belden-CV.pdf" download>Download ↓</RollingLink>
+            </div>
           </div>
         </div>
 
-        {/* Big name — the same split "Elspeth" / "Belden" construction
-            and size as the hero. */}
-        <h2 style={{
-          fontFamily: "var(--font-name)",
-          // Kept on one line on mobile too, sized so "Elspeth" + the
-          // signature image + "Belden" fill the available width edge to
-          // edge — the ratio (100vw minus the 20px side padding, divided
-          // by the measured width-per-font-size of this exact string +
-          // image combo in Perfektta) solves for the font-size that does
-          // that at any mobile viewport.
-          fontSize: isMobile ? "calc((100vw - 40px) / 6.008)" : "clamp(58px, 14.5vw, 270px)",
-          lineHeight: 0.88,
-          fontWeight: 200,
-          letterSpacing: "-0.022em",
-          margin: 0,
-          color: "var(--ink)",
-          whiteSpace: "nowrap",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-        }}>
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Elspeth", true, 0, { tracking: "-0.022em" })}</span>
-          <AnimatedHair />
-          <span style={{ whiteSpace: "nowrap" }}>{renderStaggeredLetters("Belden", true, 0, { tracking: "-0.022em" })}</span>
-        </h2>
-      </div>
+        {nameHeading}
+      </div>}
 
       <style>{`
         @keyframes client-scroll {
@@ -1563,6 +2430,7 @@ function Contact() {
 function App() {
   return (
     <>
+      <IntroOverlay />
       <Hero />
       <PullQuote />
       <SelectedWork />

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+rm -rf dist
+mkdir -p dist
+find . -mindepth 1 -maxdepth 1 \
+  ! -name .git \
+  ! -name .figma \
+  ! -name node_modules \
+  ! -name dist \
+  -exec cp -R {} dist/ \;
+
+[[ -d dist ]] || {
+  echo "Expected build output at dist" >&2
+  exit 1
+}
+
+figma make deploy-preview --build-dir dist

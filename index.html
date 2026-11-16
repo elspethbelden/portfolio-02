@@ -13,6 +13,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&family=Geist+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Archivo:wdth,wght@125,400;125,500;125,600;125,700;125,800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <script>
+// As early as physically possible — before the browser gets a chance to
+// apply its own scroll restoration on reload. Without this, refreshing
+// the page mid-scroll would jump back to that old position right as (or
+// just after) the intro splash starts, which reads as broken since the
+// splash assumes it's covering the very top of the page.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+
 // ─────────── TWEAKS ───────────
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "warmth",
@@ -159,7 +167,7 @@ window.setTweak = setTweak;
   }
 
   :root {
-    --bg: #E6E3DF;
+    --bg: #FAF9F6;
     --bg-alt: #EBE7E0;
     --ink: #1A1A1A;
     --ink-soft: #4A4A48;
@@ -180,6 +188,14 @@ window.setTweak = setTweak;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Backstop: an element overflowing the viewport width (e.g. a
+       fixed-width component dropped into a narrow mobile column) widens
+       what the browser treats as the scrollable viewport, which throws
+       off Lenis's scroll-limit math and can leave content at the bottom
+       of the page unreachable. This clips that overflow instead of
+       letting it affect scroll height, without touching vertical
+       scrolling. */
+    overflow-x: clip;
   }
 
   ::selection {
@@ -289,6 +305,7 @@ window.setTweak = setTweak;
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
 </head>
 <body>
 
