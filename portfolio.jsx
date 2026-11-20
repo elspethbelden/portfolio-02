@@ -278,7 +278,11 @@ const PAST_CLIENTS = [
 // wait for an intro event), so getting it right on the very first render
 // matters — otherwise they're stuck waiting forever for an intro event
 // that was never going to fire.
+// Portfolio 02: the intro is switched off for now (HeroWall replaces the
+// old hero); remove this early return to bring it back.
+const INTRO_ENABLED = false;
 function willPlayIntro() {
+  if (!INTRO_ENABLED) return false;
   const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const navEntry = typeof performance !== "undefined" && performance.getEntriesByType
     ? performance.getEntriesByType('navigation')[0]
@@ -765,6 +769,590 @@ function IntroOverlay() {
         </span>
       </h1>
     </div>
+  );
+}
+
+// E-mark that turns into a house outline on hover — same component as the
+// case-study pages' breadcrumb (natwest.jsx etc.), with a size prop.
+function BrandMark({ size = 21 }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <span
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{ position: "relative", display: "inline-block", width: size, height: size }}
+    >
+      <svg width={size} height={size} viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style={{
+        position: "absolute", top: 0, left: 0,
+        transform: hover ? "scale(0) rotate(-14deg)" : "scale(1) rotate(0deg)",
+        transition: "transform 0.25s ease"
+      }}>
+        <path d="M0 5 H32 V9 H4 V14 H32 V18 H4 V23 H32 V27 H0 Z" />
+      </svg>
+      <svg width={size} height={size} viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true" style={{
+        position: "absolute", top: 0, left: 0,
+        transform: hover ? "scale(1) rotate(0deg)" : "scale(0) rotate(14deg)",
+        transition: "transform 0.25s ease"
+      }}>
+        <path d="M16 4 L3 17 L3 29 L29 29 L29 17 Z" />
+      </svg>
+    </span>
+  );
+}
+
+// ─────────────── HERO WALL (Figma 141:1410) ───────────────
+// Five staggered columns of project tiles behind the big name, with the
+// motion borrowed from vivmgmt.com: columns rise in from below on load,
+// the name wipes up after them, and on scroll the gallery travels at 1.5×
+// scroll speed so the tiles slide up past the name. All geometry is in
+// Figma units (the frame is 1672 wide) and converted with --u, so the
+// whole composition scales with the viewport.
+const WALL = "assets/hero-wall/";
+// Layers are in tile-space design px (tile = 398×531). `fit: "fill"`
+// stretches (vectors/SVGs); everything else is object-fit: cover.
+const HERO_WALL_COLUMNS = [
+  { left: -145.5, top: 0, tiles: [
+    { bg: "#a9b4cb", layers: [
+      { src: "bupa-2.jpg" },
+      { color: "#bfbab4" },
+      { src: "hair-like-this.svg", l: 5.5, t: -143.37, w: 532, h: 624, fit: "fill" },
+    ] },
+    // Figma 141:1481: the same two-phone Bupa composition as column 2's
+    // "Bupa" tile, over the base image, all at 80%.
+    { bg: "#c8b3b0", layers: [{ opacity: 0.8, layers: [
+      { src: "c1t2-base.jpg" },
+      { src: "bupa-2.jpg", l: -458.7, t: -0.42, w: 858, h: 431 },
+      { color: "#27386e", l: -1.7, t: 340.58, w: 31, h: 84 },
+      { src: "bupa-2.jpg", l: -326.7, t: 63.08, w: 946, h: 475,
+        mask: { src: "bupa-phone-mask.svg", l: 249, t: 54.5, w: 390.5, h: 413 } },
+    ] }] },
+    { bg: "#444", layers: [
+      { src: "c1t3-base.jpg" },
+      { src: "c1t3-top.jpg", l: 0.2, t: 0.05 },
+      { color: "rgba(0,0,0,0.05)", l: 0.2, t: 0.05 },
+    ] },
+    { bg: "#d4b6a9", layers: [
+      { src: "c1t4-base.jpg" },
+      { src: "bg-sheep.jpg", l: 24.5, t: -10, w: 776, h: 543 },
+      { src: "bg-sheep.jpg", l: -188.5, t: 0, w: 777, h: 544 },
+      { src: "costa-latte.jpg", l: -281.5, t: 1, w: 1210, h: 533 },
+    ] },
+  ] },
+  { left: 262.7, top: 355.05, tiles: [
+    // NatWest shapes, with the "Looks like good design" recording over them.
+    { bg: "#3c1053", layers: [
+      { src: "natwest-shape-a.png", l: -12.7, t: 31.97, w: 434.24, h: 434.84, fit: "fill" },
+      { src: "natwest-shape-b.png", l: -311.71, t: 311.96, w: 431.41, h: 438.79, fit: "fill" },
+      { src: "natwest-shape-b.png", l: 111.28, t: -289.08, w: 431.41, h: 438.79, fit: "fill" },
+      { src: "natwest-shape-c.png", l: 29.05, t: 394.16, w: 435.99, h: 406.8, fit: "fill" },
+      { video: "natwest-good-design.mp4", l: 0.32, t: -0.05, w: 398, h: 533.14 },
+    ] },
+    { bg: "#a7a1cf", layers: [{ src: "image-5.webp" }] },
+    // "Bupa" (Figma 169:30): two phones cut from the Bupa shot on navy —
+    // the second through a polygon mask, with a navy patch over an edge.
+    { bg: "#27386e", layers: [
+      { src: "bupa-2.jpg", l: -458.7, t: -0.05, w: 858, h: 431 },
+      { color: "#27386e", l: -1.7, t: 340.95, w: 31, h: 84 },
+      { src: "bupa-2.jpg", l: -326.7, t: 63.45, w: 946, h: 475,
+        mask: { src: "bupa-phone-mask.svg", l: 249, t: 54.5, w: 390.5, h: 413 } },
+    ] },
+    { bg: "#162738", layers: [
+      // Box at the recording's own 2666×1826 ratio (taller than Figma's
+      // 456×295 frame) so nothing is cropped; same width and centre.
+      { video: "artfund-site.mp4", l: -87.7, t: 102.3, w: 456, h: 312.3, radius: 16 },
+    ] },
+  ] },
+  { left: 670.9, top: 149.91, tiles: [
+    { bg: "#a7a1cf", layers: [
+      { src: "c3t1-base.jpg", l: 0.1, t: -95.91, w: 553, h: 738 },
+      { src: "marlow-machine.jpg", l: -206.9, t: -0.91, w: 728, h: 614 },
+    ] },
+    // NatWest cover crop (shows while the recording loads), then the
+    // "Good design in action" card recording over it.
+    { bg: "#331148", layers: [
+      { clip: true, l: 37.1, t: 288.09, w: 324, h: 224, layers: [
+        { src: "natwest-cover.jpg", l: -737.0, t: -226.06, w: 1440, h: 900 },
+      ] },
+      { video: "natwest-cards.mp4", l: 22.1, t: -93.91, w: 354, h: 728 },
+    ] },
+    { bg: "#162738", layers: [
+      { video: "artfund-phone.mp4", l: 96.3, t: 38.95, w: 205, h: 454, radius: 2 },
+    ] },
+    // "WGDLL" (Figma 141:1508): magazine mockup over the original layers.
+    { layers: [
+      { src: "c3t4-base.jpg" },
+      { src: "c3t4-top.jpg", l: -127.9, t: 0.09, w: 532, h: 532 },
+      { src: "wgdll-magazine.jpg", l: -92.9, t: -92.91, w: 800, h: 686 },
+      { color: "rgba(0,0,0,0.05)", l: -92.9, t: -92.91, w: 800, h: 686 },
+    ] },
+  ] },
+  { left: 1079.1, top: 355.05, tiles: [
+    { bg: "#e3dae9", layers: [
+      { src: "natwest-hand.jpg", l: -317.1, t: -87.24, w: 986.3, h: 646.1 },
+    ] },
+    { bg: "#ced3dd", layers: [{ src: "screenshot-191210.jpg", l: -28.1, t: 40.95, w: 447, h: 490 }] },
+    { bg: "#fdf6fe", layers: [{ src: "book-mockup.jpg", l: -155.1, t: 41.95, w: 669, h: 446 }] },
+    // "Costa" (Figma 141:1520): the Costa Express screen recording in a
+    // bordered frame on a dark plum→indigo gradient.
+    { bg: "#231920", layers: [
+      { color: "linear-gradient(178.45deg, #231920 0.75%, #231d29 34.25%, #4a4d6e 73.34%)",
+        l: -0.1, t: -0.05, w: 425, h: 753 },
+      { clip: true, l: 40.9, t: 36.95, w: 319, h: 572, radius: 4, layers: [
+        { video: "costa-express.mp4" },
+        { color: "transparent", radius: 4,
+          style: { border: "1px solid #000", boxShadow: "inset 0 4px 4px rgba(0,0,0,0.26)", boxSizing: "border-box" } },
+      ] },
+    ] },
+  ] },
+  { left: 1487.3, top: 0, tiles: [
+    // "Container-book" (Figma 141:1526): the alt book mockup, which covers
+    // the tile (the original mockup under it never shows, so it's dropped).
+    { bg: "#fdf6fe", layers: [{ src: "book-mockup-alt.jpg", l: -254.3, t: -79, w: 968, h: 645 }] },
+    { bg: "#30ccd6", layers: [{ src: "image-10.jpg", l: -49.3, t: 77, w: 497, h: 356 }] },
+    { bg: "#007bce", layers: [
+      { src: "image-9.jpg", l: -83.3, t: 107, w: 565, h: 425 },
+      { src: "phone-hand.jpg", l: -117.3, t: -39, w: 575, h: 575 },
+    ] },
+    { bg: "#a9b4cb", layers: [{ src: "image-5.webp" }] },
+  ] },
+];
+const WALL_TILE_W = 398, WALL_TILE_H = 531, WALL_GAP = 10, WALL_TOP = 307;
+// Extra scroll drift per column (× scroll px), on top of the gallery's
+// shared 0.5× — small, so the columns slip against each other subtly.
+// Tiles that stay *behind* the name (top-left and top-right corners);
+// every other tile scrolls over it.
+const WALL_BEHIND_NAME = (ci, ti) => ti === 0 && (ci === 0 || ci === HERO_WALL_COLUMNS.length - 1);
+const WALL_COL_DRIFT = [0.125, 0, 0.075, -0.0625, 0.1625];
+const wallColH = (cols) => Math.max(...cols.map(c => c.top + c.tiles.length * (WALL_TILE_H + WALL_GAP) - WALL_GAP)) + 40;
+const WALL_COL_H = wallColH(HERO_WALL_COLUMNS);
+// Mobile: two full-width columns, no panning. The outer desktop columns
+// (cropped off on desktop anyway) are dropped, and the middle three's
+// tiles are dealt row by row, alternating left/right, so neighbours mix.
+const MOBILE_WALL_COLUMNS = (() => {
+  const src = [1, 2, 3].map(i => HERO_WALL_COLUMNS[i].tiles);
+  const cols = [[], []];
+  let k = 0;
+  for (let r = 0; r < Math.max(...src.map(t => t.length)); r++)
+    src.forEach(tiles => { if (tiles[r]) cols[k++ % 2].push(tiles[r]); });
+  // Right column starts ~30% of a tile lower, so the two are staggered.
+  return cols.map((tiles, i) => ({ left: 0, top: i ? 160 : 0, tiles }));
+})();
+const MOBILE_WALL_COL_H = wallColH(MOBILE_WALL_COLUMNS);
+const MOBILE_WALL_MARGIN = 12; // px, each screen edge
+// Mobile drift: the right column runs slightly ahead (never lags, so it
+// can't drop past the section's bottom edge).
+const MOBILE_COL_DRIFT = [0, -0.04];
+
+// pw/ph: the parent box in Figma px (the tile, or an enclosing group), so
+// nested layers can use their own group-relative coordinates.
+function renderWallLayers(layers, pw = WALL_TILE_W, ph = WALL_TILE_H) {
+  return layers.map((ly, i) => {
+    // Defaults to filling the parent; explicit l/t/w/h are parent-space px.
+    const w = ly.w ?? pw, h = ly.h ?? ph;
+    const box = {
+      position: "absolute",
+      left: `${((ly.l ?? 0) / pw) * 100}%`,
+      top: `${((ly.t ?? 0) / ph) * 100}%`,
+      width: `${(w / pw) * 100}%`,
+      height: `${(h / ph) * 100}%`,
+      // Corner radius in Figma px, as % of the box so it scales with the wall.
+      ...(ly.radius && { borderRadius: `${(ly.radius / w) * 100}% / ${(ly.radius / h) * 100}%` }),
+    };
+    if (ly.layers) return (
+      <div key={i} style={{ ...box, opacity: ly.opacity, overflow: ly.clip ? "hidden" : undefined }}>
+        {renderWallLayers(ly.layers, w, h)}
+      </div>
+    );
+    // `style` adds extras such as a border or inset shadow on a frame.
+    if (ly.color) return <div key={i} style={{ ...box, background: ly.color, ...ly.style }} />;
+    if (ly.video) {
+      // Muted + playsInline so it autoplays everywhere (incl. iOS); held on
+      // its first frame for reduced-motion users.
+      const still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      // React sets `muted` as a property but never as the HTML attribute,
+      // which autoplay policies can check — so autoplay can silently not
+      // start. Mark it muted explicitly and start it ourselves once it can
+      // play (files with the index at the end only get there once fully
+      // loaded).
+      const startMuted = (el) => {
+        if (!el || still) return;
+        el.muted = true; el.defaultMuted = true; el.setAttribute("muted", "");
+        const go = () => { const p = el.play(); if (p && p.catch) p.catch(() => {}); };
+        if (el.readyState >= 3) go(); else el.addEventListener("canplay", go, { once: true });
+      };
+      return (
+        <video key={i} ref={startMuted} src={WALL + ly.video} muted loop playsInline autoPlay={!still} preload="auto"
+          aria-hidden="true" style={{ ...box, maxWidth: "none", display: "block", objectFit: "cover" }} />
+      );
+    }
+    // Optional alpha mask (Figma "Mask group"): an SVG shape placed at
+    // ly.mask.{l,t,w,h} in the layer's own px. Sized as % of the layer and
+    // positioned with CSS's %-offset rule — p% = offset / (box − mask) —
+    // so it scales with the wall.
+    let maskStyle = null;
+    if (ly.mask) {
+      const m = ly.mask;
+      const size = `${(m.w / w) * 100}% ${(m.h / h) * 100}%`;
+      const pos = `${(m.l / (w - m.w)) * 100}% ${(m.t / (h - m.h)) * 100}%`;
+      const url = `url("${WALL + m.src}")`;
+      maskStyle = {
+        WebkitMaskImage: url, maskImage: url,
+        WebkitMaskSize: size, maskSize: size,
+        WebkitMaskPosition: pos, maskPosition: pos,
+        WebkitMaskRepeat: "no-repeat", maskRepeat: "no-repeat",
+      };
+    }
+    return (
+      <img key={i} src={WALL + ly.src} alt="" draggable="false" style={{
+        ...box, maxWidth: "none", display: "block",
+        objectFit: ly.fit === "fill" ? "fill" : "cover",
+        ...maskStyle,
+      }} />
+    );
+  });
+}
+
+function HeroWall() {
+  const isMobile = useIsMobile();
+  const reduced = typeof window !== "undefined" && window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [entered, setEntered] = useState(reduced);
+  // Layout width (no scrollbar), so both name edges sit evenly against the
+  // columns — innerWidth includes the scrollbar and skews everything ~15px.
+  const viewW = () => document.documentElement.clientWidth || window.innerWidth;
+  const [vw, setVw] = useState(viewW);
+  const [vh, setVh] = useState(() => window.innerHeight);
+  // The wall is rendered twice, in sync: a back layer (corner tiles only,
+  // under the name) and a front layer (all other tiles, over it). One
+  // transform can't put tiles on both sides of the name, since each
+  // column's transform makes it its own stacking context.
+  const galleryRefs = useRef([]);   // [back, front]
+  const colRefs = useRef([[], []]); // per layer, per column
+  const nameRef = useRef(null);
+
+  // Figma px → CSS px. Desktop maps the 1672-wide frame to the viewport;
+  // mobile sizes two tiles + one gap to fill the width inside 12px margins.
+  const columns = isMobile ? MOBILE_WALL_COLUMNS : HERO_WALL_COLUMNS;
+  const colDrift = isMobile ? MOBILE_COL_DRIFT : WALL_COL_DRIFT;
+  const u = isMobile ? (vw - MOBILE_WALL_MARGIN * 2) / (2 * WALL_TILE_W + WALL_GAP) : vw / 1672;
+  // Mobile: name centred on the first screen, with the work starting just
+  // under it and overlapping its bottom quarter (tiles sit over the name).
+  const MOBILE_NAME_DIV = 5.0; // name size = (vw − 40) / this
+  const mobileNameH = ((vw - 40) / MOBILE_NAME_DIV) * 0.88;
+  const mobileNameTop = (vh - mobileNameH) / 2;
+  // Desktop: name + wall sit 80 Figma units lower than the frame, so the
+  // work is cut off further down at the bottom of the first screen.
+  const DROP = 80;
+  const galleryTop = isMobile ? mobileNameTop + mobileNameH * 0.75 : (WALL_TOP + DROP) * u;
+  const nameTop = isMobile ? mobileNameTop : (443 + DROP) * u;
+  const colH = (isMobile ? MOBILE_WALL_COL_H : WALL_COL_H) * u;
+  const nameH = isMobile ? mobileNameH : 242.44 * u * 0.88;
+  // Gallery moves an extra 0.5× scroll (1.5× total, as on vivmgmt.com).
+  // The section is sized so that extra travel ends exactly when the
+  // gallery's bottom meets the section's bottom at the bottom of the
+  // screen — from there it scrolls 1:1 with the page, so no gap opens
+  // up above the next section. Solves: galleryTop + colH − 0.5·sEnd = H,
+  // with sEnd = H − vh.
+  const PARALLAX = reduced ? 0 : 0.5;
+  // Scroll zoom ("camera push") into the middle three columns: over the
+  // first ~screen of scrolling the wall scales up ZOOM× around their
+  // centre and recentres them, so they fill the width inside 12px side
+  // margins (nothing cropped) and the outer two columns slide
+  // off either edge. Desktop only — on mobile the middle three already
+  // overfill the screen.
+  // The wall is *laid out* at the zoomed size (gu = u × ZOOM) and drawn
+  // scaled down to start with, so it's rasterised at full resolution and
+  // stays sharp as it scales up (a layer scaled *up* would be blurry).
+  const ZOOM_MARGIN = 12;
+  const midW = HERO_WALL_COLUMNS[3].left + WALL_TILE_W - HERO_WALL_COLUMNS[1].left; // 1214.4
+  const ZOOM = isMobile || reduced ? 1 : Math.max(1, (vw - ZOOM_MARGIN * 2) / (midW * u));
+  const gu = u * ZOOM;
+  // Spread over ~1.5 screens of scrolling for a gradual push-in; the sEnd
+  // cap is defined below, so it's applied in the scroll effect.
+  const ZOOM_SCREENS = 1.5;
+  const zoomSpan = vh * ZOOM_SCREENS;
+  // Centre of the middle three columns, in zoomed-layout px. Mobile: the
+  // screen centre, so the zoom's recentring shift is zero (no side pan).
+  const midCx = isMobile ? vw / 2 : ((HERO_WALL_COLUMNS[1].left + HERO_WALL_COLUMNS[3].left + WALL_TILE_W) / 2) * gu;
+  // Wall's on-screen height once fully zoomed = colH × ZOOM.
+  const sectionH = PARALLAX
+    ? Math.max(vh, (galleryTop + colH * ZOOM + PARALLAX * vh) / (1 + PARALLAX))
+    : galleryTop + colH * ZOOM;
+  const sEnd = Math.max(0, sectionH - vh);
+  // Finish the zoom before the wall's hand-off point (sEnd) on any screen.
+  const zoomEnd = Math.max(1, Math.min(zoomSpan, sEnd * 0.95));
+
+  useEffect(() => {
+    // On touch screens the browser's address bar collapses/expands while
+    // scrolling, changing innerHeight — ignore height-only changes there
+    // so the centred name and the wall don't jump mid-scroll.
+    const touch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    let lastW = viewW();
+    const onResize = () => {
+      const w = viewW();
+      setVw(w);
+      if (!touch || w !== lastW) setVh(window.innerHeight);
+      lastW = w;
+    };
+    window.addEventListener("resize", onResize);
+    // The scrollbar appears after first paint (once the page is long
+    // enough) without firing a resize, so watch the layout width directly.
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(onResize) : null;
+    if (ro) ro.observe(document.documentElement);
+    return () => { window.removeEventListener("resize", onResize); if (ro) ro.disconnect(); };
+  }, []);
+
+  useEffect(() => {
+    if (reduced) return;
+    const id = requestAnimationFrame(() => requestAnimationFrame(() => setEntered(true)));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  // Scroll-driven, written straight to the element (not React state) so it
+  // stays on the compositor. Driven from Lenis's own scroll callback, which
+  // fires inside the same frame Lenis moves the page — a window "scroll"
+  // listener only hears about it a frame later, which left the wall
+  // trailing the page by one frame (felt as judder, since the wall moves
+  // at a different speed from everything around it).
+  useEffect(() => {
+    let raf = 0;
+    const apply = () => {
+      raf = 0;
+      const y = Math.max(window.scrollY, 0);
+      // Name fades out ahead of the top edge: starts once its top is ~22%
+      // of the way down the screen, gone just as it reaches the top.
+      if (nameRef.current) {
+        const fadeFrom = nameTop - 0.22 * vh, fadeTo = nameTop + 0.1 * nameH;
+        const fade = (y - fadeFrom) / (fadeTo - fadeFrom);
+        nameRef.current.style.opacity = String(1 - Math.min(1, Math.max(0, fade)));
+      }
+      if (!PARALLAX) return;
+      // Shared travel: 0.5× until the wall's bottom meets the section's
+      // bottom (sEnd, still below the fold), then a gentler TAIL× so the
+      // images keep drifting until they're off screen instead of locking
+      // to the page. Past sEnd the wall only ever pulls *up* from the next
+      // section (a little extra space above the quote), never into it.
+      const TAIL = 0.2;
+      const travel = PARALLAX * Math.min(y, sEnd) + TAIL * Math.max(0, y - sEnd);
+      // Zoom progress, eased (smoothstep). Scale goes 1/ZOOM → 1 on the
+      // full-size layer; x shifts the middle-three centre from where it
+      // sits in the Figma layout to the middle of the screen.
+      const zt = Math.min(1, Math.max(0, y / zoomEnd));
+      const zp = zt * zt * (3 - 2 * zt);
+      const scale = (1 + (ZOOM - 1) * zp) / ZOOM;
+      const dx0 = -midCx * (1 - 1 / ZOOM), dx1 = vw / 2 - midCx;
+      const dx = dx0 + (dx1 - dx0) * zp;
+      galleryRefs.current.forEach(g => {
+        if (g) g.style.transform = `translate3d(${dx}px, ${-travel}px, 0) scale(${scale})`;
+      });
+      // Per-column drift on top of that: positive = lags behind (slower),
+      // negative = runs ahead. Unclamped, so the columns keep slipping
+      // against each other all the way out. The two tallest columns (1,
+      // 3) set where the wall ends, so 1 stays at 0 and 3 only runs ahead;
+      // the shorter columns have the slack to lag, and every lag is below
+      // TAIL, so no column ever drops back past the section bottom.
+      colRefs.current.forEach(layer => layer.forEach((el, i) => {
+        // ÷ scale: the columns sit inside the scaled wall layer, so this
+        // keeps the drift's on-screen size the same at any zoom.
+        if (el) el.style.transform = `translate3d(0, ${(y * (colDrift[i] || 0)) / scale}px, 0)`;
+      }));
+    };
+    // Fallback for native scroll (no Lenis yet, or none at all): batch to
+    // the next frame. Once Lenis is up, it drives `apply` synchronously.
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(apply); };
+    let offLenis = null, waitRaf = 0;
+    const attachLenis = () => {
+      const lenis = window.__lenis;
+      if (lenis && lenis.on) {
+        window.removeEventListener("scroll", onScroll);
+        offLenis = lenis.on("scroll", apply);
+        apply();
+      } else {
+        waitRaf = requestAnimationFrame(attachLenis);
+      }
+    };
+    apply();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    attachLenis();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf); cancelAnimationFrame(waitRaf);
+      if (typeof offLenis === "function") offLenis();
+    };
+  }, [sEnd, PARALLAX, nameTop, nameH, vh, vw, ZOOM, midCx, zoomEnd, colDrift]);
+
+  // Load sequence: the name rises letter by letter from its baseline
+  // first; once the last letter has landed the columns rise in from below
+  // the fold (centre-out, vivmgmt.com-style), and the header copy follows
+  // as they settle.
+  const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+  const NAME_START = 0.15, LETTER_STAGGER = 0.055, LETTER_DUR = 0.9;
+  const NAME_LETTERS = "Elspeth".length + "Belden".length;
+  const COL_DUR = 1.9;
+  // Columns set off as the last letter starts rising (~0.8s) rather than
+  // after it lands — they enter from below the fold, so the name is
+  // complete by the time they reach it.
+  const colStart = NAME_START + (NAME_LETTERS - 1) * LETTER_STAGGER;
+  const colDelay = (isMobile ? [0, 0.12] : [0.24, 0.08, 0, 0.16, 0.32]).map(d => colStart + d);
+  const headerDelay = colStart + 0.9;
+
+  // Mobile: the two words together measure ~4.76em, so /5 fills the width
+  // with roughly a word space between them.
+  const nameSize = isMobile ? `${(vw - 40) / MOBILE_NAME_DIV}px` : `${242.44 * u}px`;
+  // Letter-by-letter rise from the baseline (same idea as the quote's
+  // word rise). Each letter's mask is a clip-path rather than overflow
+  // hidden: generous on the sides and top so serifs/ascenders are never
+  // trimmed, with its bottom edge just under the descenders (the "p") —
+  // the letter starts below that edge and slides up into view.
+  const nameWord = (word, offset) => (
+    <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+      {word.split("").map((ch, i) => (
+        <span key={i} style={{ display: "inline-block", clipPath: "inset(-60% -40% -0.28em -40%)" }}>
+          <span style={{
+            display: "inline-block",
+            // 1.5em clears the mask fully: the line box is only 0.88em but
+            // ascenders sit above it, so a smaller drop left their tips
+            // peeking under the mask edge before the rise.
+            transform: entered ? "translateY(0)" : "translateY(1.5em)",
+            transition: reduced ? "none" : `transform ${LETTER_DUR}s ${EASE} ${NAME_START + (offset + i) * LETTER_STAGGER}s`,
+          }}>{ch}</span>
+        </span>
+      ))}
+    </span>
+  );
+
+  // Header copy reveals the way the old hero's intro row did: the
+  // paragraph word by word (renderStaggeredWords: fade + 12px rise, 80ms
+  // apart), then "Latest work" at +400ms and "Let's talk" at +600ms —
+  // all offset to start once the columns are mostly in.
+  const headerMs = headerDelay * 1000;
+  const linkFade = (ms) => ({
+    opacity: entered ? 1 : 0,
+    transition: reduced ? "none" : `opacity 650ms cubic-bezier(0.2, 0.8, 0.2, 1) ${headerMs + ms}ms`,
+  });
+  // RollingLink draws its own underline — no border here.
+  const linkStyle = { fontSize: 12, lineHeight: "12px", letterSpacing: "1.44px", color: "var(--ink)" };
+
+  // Gallery — parallax wrapper (scroll) around per-column entrance (load).
+  // layer 0 = back (WALL_BEHIND_NAME tiles), 1 = front (the rest). Both
+  // keep every tile slot so the columns lay out identically; tiles that
+  // belong to the other layer are left as empty, invisible slots.
+  const renderGallery = (layer) => (
+    <div ref={el => (galleryRefs.current[layer] = el)} aria-hidden="true" style={{
+      position: "absolute", top: galleryTop, left: 0, width: "100%", height: colH * ZOOM,
+      transformOrigin: `${midCx}px 0px`,
+      // Initial state matches the first scroll frame (unzoomed) so there's
+      // no jump before the scroll effect runs.
+      transform: `translate3d(${-midCx * (1 - 1 / ZOOM)}px, 0, 0) scale(${1 / ZOOM})`,
+      willChange: PARALLAX ? "transform" : undefined, zIndex: layer ? 3 : 1,
+      pointerEvents: "none",
+    }}>
+      {columns.map((col, ci) => (
+        // Outer: position + per-column scroll drift (set in the scroll
+        // effect). Inner: the load-time rise. Kept on separate elements
+        // so the two transforms never fight.
+        <div key={ci} ref={el => (colRefs.current[layer][ci] = el)} style={{
+          position: "absolute",
+          // Desktop: Figma's own column x. Mobile: two columns inside
+          // 12px margins.
+          left: isMobile ? MOBILE_WALL_MARGIN + ci * (WALL_TILE_W + WALL_GAP) * gu : col.left * gu,
+          top: col.top * gu,
+          width: WALL_TILE_W * gu,
+          willChange: PARALLAX ? "transform" : undefined,
+        }}>
+          <div style={{
+            display: "flex", flexDirection: "column", gap: WALL_GAP * gu,
+            // × ZOOM: this sits inside the scaled-down layer.
+            transform: entered ? "translate3d(0,0,0)" : `translate3d(0, ${(vh + 200) * ZOOM}px, 0)`,
+            transition: reduced ? "none" : `transform ${COL_DUR}s ${EASE} ${colDelay[ci]}s`,
+          }}>
+            {col.tiles.map((tile, ti) => {
+              const behind = !isMobile && WALL_BEHIND_NAME(ci, ti);
+              const mine = behind === (layer === 0);
+              return (
+                <div key={ti} style={{
+                  position: "relative", width: "100%", aspectRatio: `${WALL_TILE_W} / ${WALL_TILE_H}`,
+                  overflow: "hidden", background: mine ? (tile.bg || "transparent") : "transparent",
+                  visibility: mine ? "visible" : "hidden",
+                }}>
+                  {mine && renderWallLayers(tile.layers)}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <section id="top" style={{ position: "relative", height: sectionH, overflow: "hidden" }}>
+      {/* Header (Figma 143:1877): menu + tagline | — | Latest work | Let's talk */}
+      <header style={{
+        position: "absolute", top: isMobile ? 20 : 29, left: 0, right: 0, zIndex: 4,
+        padding: isMobile ? "0 20px" : "0 32px",
+        display: "grid",
+        gridTemplateColumns: isMobile ? "auto 1fr auto" : "repeat(4, minmax(0, 1fr))",
+        columnGap: isMobile ? 24 : 40,
+        rowGap: 24,
+        alignItems: "start",
+      }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 40, gridColumn: isMobile ? "1" : undefined }}>
+          {/* Same E → house mark as the case-study pages' breadcrumb. */}
+          <a href="#top" aria-label="Home" style={{ display: "block", width: 24, height: 24, color: "var(--ink)", ...linkFade(0) }}
+            onClick={(e) => { e.preventDefault(); if (window.__lenis) window.__lenis.scrollTo(0); else window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+            <BrandMark size={24} />
+          </a>
+          {!isMobile && (
+            // nowrap: only ever breaks at the <br> (after "organisations").
+            <p style={{ fontFamily: "'Geist', system-ui, sans-serif", fontSize: 22, lineHeight: 1.3, letterSpacing: "-0.3px", color: "var(--ink)", margin: 0, maxWidth: 495, whiteSpace: "nowrap" }}>
+              {renderStaggeredWords("I help complex organisations", entered, headerMs)}
+              <br />
+              {renderStaggeredWords("ship products that feel simple.", entered, headerMs + 4 * 80)}
+            </p>
+          )}
+        </div>
+        {!isMobile && <div />}
+        <div className="mono" style={{ display: "flex", justifyContent: "flex-end", padding: "7px 0", ...linkFade(400) }}>
+          <RollingLink href={`#${CASE_STUDIES[0].id}`} style={linkStyle}>Latest work</RollingLink>
+        </div>
+        <div className="mono" style={{ display: "flex", justifyContent: "flex-end", padding: "7px 0", ...linkFade(600) }}>
+          <RollingLink href="#contact" style={linkStyle}>Let's talk</RollingLink>
+        </div>
+        {isMobile && (
+          <p style={{ gridColumn: "1 / -1", fontFamily: "'Geist', system-ui, sans-serif", fontSize: 18, lineHeight: 1.3, letterSpacing: "-0.3px", color: "var(--ink)", margin: "16px 0 0", whiteSpace: "nowrap" }}>
+            {renderStaggeredWords("I help complex organisations", entered, headerMs)}
+            <br />
+            {renderStaggeredWords("ship products that feel simple.", entered, headerMs + 4 * 80)}
+          </p>
+        )}
+      </header>
+
+      {/* Back layer: corner tiles only, under the name. */}
+      {renderGallery(0)}
+
+      {/* Name (Figma 141:1024) — scrolls 1:1, between the two wall layers;
+          fades as it leaves the top of the screen (scroll effect above). */}
+      <h1 ref={nameRef} style={{
+        position: "absolute", top: nameTop, left: 0, right: 0, zIndex: 2,
+        padding: isMobile ? "0 20px" : `0 ${24 * u}px`,
+        margin: 0,
+        display: "flex", justifyContent: "space-between", alignItems: "flex-start",
+        fontFamily: "var(--font-name)", fontWeight: 200,
+        // -0.044em matches Figma's letter positions with the name split
+        // into per-letter spans (which drops kerning, ~0.007em wider than
+        // the whole-word text) — measured to restore the gaps between the
+        // "h"/"B" and the middle column.
+        fontSize: nameSize, lineHeight: 0.88, letterSpacing: "-0.044em",
+        color: "#1a1a1a", pointerEvents: "none",
+      }}>
+        {nameWord("Elspeth", 0)}
+        {nameWord("Belden", "Elspeth".length)}
+      </h1>
+
+      {/* Front layer: every other tile, over the name. */}
+      {renderGallery(1)}
+    </section>
   );
 }
 
@@ -1291,9 +1879,44 @@ function ImagePlaceholder({ label = "image", aspect = "4/3", full = false, tint 
 // flow), so there's no separate scroll nudge here. Skips straight to its
 // resting state when there's no splash to key off (reduced motion, GSAP
 // unavailable).
+// Word-by-word rise from the baseline: each word sits in its own mask
+// (overflow hidden) and slides up from just below it. The mask is padded
+// down by 0.2em (and pulled back with a matching negative margin, so
+// line spacing is unchanged) so descenders — the g, p — aren't clipped.
+function renderBaselineWords(text, shown, baseDelay = 0, stagger = 90) {
+  return text.split(" ").map((word, i) => (
+    <React.Fragment key={i}>
+      <span style={{
+        display: "inline-block", overflow: "hidden", verticalAlign: "top",
+        paddingBottom: "0.2em", marginBottom: "-0.2em",
+      }}>
+        <span style={{
+          display: "inline-block",
+          transform: shown ? "translateY(0)" : "translateY(110%)",
+          transition: `transform 900ms cubic-bezier(0.22, 1, 0.36, 1) ${baseDelay + i * stagger}ms`,
+        }}>{word}</span>
+      </span>
+      {" "}
+    </React.Fragment>
+  ));
+}
+
 function PullQuote() {
   const isMobile = useIsMobile();
   const [revealed, setRevealed] = useState(() => !willPlayIntro());
+  // The quote's word rise waits until it's actually on screen (a third
+  // of it visible), once — reduced motion just shows it.
+  const quoteRef = useRef(null);
+  const [quoteIn, setQuoteIn] = useState(() =>
+    !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches));
+  useEffect(() => {
+    if (quoteIn || !quoteRef.current) return;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setQuoteIn(true); io.disconnect(); }
+    }, { threshold: 0.3 });
+    io.observe(quoteRef.current);
+    return () => io.disconnect();
+  }, [quoteIn]);
 
   useEffect(() => {
     if (revealed) return;
@@ -1310,54 +1933,10 @@ function PullQuote() {
       // heights — same fix as the footer's own marginTop below.
       marginTop: "-1px",
       padding: isMobile ? "60px 20px" : "120px 32px",
-      borderTop: "1px solid var(--line-faint)",
       opacity: revealed ? 1 : 0,
       transform: revealed ? "translateY(0)" : "translateY(56px)",
       transition: "opacity 900ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 900ms cubic-bezier(0.34, 1.56, 0.64, 1)",
     }}>
-      {/* Four-image editorial collage above the quote — staggered across
-          two rows of a 12-col grid at uneven spans/offsets so it reads as
-          a magazine spread rather than a product grid. Each slot's
-          aspectRatio matches its screengrab so nothing is cropped.
-          Desktop: wide Innocent top-left, Art Fund dropped lower on the
-          right; tado tucked up under Innocent (negative margin closes the
-          gap Art Fund's offset leaves), banking stepped down on the right.
-          Mobile: Innocent wide, tado + Art Fund side by side, banking
-          indented on its own row. */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(12, 1fr)",
-        columnGap: isMobile ? 16 : 24,
-        rowGap: isMobile ? 16 : 24,
-        alignItems: "start",
-        marginBottom: isMobile ? 48 : 88,
-      }}>
-        {[
-          { id: "approach-collage-1", src: "assets/Screenshot 2026-11-13 at 19.12.55.png", ar: "2448 / 1476",
-            d: { gridColumn: "1 / span 7", gridRow: 1 },
-            m: { gridColumn: "1 / span 10", gridRow: 1 } },
-          { id: "approach-collage-2", src: "assets/Screenshot 2026-11-13 at 19.12.10.png", ar: "1610 / 1762",
-            d: { gridColumn: "9 / span 4", gridRow: 1, marginTop: 120 },
-            m: { gridColumn: "7 / span 6", gridRow: 2, marginTop: 40 } },
-          { id: "approach-collage-3", src: "assets/Screenshot 2026-11-13 at 19.12.31.png", ar: "1712 / 1752",
-            d: { gridColumn: "3 / span 4", gridRow: 2, marginTop: -80 },
-            m: { gridColumn: "1 / span 6", gridRow: 2 } },
-          { id: "approach-collage-4", src: "assets/Screenshot 2026-11-13 at 19.11.30.png", ar: "1372 / 858",
-            d: { gridColumn: "8 / span 5", gridRow: 2, marginTop: 48 },
-            m: { gridColumn: "3 / span 10", gridRow: 3 } },
-        ].map(s => (
-          <image-slot
-            key={s.id}
-            id={s.id}
-            src={s.src}
-            placeholder="Drop an image"
-            fit="cover"
-            shape="rect"
-            style={{ ...(isMobile ? s.m : s.d), aspectRatio: s.ar, width: "100%", height: "auto", display: "block", minWidth: 0 }}
-          ></image-slot>
-        ))}
-      </div>
-
       {/* Big display quote — spans the first two of the three columns
           below it; the third is left empty, same "deliberately blank
           column" language as the hero intro row and case-study grid. */}
@@ -1367,7 +1946,7 @@ function PullQuote() {
         gap: 40,
         paddingBottom: isMobile ? 56 : 104,
       }}>
-        <blockquote style={{
+        <blockquote ref={quoteRef} style={{
           gridColumn: isMobile ? "1" : "1 / span 2",
           fontFamily: "var(--font-display)",
           fontSize: "clamp(40px, 7vw, 112px)",
@@ -1377,8 +1956,9 @@ function PullQuote() {
           color: "var(--ink)",
           margin: 0,
         }}>
-          Visual designer's eye.<br />
-          Problem-solver's brain.
+          {renderBaselineWords("Visual designer's eye.", quoteIn, 0)}
+          <br />
+          {renderBaselineWords("Problem-solver's brain.", quoteIn, 3 * 90)}
         </blockquote>
         {!isMobile && <div />}
       </div>
@@ -1410,8 +1990,10 @@ function PullQuote() {
           <div className="mono" style={{
             color: "var(--ink-soft)",
             marginBottom: 24,
-            fontSize: 16,
-            lineHeight: 1,
+            // 13px Geist Mono — the site's small-caps label size (matches
+            // "I've also worked with" in the footer).
+            fontSize: 13,
+            lineHeight: "18.6px",
             letterSpacing: "1.44px",
           }}>
             ABOUT ME
@@ -1424,10 +2006,10 @@ function PullQuote() {
             color: "var(--ink)",
           }}>
             <p style={{ margin: "0 0 20px" }}>
-              Hi, I'm Elly. I'm a product designer who's as good with the pixels as I am with the problem, and I've spent over a decade designing across finance, retail, healthcare and the public sector.
+              Hi, I’m Elly. I’m a product designer who’s as good with the pixels as I am with the problem. For over a decade I’ve worked across finance, healthcare, retail, the arts and the public sector, usually on products with a lot of complexity behind a simple screen.
             </p>
             <p style={{ margin: "0 0 20px" }}>
-              I set the visual direction from a blank page, design the product end to end, and build the component library so it still looks right after I've left the room.
+              I also like to bring some play into serious work, because people remember how a product made them feel long after they’ve forgotten the flow.
             </p>
             <p style={{ margin: 0 }}>
               Most recently, I led design on an AI assistant for a global investment bank, from first sketch to launch. 40,000 people now use it every week.
@@ -1534,8 +2116,8 @@ function SelectedWork() {
       }}>
         <div className="mono" style={{
           color: "var(--ink-soft)",
-          fontSize: 16,
-          lineHeight: 1,
+          fontSize: 13,
+          lineHeight: "18.6px",
           letterSpacing: "1.44px",
         }}>
           CASE STUDIES
@@ -2430,8 +3012,7 @@ function Contact() {
 function App() {
   return (
     <>
-      <IntroOverlay />
-      <Hero />
+      <HeroWall />
       <PullQuote />
       <SelectedWork />
       <Contact />
