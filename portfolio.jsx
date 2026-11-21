@@ -261,7 +261,7 @@ const CASE_STUDIES = [
 ];
 
 const PAST_CLIENTS = [
-  "ASOS", "HSBC", "Guinness Storehouse", "Costa Coffee",
+  "ASOS", "HSBC", "Guinness Storehouse",
   "GovUK", "E.ON", "Art Fund", "Sainsbury's",
   "National Theatre", "Chelsea FC", "Topman", "Nord Anglia",
   "Diageo", "Freeview", "NowTV", "Bethesda"
@@ -934,14 +934,23 @@ const MOBILE_WALL_COLUMNS = (() => {
   let k = 0;
   for (let r = 0; r < Math.max(...src.map(t => t.length)); r++)
     src.forEach(tiles => { if (tiles[r]) cols[k++ % 2].push(tiles[r]); });
-  // Right column starts ~30% of a tile lower, so the two are staggered.
-  return cols.map((tiles, i) => ({ left: 0, top: i ? 160 : 0, tiles }));
+  // Figma mobile (173:23) leads with the NatWest hand, then "Looks like
+  // good design" — swap the first two on the left.
+  [cols[0][0], cols[0][1]] = [cols[0][1], cols[0][0]];
+  // Swap the NatWest card recording (left) with the green Art Fund
+  // screens (right) — both third in their column.
+  [cols[0][2], cols[1][2]] = [cols[1][2], cols[0][2]];
+  // …and the "Made to matter" book (left) with the Art Pass red-dots
+  // recording (right) — both fifth in their column.
+  [cols[0][4], cols[1][4]] = [cols[1][4], cols[0][4]];
+  // Right column starts ~a quarter of a tile lower, so the two are staggered.
+  return cols.map((tiles, i) => ({ left: 0, top: i ? 124 : 0, tiles }));
 })();
 const MOBILE_WALL_COL_H = wallColH(MOBILE_WALL_COLUMNS);
 const MOBILE_WALL_MARGIN = 12; // px, each screen edge
-// Mobile drift: the right column runs slightly ahead (never lags, so it
-// can't drop past the section's bottom edge).
-const MOBILE_COL_DRIFT = [0, -0.04];
+// Mobile drift: the right column runs clearly ahead of the left (never
+// lags, so it can't drop past the section's bottom edge).
+const MOBILE_COL_DRIFT = [0, -0.15];
 
 // pw/ph: the parent box in Figma px (the tile, or an enclosing group), so
 // nested layers can use their own group-relative coordinates.
@@ -1029,21 +1038,22 @@ function HeroWall() {
   const galleryRefs = useRef([]);   // [back, front]
   const colRefs = useRef([[], []]); // per layer, per column
   const nameRef = useRef(null);
+  const taglineRef = useRef(null);
 
   // Figma px → CSS px. Desktop maps the 1672-wide frame to the viewport;
   // mobile sizes two tiles + one gap to fill the width inside 12px margins.
   const columns = isMobile ? MOBILE_WALL_COLUMNS : HERO_WALL_COLUMNS;
   const colDrift = isMobile ? MOBILE_COL_DRIFT : WALL_COL_DRIFT;
   const u = isMobile ? (vw - MOBILE_WALL_MARGIN * 2) / (2 * WALL_TILE_W + WALL_GAP) : vw / 1672;
-  // Mobile: name centred on the first screen, with the work starting just
-  // under it and overlapping its bottom quarter (tiles sit over the name).
+  // Mobile: name centred on the first screen, with the work starting right
+  // under its line box (tiles overlap just the descenders).
   const MOBILE_NAME_DIV = 5.0; // name size = (vw − 40) / this
   const mobileNameH = ((vw - 40) / MOBILE_NAME_DIV) * 0.88;
   const mobileNameTop = (vh - mobileNameH) / 2;
   // Desktop: name + wall sit 80 Figma units lower than the frame, so the
   // work is cut off further down at the bottom of the first screen.
   const DROP = 80;
-  const galleryTop = isMobile ? mobileNameTop + mobileNameH * 0.75 : (WALL_TOP + DROP) * u;
+  const galleryTop = isMobile ? mobileNameTop + mobileNameH : (WALL_TOP + DROP) * u;
   const nameTop = isMobile ? mobileNameTop : (443 + DROP) * u;
   const colH = (isMobile ? MOBILE_WALL_COL_H : WALL_COL_H) * u;
   const nameH = isMobile ? mobileNameH : 242.44 * u * 0.88;
@@ -1075,7 +1085,17 @@ function HeroWall() {
   // screen centre, so the zoom's recentring shift is zero (no side pan).
   const midCx = isMobile ? vw / 2 : ((HERO_WALL_COLUMNS[1].left + HERO_WALL_COLUMNS[3].left + WALL_TILE_W) / 2) * gu;
   // Wall's on-screen height once fully zoomed = colH × ZOOM.
-  const sectionH = PARALLAX
+  // Mobile: sized to the column that actually ends lowest once each
+  // column's drift is applied (the staggered right column runs ahead, so
+  // the left one sets the bottom) — no spare buffer, so the next section
+  // follows on closely. Per column: galleryTop + bottom − (P − d)·sEnd = H.
+  const mobileSectionH = () => Math.max(vh, ...columns.map((c, i) => {
+    const b = (c.top + c.tiles.length * (WALL_TILE_H + WALL_GAP) - WALL_GAP) * gu;
+    const k = PARALLAX - (colDrift[i] || 0);
+    return (galleryTop + b + k * vh) / (1 + k);
+  }));
+  const sectionH = isMobile && PARALLAX ? mobileSectionH()
+    : PARALLAX
     ? Math.max(vh, (galleryTop + colH * ZOOM + PARALLAX * vh) / (1 + PARALLAX))
     : galleryTop + colH * ZOOM;
   const sEnd = Math.max(0, sectionH - vh);
@@ -1122,9 +1142,15 @@ function HeroWall() {
       // Name fades out ahead of the top edge: starts once its top is ~22%
       // of the way down the screen, gone just as it reaches the top.
       if (nameRef.current) {
-        const fadeFrom = nameTop - 0.22 * vh, fadeTo = nameTop + 0.1 * nameH;
+        // Mobile: the work starts right under the name and rises over it
+        // within the first ~quarter screen, so fade it over that instead.
+        const fadeFrom = isMobile ? 0 : nameTop - 0.22 * vh;
+        const fadeTo = isMobile ? 0.25 * vh : nameTop + 0.1 * nameH;
         const fade = (y - fadeFrom) / (fadeTo - fadeFrom);
-        nameRef.current.style.opacity = String(1 - Math.min(1, Math.max(0, fade)));
+        const op = String(1 - Math.min(1, Math.max(0, fade)));
+        nameRef.current.style.opacity = op;
+        // Mobile tagline fades with the name.
+        if (taglineRef.current) taglineRef.current.style.opacity = op;
       }
       if (!PARALLAX) return;
       // Shared travel: 0.5× until the wall's bottom meets the section's
@@ -1132,7 +1158,8 @@ function HeroWall() {
       // images keep drifting until they're off screen instead of locking
       // to the page. Past sEnd the wall only ever pulls *up* from the next
       // section (a little extra space above the quote), never into it.
-      const TAIL = 0.2;
+      // Mobile: much gentler, so little gap opens above "About me".
+      const TAIL = isMobile ? 0.05 : 0.2;
       const travel = PARALLAX * Math.min(y, sEnd) + TAIL * Math.max(0, y - sEnd);
       // Zoom progress, eased (smoothstep). Scale goes 1/ZOOM → 1 on the
       // full-size layer; x shifts the middle-three centre from where it
@@ -1179,7 +1206,7 @@ function HeroWall() {
       cancelAnimationFrame(raf); cancelAnimationFrame(waitRaf);
       if (typeof offLenis === "function") offLenis();
     };
-  }, [sEnd, PARALLAX, nameTop, nameH, vh, vw, ZOOM, midCx, zoomEnd, colDrift]);
+  }, [sEnd, PARALLAX, nameTop, nameH, vh, vw, ZOOM, midCx, zoomEnd, colDrift, isMobile]);
 
   // Load sequence: the name rises letter by letter from its baseline
   // first; once the last letter has landed the columns rise in from below
@@ -1319,14 +1346,21 @@ function HeroWall() {
         <div className="mono" style={{ display: "flex", justifyContent: "flex-end", padding: "7px 0", ...linkFade(600) }}>
           <RollingLink href="#contact" style={linkStyle}>Let's talk</RollingLink>
         </div>
-        {isMobile && (
-          <p style={{ gridColumn: "1 / -1", fontFamily: "'Geist', system-ui, sans-serif", fontSize: 18, lineHeight: 1.3, letterSpacing: "-0.3px", color: "var(--ink)", margin: "16px 0 0", whiteSpace: "nowrap" }}>
-            {renderStaggeredWords("I help complex organisations", entered, headerMs)}
-            <br />
-            {renderStaggeredWords("ship products that feel simple.", entered, headerMs + 4 * 80)}
-          </p>
-        )}
       </header>
+
+      {/* Mobile tagline (Figma 173:23): sits just above the name rather
+          than in the header — 20px / 30px, ~52px clear of the name. */}
+      {isMobile && (
+        <p ref={taglineRef} style={{
+          position: "absolute", left: 20, right: 20, top: nameTop - 52 - 2 * 30, zIndex: 2,
+          fontFamily: "'Geist', system-ui, sans-serif", fontSize: 20, lineHeight: "30px", letterSpacing: "-0.3px",
+          color: "var(--ink)", margin: 0, whiteSpace: "nowrap",
+        }}>
+          {renderStaggeredWords("I help complex organisations", entered, headerMs)}
+          <br />
+          {renderStaggeredWords("ship products that feel simple.", entered, headerMs + 4 * 80)}
+        </p>
+      )}
 
       {/* Back layer: corner tiles only, under the name. */}
       {renderGallery(0)}
@@ -1334,7 +1368,8 @@ function HeroWall() {
       {/* Name (Figma 141:1024) — scrolls 1:1, between the two wall layers;
           fades as it leaves the top of the screen (scroll effect above). */}
       <h1 ref={nameRef} style={{
-        position: "absolute", top: nameTop, left: 0, right: 0, zIndex: 2,
+        // Mobile: above both wall layers, so the work passes under the name.
+        position: "absolute", top: nameTop, left: 0, right: 0, zIndex: isMobile ? 4 : 2,
         padding: isMobile ? "0 20px" : `0 ${24 * u}px`,
         margin: 0,
         display: "flex", justifyContent: "space-between", alignItems: "flex-start",
@@ -1974,6 +2009,9 @@ function PullQuote() {
       }}>
         <div style={{
           gridColumn: isMobile ? undefined : "1",
+          // Mobile: 60% width, centred, rather than full-bleed.
+          width: isMobile ? "60%" : undefined,
+          alignSelf: isMobile ? "center" : undefined,
           aspectRatio: "332 / 416",
           overflow: "hidden",
         }}>
@@ -2000,7 +2038,7 @@ function PullQuote() {
           </div>
           <div style={{
             fontFamily: "'Geist', system-ui, sans-serif",
-            fontSize: 22,
+            fontSize: isMobile ? 20 : 22,
             letterSpacing: "-0.3px",
             lineHeight: 1.3,
             color: "var(--ink)",

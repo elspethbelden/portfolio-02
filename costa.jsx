@@ -462,7 +462,12 @@ function PhotographySection() {
           alignItems: "start"
         }}>
           <figure style={{ padding: isMobile ? 0 : "0 8% 0 18%" }}>
-            <ImagePlaceholder label="syrup selection screen" aspect="16/6" tint="crema" src="uploads/Costa/Costa-syrup-screen-02.webp" />
+            {/* Screen recording (same 1076×1924 frame as the still it
+                replaces, which now serves as the poster while it loads).
+                Shares the homepage hero's copy of the file. */}
+            <video src="assets/hero-wall/costa-express.mp4" poster="uploads/Costa/Costa-syrup-screen-02.webp"
+              autoPlay loop muted playsInline aria-label="Syrup selection screen recording"
+              style={{ width: "100%", height: "auto", aspectRatio: "1076 / 1924", display: "block", objectFit: "cover", borderRadius: 12 }} />
             <figcaption className="mono" style={{
               color: "rgba(244,241,236,0.5)", marginTop: 14,
               display: "flex", justifyContent: "space-between"
